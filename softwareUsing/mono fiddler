@@ -1,0 +1,38 @@
+#Linux(Ubuntu)环境下使用Fiddler 
+
+ http://www.cnblogs.com/jcli/p/4474332.html
+
+
+
+首先，你要有个Mono环境，在Ubuntu环境下安装很简单，输入：
+sudo apt-get install mono-complete
+下载一个最新的Fiddler for Mono版本，我写这篇文章时最新版本是这个。
+(下载地址：http://fiddler.wikidot.com/mono)
+下载完成后，解压到你的习惯放置的随便一个目录里。然后cd到目录下，运行：
+
+tony@tony:~/devs/fiddler$ mono Fiddler.exe
+然后熟悉的界面就看到了，怎么使用的你应该知道了。
+
+Chrome浏览器不用进行任何设置，所有请求都会通过Fiddler自动代理，
+原理就是：当Fiddler启动时会执行如下脚本：
+
+gsettings set org.gnome.system.proxy.https port 8888
+gsettings set org.gnome.system.proxy.http port 8888
+gsettings set org.gnome.system.proxy.http host '127.0.0.1'
+gsettings set org.gnome.system.proxy.https host '127.0.0.1'
+gsettings set org.gnome.system.proxy mode 'manual'
+就是用gsettings命令修改系统的http和https代理参数值，
+同时用model 'manual'打开系统级代理开关。
+当关闭Fiddler程序时，会把model参数值恢复为none，即不开启代理
+
+(这里提示有的同学，如果你在命令行里运行mono Fiddler.exe后，
+然后直接kill 9掉该进程，或者直接在窗口crtl+D结束，
+可能使Fiddler不能正常设置model参数，
+导致浏览器打开什么网页都是无法访问，遇到这个问题你知道怎么办了吧)。
+
+
+而Chrome浏览器默认就是使用系统代理设置，截图为证：
+chrome proxy
+而Firefox浏览器没有默认使用系统代理设置，
+所以手动设置下就好了：
+Click Edit > Preferences > Advanced > Network > Settings and choose "Manual Proxy Configuration", Proxy 127.0.0.1, Port 8888, and tick the "Use this proxy server for all protocols" box.

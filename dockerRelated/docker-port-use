@@ -1,0 +1,9 @@
+#ubuntu中运行docker时80端口被占用导致容器无法启动的解决
+docker运行时需要使用80端口，nginx 等服务运行时默认都是使用80端口，经常造成
+80端口被占用的情况，这时可以卸载其他程序。
+
+使用sudo apt-get remove 命令可以卸载相关程序。
+如：
+sudo apt-get remove lighttpd
+sudo apt-get remove nginx
+sudo apt-get remove mysql-server等，根据运行时提示错误信息执行相应操作。

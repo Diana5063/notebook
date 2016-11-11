@@ -1,0 +1,7 @@
+#升级docker
+curl -sSL https://get.docker.io/ | sudo sh
+
+如果升级后docker无法启动，执行下面3条命令
+systemctl unmask docker.service
+systemctl unmask docker.socket
+systemctl start docker.service

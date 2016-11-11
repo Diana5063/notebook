@@ -1,0 +1,24 @@
+#设置docker容器开机自启动
+
+sudo -i切换到root权限，增加下列命令到/etc/rc.local的exit 0之前
+
+service docker start
+sleep 2
+docker start name2
+sleep 2
+docker start name2
+
+保存之后，执行chmod a+x /etc/rc.local。
+
+
+如果添加脚本后不起作用，
+原因是系统默认使用的是dash shell，而启动rc.local脚本需要使用bash shell。
+将默认的shell改成bash的方法，如下：
+在终端执行
+sudo dpkg-reconfigure dash
+在弹出窗口用Tab键左右移动到no，按Enter键选择
+然后执行
+sudo rm /bin/sh
+sudo ln -s /bin/bash /bin/sh
+
+最后重启电脑验证是否已成功开机启动。

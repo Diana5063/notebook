@@ -1,0 +1,11 @@
+#docker 容器中nignx配置文件冲突解决方法
+1、进入容器，命令如下：
+docker exec -it name /bin/bash
+或
+docker attach name
+
+2、解决冲突的.conf文件
+删除冲突文件或修改冲突域名等，按实际情况操作；
+
+3、重启nginx服务器，命令如下：
+supervisorctl restart nginx

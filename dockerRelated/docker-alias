@@ -1,0 +1,2 @@
+#查看docker容器别名，在host主机执行
+docker network inspect name

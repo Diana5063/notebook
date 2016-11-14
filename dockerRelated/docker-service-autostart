@@ -4,7 +4,7 @@ sudo -i切换到root权限，增加下列命令到/etc/rc.local的exit 0之前
 
 service docker start
 sleep 2
-docker start name2
+docker start name1
 sleep 2
 docker start name2
 

@@ -1,12 +1,12 @@
-#Linux(Ubuntu)环境下使用Fiddler 
+#Linux(Ubuntu)环境下使用Fiddler
 
- http://www.cnblogs.com/jcli/p/4474332.html
+转自http://www.cnblogs.com/jcli/p/4474332.html
 
 
 
 首先，你要有个Mono环境，在Ubuntu环境下安装很简单，输入：
 sudo apt-get install mono-complete
-下载一个最新的Fiddler for Mono版本，我写这篇文章时最新版本是这个。
+下载一个最新的Fiddler for Mono版本。
 (下载地址：http://fiddler.wikidot.com/mono)
 下载完成后，解压到你的习惯放置的随便一个目录里。然后cd到目录下，运行：
 

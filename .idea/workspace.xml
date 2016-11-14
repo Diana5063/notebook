@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d0f3a342-6fbb-425a-8fab-e099629ffe0c" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockerRelated/docker-alias" afterPath="$PROJECT_DIR$/dockerRelated/docker-alias" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockerRelated/docker-command" afterPath="$PROJECT_DIR$/dockerRelated/docker-command" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockerRelated/docker-exec-attach" afterPath="$PROJECT_DIR$/dockerRelated/docker-exec-attach" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dockerRelated/docker-service-autostart" afterPath="$PROJECT_DIR$/dockerRelated/docker-service-autostart" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/softwareUsing/mono fiddler" afterPath="$PROJECT_DIR$/softwareUsing/mono fiddler" />
-    </list>
+    <list default="true" id="d0f3a342-6fbb-425a-8fab-e099629ffe0c" name="Default" comment="" />
     <ignored path="notebook.iws" />
     <ignored path=".idea/workspace.xml" />
+    <ignored path=".idea/dataSources.local.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,51 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="mono fiddler" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/softwareUsing/mono fiddler">
+      <file leaf-file-name="smartgit-add-remote-repository" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/gitRelated/smartgit-add-remote-repository">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="29" column="24" selection-start-line="29" selection-start-column="24" selection-end-line="29" selection-end-column="24" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="docker-service-autostart" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockerRelated/docker-service-autostart">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="14" column="50" selection-start-line="14" selection-start-column="50" selection-end-line="14" selection-end-column="50" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="docker-exec-attach" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockerRelated/docker-exec-attach">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="2" column="59" selection-start-line="2" selection-start-column="59" selection-end-line="2" selection-end-column="59" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="docker-command" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dockerRelated/docker-command">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="1" column="46" selection-start-line="1" selection-start-column="46" selection-end-line="1" selection-end-column="46" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="docker-alias" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/dockerRelated/docker-alias">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.019977802">
-              <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -90,6 +45,9 @@
         <option value="$PROJECT_DIR$/dockerRelated/docker-exec-attach" />
         <option value="$PROJECT_DIR$/dockerRelated/docker-command" />
         <option value="$PROJECT_DIR$/dockerRelated/docker-alias" />
+        <option value="$PROJECT_DIR$/gitRelated/create-pr" />
+        <option value="$PROJECT_DIR$/gitRelated/git-diff" />
+        <option value="$PROJECT_DIR$/gitRelated/git-edit-commit-msg" />
       </list>
     </option>
   </component>
@@ -159,6 +117,20 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="softwareUsing" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="notebook" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="notebook" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gitRelated" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -309,7 +281,39 @@
     <entry file="file://$PROJECT_DIR$/dockerRelated/docker-alias">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.019977802">
-          <caret line="1" column="27" selection-start-line="1" selection-start-column="27" selection-end-line="1" selection-end-column="27" />
+          <caret line="1" column="21" selection-start-line="1" selection-start-column="21" selection-end-line="1" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gitRelated/git-edit-commit-msg">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33962265">
+          <caret line="17" column="34" selection-start-line="17" selection-start-column="34" selection-end-line="17" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gitRelated/git-diff">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.09988901">
+          <caret line="5" column="86" selection-start-line="5" selection-start-column="86" selection-end-line="5" selection-end-column="86" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gitRelated/create-pr">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.019977802">
+          <caret line="1" column="41" selection-start-line="1" selection-start-column="41" selection-end-line="1" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/gitRelated/smartgit-add-remote-repository">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>

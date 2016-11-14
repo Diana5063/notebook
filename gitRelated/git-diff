@@ -1,0 +1,6 @@
+#git diff打包两个版本之间指定的文件
+
+git diff --name-only xxxx|grep -v -E 'pathA|pathB'
+
+
+git diff 7ee28d3d..525015f9 --name-only|grep -v -E 'front'|xargs tar zcvf example.com.1112.1356.tar.gz

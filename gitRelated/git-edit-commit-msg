@@ -1,0 +1,27 @@
+#git commit命令的使用与git默认编辑器的修改
+
+转自http://blog.csdn.net/longxiaowu/article/details/24017181
+
+
+1、git commit
+
+此时是进入GUN nano编辑器。
+在这里可以添加你的commit imformation 然后ctrl+o,回车保存，再ctrl+x退出。
+
+因为对Nano编辑器很不熟悉，在这里我想将默认编辑器改为vim。
+打开.git/config文件，在core中添加 editor=vim即可。
+
+或者运行命令 git config –global core.editor vim 修改更加方便。
+
+2、git commit -a
+
+把所有add了的文件都加入commit，然后进入编辑器编辑commit信息。
+
+3、git commit -m  “commit imformation”
+
+直接在后面添加commit 信息然后提交commit，
+与gitcommit相比快捷方便，但是就是commit信息格式无法控制。
+
+4、git commit --amend 
+
+修改最后一次commit的信息。

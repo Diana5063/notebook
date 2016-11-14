@@ -1,0 +1,58 @@
+#解决MysqlWorkbench Export Data时报错：'delayed-insert'=FALSE
+
+转自http://blog.csdn.net/u010214003/article/details/49866115
+
+
+
+
+MysqlWorkbench Export Data时报错
+
+
+解决步骤
+配置文件所在位置
+windows
+Mac
+Ubuntu
+
+
+问题
+MysqlWorkbench6.0之后的版本使用export data时会遇到这个错误
+Running: /Applications/MySQLWorkbench.app/Contents/MacOS/mysqldump --defaults-file
+="/var/folders/xl/s140j_d96n5djybp3rvh2nt80000gp/T/tmpn6fxeU/extraparams.cnf"  
+--set-gtid-purged=OFF --delayed-insert=FALSE --host=121.40.157.75 
+--protocol=tcp --user=root --port=3306 --default-character-set=utf8 
+--skip-triggers "matchbox_test"
+mysqldump: [ERROR] unknown variable 'delayed-insert=FALSE'
+
+Operation failed with exitcode 7
+13:19:01 Export of /Users/jason/Documents/Dump20151116.sql has finished with 1 errors
+
+
+原因
+
+我们看错误报告显示这个变量 'delayed-insert=FALSE' 不被识别，workbench默认配置里会开启
+这个变量并且默认值是false。如果我们用不到这个变量可以更改配置文件，注释掉这个变量来解决
+
+
+解决步骤
+找到配置文件目录：__InstallPath__/modules
+打开python格式的输出配置文件：wb_admin_export_options.py
+找到所在行："delayed-insert":["Write INSERT DELAYED statements rather than ...
+在行开头插入#号注释改行
+保存文件，重启Workbench
+
+
+配置文件所在位置
+
+windows
+Workbench的安装目录
+如：C:\Program Files\MySQL\MySQL Workbench 6.3 CE\modules
+
+
+Mac
+Applications -> MYSQLWorkbench.app/Contents/Resources/plugins.
+Note: 在应用上右击选择 Show Package contents 进入应用目录
+
+
+Ubuntu
+/usr/lib/mysql-workbench/modules/wb_admin_export_options.py

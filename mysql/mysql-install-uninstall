@@ -1,0 +1,144 @@
+#mysql 安装和卸载
+环境：lubuntu15.10  64位
+
+
+1、删除mysql
+sudo apt-get autoremove --purge mysql-server-5.0
+sudo apt-get remove mysql-server
+sudo apt-get autoremove mysql-server//可省略
+sudo apt-get remove mysql-common //这个很重要
+
+
+2、清理残留数据
+dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
+
+
+3、安装mysql5.7
+清理完数据后发现执行mysql --version还是可以看到5.6.30的版本。
+
+由于要重新安装mysql，于是参照网上指导安装libaio1，
+执行 sudo apt-get install libaio1时，提示以下无用安装包，
+
+下列软件包是自动安装的并且现在不需要了：
+  guile-2.0-libs libarmadillo5 libarpack2 libatkmm-1.6-1v5 libblas-common
+  libblas3 libcairomm-1.0-1v5 libctemplate2v5 libdap17v5 libdapclient6v5
+  libdbi-perl libepsilon1 libfreexl1 libgc1c2 libgeos-3.5.0 libgeos-c1v5
+  libgfortran3 libglibmm-2.4-1v5 libgsasl7 libgtkmm-2.4-1v5 libhdf4-0-alt
+  libhdf5-10 libjasper1 libkmlbase1 libkmldom1 libkmlengine1
+  libkyotocabinet16v5 liblapack3 liblwgeom-2.1.8 libminizip1 libnetcdf7
+  libntlm0 libogdi3.2 libopenjp2-7 libpangomm-1.4-1v5 libpcrecpp0v5 libpq5
+  libproj9 libsigc++-2.0-0v5 libspatialite7 libsuperlu4 liburiparser1
+  libvsqlitepp3v5 libxerces-c3.1 libzip4 mailutils-common
+  mysql-client-core-5.6 mysql-utilities mysql-workbench-data proj-bin
+  proj-data python-crypto python-ecdsa python-mysql.connector python-paramiko
+  python-pexpect python-pyodbc
+使用'apt-get autoremove'来卸载它(它们)。
+
+于是我执行了sudo apt-get autoremove mysql-client-core-5.6，最终彻底删除。
+
+
+
+1)、下面继续安装mysql5.7，在官方网站发现最新版本是5.7.12，本来就是为了升级，
+所以下载了这个最新版本。
+官网下载地址http://downloads.mysql.com/archives/community/，
+版本(Select Version)选择5.7.12，平台(Select Platform)选择Ubuntu Linux，根据自己的实际系统选择平台。
+下载的文件为mysql-server_5.7.12-1ubuntu15.10_amd64.deb-bundle.tar
+
+ 2)、增加用户和用户组
+sudo groupadd mysql
+sudo useradd -r -g mysql mysql
+
+3)、将mysql解压到/usr/local/src目录，执行命令
+cd /usr/local/src
+sudo tar xvf /home/diana/PHP-source/mysql-server_5.7.12-1ubuntu15.10_amd64.deb-bundle.tar
+解压后有下面这些安装包
+libmysqlclient-dev_5.7.12-1ubuntu15.10_amd64.deb  *
+mysql-testsuite_5.7.12-1ubuntu15.10_amd64.deb
+mysql-community-client_5.7.12-1ubuntu15.10_amd64.deb *
+mysql-community-server_5.7.12-1ubuntu15.10_amd64.deb
+mysql-community-test_5.7.12-1ubuntu15.10_amd64.deb
+mysql-community_5.7.12-1ubuntu15.10_amd64.changes
+mysql-server_5.7.12-1ubuntu15.10_amd64.deb
+libmysqlclient20_5.7.12-1ubuntu15.10_amd64.deb *
+mysql-common_5.7.12-1ubuntu15.10_amd64.deb *
+mysql-community-source_5.7.12-1ubuntu15.10_amd64.deb
+libmysqld-dev_5.7.12-1ubuntu15.10_amd64.deb *
+mysql-client_5.7.12-1ubuntu15.10_amd64.deb *
+
+
+由于包之间的依赖关系，下面要按一定的顺序安装
+sudo dpkg -i mysql-common_5.7.12-1ubuntu15.10_amd64.deb
+sudo dpkg-preconfigure mysql-community-server_5.7.12-1ubuntu15.10_amd64.deb//配置密码
+sudo dpkg -i mysql-community-client_5.7.12-1ubuntu15.10_amd64.deb
+sudo dpkg -i mysql-client_5.7.12-1ubuntu15.10_amd64.deb
+sudo dpkg -i libmysqlclient20_5.7.12-1ubuntu15.10_amd64.deb
+sudo dpkg -i libmysqlclient-dev_5.7.12-1ubuntu15.10_amd64.deb
+sudo dpkg -i libmysqld-dev_5.7.12-1ubuntu15.10_amd64.deb
+sudo apt-get -f install  //此步为了安装依赖包 libmecab2
+
+异常情况——
+安装依赖包 libmecab2时进程锁死无法继续，我执行了
+
+sudo rm /var/lib/dpkg/lock   强制解锁命令
+
+结果报错：
+E: dpkg 被中断，您必须手工运行 ‘sudo dpkg --configure -a’ 解决此问题。
+
+于是运行
+
+sudo dpkg --configure -a
+
+配置后再次运行了
+
+sudo apt-get -f install 
+
+报如下错误
+E: 无法获得锁 /var/cache/apt/archives/lock - open (11: 资源暂时不可用)
+E: 无法对目录 /var/cache/apt/archives/ 加锁，
+
+再次强制解锁
+
+sudo rm /var/cache/apt/archives/lock 
+sudo rm /var/lib/dpkg/lock 
+
+再次运行
+
+sudo apt-get -f install 
+
+报错
+有 1 个软件包没有被完全安装或卸载。
+解压缩后会消耗掉 0 B 的额外空间。
+debconf: DbDriver "config": /var/cache/debconf/config.dat is locked by another process: 资源暂时不可用
+正在设置 mysql-community-server (5.7.12-1ubuntu15.10) ...
+debconf: DbDriver "config": /var/cache/debconf/config.dat is locked by another process: 资源暂时不可用
+
+重启了电脑
+然后尝试
+
+sudo apt-get -f install，成功了，继续执行
+
+mysql-community-server_5.7.12-1ubuntu15.10_amd64.deb
+sudo dpkg -i mysql-server_5.7.12-1ubuntu15.10_amd64.deb
+
+安装结束，查看mysql版本
+mysql --version
+mysql  Ver 14.14 Distrib 5.7.12, for Linux (x86_64) using  EditLine wrapper
+已经升级到5.7.12啦
+
+用账号root和之前设置的密码登录
+mysql -uroot -p
+输入密码12345677
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 5.7.12 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2016, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> 

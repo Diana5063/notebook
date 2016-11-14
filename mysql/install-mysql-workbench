@@ -1,0 +1,120 @@
+#升级mysql时把workbench卸载了，需要重新安装workbench
+环境：lubuntu15.10  64位
+
+去官网http://dev.mysql.com/downloads/workbench/下载了workbench安装包
+mysql-workbench-community-6.3.7-1ubu1604-amd64.deb
+
+执行安装命令
+sudo dpkg -i mysql-workbench-community-6.3.7-1ubu1604-amd64.deb
+
+发现有依赖包没有安装导致安装workbench出错，于是执行
+
+sudo apt-get -f install         此步骤安装依赖包
+
+再次安装
+sudo dpkg -i mysql-workbench-community-6.3.7-1ubu1604-amd64.deb
+发现系统中的依赖包版本低于当前workbench需要的依赖版本
+
+于是尝试
+sudo apt-get update升级，没有用
+
+再次执行
+sudo apt-get -f install
+
+提示
+下列软件包是自动安装的并且现在不需要了：
+  libatkmm-1.6-1v5 libcairomm-1.0-1v5 libglibmm-2.4-1v5 libgtkmm-2.4-1v5
+  libpangomm-1.4-1v5 libpcrecpp0v5 libsigc++-2.0-0v5 libzip4 python-crypto
+  python-ecdsa python-paramiko
+使用'apt-get autoremove'来卸载它(它们)。
+
+
+运行
+sudo apt-get -f install
+sudo apt-get autoremove libatkmm-1.6-1v5 libcairomm-1.0-1v5 libglibmm-2.4-1v5 libgtkmm-2.4-1v5
+
+依然是依赖版本低于所需要版本
+mysql-workbench-community 依赖于 libatkmm-1.6-1v5 (>= 2.24.0)；然而：
+系统中 libatkmm-1.6-1v5:amd64 的版本为 2.22.7-3。
+ mysql-workbench-community 依赖于 libcairomm-1.0-1v5 (>= 1.12.0)；然而：
+系统中 libcairomm-1.0-1v5:amd64 的版本为 1.11.2-0ubuntu3~gcc5。
+ mysql-workbench-community 依赖于 libglibmm-2.4-1v5 (>= 2.46.0)；然而：
+系统中 libglibmm-2.4-1v5:amd64 的版本为 2.45.41.is.2.44.0-0ubuntu2。
+ mysql-workbench-community 依赖于 libncurses5 (>= 6)；然而：
+系统中 libncurses5:amd64 的版本为 5.9+20150516-2ubuntu1。
+ mysql-workbench-community 依赖于 libpangomm-1.4-1v5 (>= 2.38.0)；然而：
+系统中 libpangomm-1.4-1v5:amd64 的版本为 2.36.0-2。
+ mysql-workbench-community 依赖于 libsigc++-2.0-0v5 (>= 2.6.1)；然而：
+系统中 libsigc++-2.0-0v5:amd64 的版本为 2.4.1-2。
+
+
+
+
+
+
+
+
+
+
+山重水复疑无路，柳暗花明又一村！！！！
+转自http://www.cnblogs.com/xuxiang/p/3158828.html
+
+
+********************************************************
+
+
+安装成功的步骤只需要两步：
+1、sudo apt-get -f install //分析并安装合适的依赖包
+2、sudo apt-get install mysql-workbench//安装workbench
+
+
+以下是参考
+*******************************************************
+
+
+1、如果你没有更换源，是主服务器的官网源，这时候你可以直接用sudo apt-get install mysql-workbench来安装（前提是已经装好mysql相关服务)
+
+　　2、如果你第一条装不了，那么看下面这些吧，先去mysql官网下载workbench
+
+             http://dev.mysql.com/downloads/tools/workbench/#downloads 在这里下载deb包，（要先注册一个帐号才能下载）
+
+        3、安装下载完成的包，sudo dpkg -i mysql-workbench-gpl-5.2.47-1ubu1204-amd64 此时出现以下错误
+
+复制代码
+Unpacking mysql-workbench-gpl (from mysql-workbench-gpl-5.2.38-1ubu1104-amd64.deb) ...
+dpkg: dependency problems prevent configuration of mysql-workbench-gpl:
+mysql-workbench-gpl depends on libzip1 (>= 0.8); however:
+Package libzip1 is not installed.
+mysql-workbench-gpl depends on python-paramiko; however:
+Package python-paramiko is not installed.
+mysql-workbench-gpl depends on python-pysqlite2; however:
+Package python-pysqlite2 is not installed.
+复制代码
+这里你要下载几个依赖包，
+
+　　4、下载并安装依赖包
+
+          wget https://launchpad.net/ubuntu/+archive/primary/+files/libzip1_0.9.3-1_i386.deb
+
+      wget http://launchpadlibrarian.net/94563300  /libmysqlclient16_5.1.58-1ubuntu5_i386.deb
+
+    然后执行
+
+sudo dpkg -i libzip1_0.9.3-1_i386.deb
+sudo dpkg -i libmysqlclient16_5.1.58-1ubuntu5_i386.deb
+sudo apt-get -f install python-paramiko libzip2 libmysqlclient18 mysql-client mysql-common python-pysqlite2 libdbi-perl libdbd-mysql-perl libplrpc-perl libnet-daemon-perl mysql-client
+   5、有些系统安装这些就可以了，但有些还会出现两个依赖包未安装
+     正预备替换 mysql-workbench-gpl 5.2.47-1ubu1204 (使用 mysql-workbench-gpl-5.2.47-1ubu1204-amd64.deb) ...
+     正在解压缩将用于更替的包文件 mysql-workbench-gpl ...
+     dpkg: dependency problems prevent configuration of mysql-workbench-gpl:
+     mysql-workbench-gpl 依赖于 libgtkmm-2.4-1c2a (>= 1:2.24.0)；libctemplate0_1.0-1_amd64 然而：
+     未安装软件包 libgtkmm-2.4-1c2a。libctemplate0_1.0-1_amd64 
+     这里又要安装两个包
+ 6、去官网把这两个包给下载下来安装
+　　http://packages.ubuntu.com/precise/amd64/libctemplate0/download
+　　http://packages.ubuntu.com/precise/amd64/libgtkmm-2.4-1c2a/download
+  7、安装完这两个包，再重新执行  sudo dpkg -i mysql-workbench-gpl-5.2.47-1ubu1204-amd64 没有报错，OK，在/usr/share/applications 找到workbench,放在菜单栏上
+     至此workbench全部搞定
+
+在安装软件的时候，经常会遇到这种依赖包，此时很多新手都会崩溃。只要把这些依赖包一个个找到安装上就可以了。先百度一下可以找到相关的人发的包，如果安装后还有依赖包，
+那么去ubuntu官网下载，一般都有的，再安装完就可以了。只要心不急，一个一个找也会全找到的，就是麻烦点。

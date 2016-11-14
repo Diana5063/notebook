@@ -1,0 +1,10 @@
+#禁止mysql开机自启动
+
+环境：lubuntu15.10   64位
+
+#执行命令
+sudo update-rc.d mysql disable
+
+#执行结果
+insserv: warning: current start runlevel(s) (empty) of script `mysql' overrides LSB defaults (2 3 4 5).
+insserv: warning: current stop runlevel(s) (0 1 2 3 4 5 6) of script `mysql' overrides LSB defaults (0 1 6).

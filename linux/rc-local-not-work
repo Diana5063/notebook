@@ -1,0 +1,13 @@
+#ubuntu /etc/rc.local下脚本不起作用，解决方法如下：
+
+http://jingyan.baidu.com/article/c33e3f48a97447ea15cbb507.html?qq-pf-to=pcqq.c2c
+
+1、原因是该系统使用的bash shell 更换成了dash shell。
+而/etc/rc.local脚本中用的正是/bin/sh。
+所以错误。
+
+2、将默认的shell改成bash的方法:
+在终端执行 sudo dpkg-reconfigure dash，然后选择 no  (推荐)。
+
+3、sudo rm /bin/sh
+sudo ln -s /bin/bash /bin/sh

@@ -1,0 +1,5 @@
+#对文件加锁解锁
+
+chattr +i filename 加锁
+chattr -i filename 解锁
+lsattr 查看当前目录下面的文件加锁的情况

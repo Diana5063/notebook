@@ -1,0 +1,14 @@
+#php的pcntl扩展版本与php版本不匹配导致的问题
+
+php安装好后如果要补充安装扩展，可以到官网  http://php.net/  下载当前版本的源码包，
+只要大版本相同即可（如我的php版本是5.6.18，如果官网没有这个版本，可以下载5.6.20或
+其他5.6.*版本）。
+
+1、下载后解压       ＃tar zxvf php-5.6.20.tar.gz
+2、然后进入扩展目录   ＃cd php-5.6.20/ext/pcntl
+3、执行phpize命令    ＃phpize
+(如果没有这个工具，可自行安装 ＃yum install php56_devel   （ps：请注意自己的版本))
+4、设定与php一致的配置   ＃ ./configure --with-php-config=/usr/local/php/bin/php-config
+5、编译安装     ＃make && make install
+6、将pcntl.so的扩展加入到php.ini中，在php.ini中添加extension=pcntl.so;  然后重新启动php-fpm
+＃service php-fpm restart

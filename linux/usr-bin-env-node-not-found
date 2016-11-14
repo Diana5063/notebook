@@ -1,0 +1,7 @@
+#(ubuntu)linux 安装nodejs后，出现/usr/bin/env: node: No such file or directory
+http://stackoverflow.com/questions/26320901/cannot-install-nodejs-usr-bin-env-node-no-such-file-or-directory
+
+在根目录下执行
+sudo ln -s /usr/bin/nodejs /usr/bin/node
+创建node到nodejs的软链接，因为nodejs是较高版本，node是旧版本命令，
+一般的脚本文件用的是旧的node命令，所以安装新版本的node后找不到目录或文件。

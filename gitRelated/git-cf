@@ -1,0 +1,9 @@
+#!/bin/sh
+set -e
+if [  -d $1 ]; then
+    echo "git cf HEAD^#"
+    exit 0
+fi
+for i in $(git diff  --name-only $1); do
+    git checkout $1 $i
+done

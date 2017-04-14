@@ -1,0 +1,9 @@
+致命错误: Class 'app\admin\model\AdminInfo' not found
+
+原因：命名空间原因，找不到AdminInfo类，后来发现是model目录写成了Model，然后命名空间写的是
+app\admin\model
+
+解决方法：将目录修改成model（也可以将命名空间改成Model，为了统一就改的目录名）
+
+总结：
+命名空间是以部分子目录名命名的，要跟项目中的相关子目录名一致。

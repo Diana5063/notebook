@@ -1,0 +1,26 @@
+安装mysql5.7并启动时出现如下错误：
+
+2017-03-28T10:43:54.873961Z 0 [ERROR] InnoDB: The Auto-extending innodb_system data file './ibdata1' is of a different size 640 pages (rounded down to MB) than specified in the .cnf file: initial 768 pages, max 0 (relevant if non-zero) pages!
+2017-03-28T10:43:54.873971Z 0 [ERROR] InnoDB: Plugin initialization aborted with error Generic error
+2017-03-28T10:43:55.474859Z 0 [ERROR] Plugin 'InnoDB' init function returned error.
+2017-03-28T10:43:55.474880Z 0 [ERROR] Plugin 'InnoDB' registration as a STORAGE ENGINE failed.
+2017-03-28T10:43:55.474885Z 0 [ERROR] Failed to initialize plugins.
+2017-03-28T10:43:55.474887Z 0 [ERROR] Aborting
+
+解决方法：
+1、先停止mysql服务
+service mysqld stop
+
+2、修改mysql配置文件my.cnf，在文件中加上一行配置
+innodb_data_file_path = ibdata1:10M:autoextend
+
+3、重启mysql服务
+service mysqld start
+如果这一步还是报错，在/var/lib/mysql中删除ibdata1，ib_logfile0，ib_logfile1这三个文件再尝试重启。
+
+4、相关更新操作
+restorecon -R /var/lib/mysql/
+chmod -R 777 /var/lib/mysql
+
+
+最后还是无法启动mysqld服务，尝试重装mysql；

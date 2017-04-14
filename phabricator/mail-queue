@@ -1,0 +1,25 @@
+#邮件堆积在队列中发不出去，最终原因只有一个，就是邮件配置有错误
+
+解决步骤：
+如果原来成功发送过邮件，现在发送不了，检查一下用户的通知邮箱是否可以正常使用。
+如果能正常使用，看看是否有修改过密码，保证该邮箱能正常使用并能正常登录。
+此处需要用到管理员账号，以root用户登录phabricator所在的服务器，
+cd /opt/phabricator
+./bin/accountadmin，回车后按提示操作，如果想创建管理员账号，输入不存在的用户名，
+如果想将原有账号改成管理员账号，输入已有的用户名，在最后设置为管理员。
+
+用管理员账号登录phabricator并修改邮件设置，
+./bin/phd status查看进程状态
+./bin/phd restart 重启进程
+如果网页上没有更新
+可能需要重启nginx和php-fpm
+service nginx restart
+service php-fpm restart
+
+如果报libphutil类或其他类错误，升级一下phabricator，在相应目录用git pull获取最新代码；
+具体可查看官方文档。
+我属于此类情况；
+
+
+
+如果原来没有成功发送过，尽量查看官方文档修改。

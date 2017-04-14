@@ -1,0 +1,20 @@
+＃登录时验证码无法显示
+
+环境：
+页面显示的验证码路径是/captcha.html，项目中没有这个路由
+
+原因：由于ubuntu或linux下thinkphp路由有问题，我用的是兼容模式，
+（http://域名?s=admin/login），服务器找不到http://域名/captcha这个路由，无法生成图片。
+
+解决方法：将nginx虚拟主机配置文件的重写规则修改为
+原来是
+location @orig {
+    rewrite ^/(.*)$ /index.php last;
+  }
+
+location @orig {
+    rewrite ^/(.*)$ /index.php?s=/$1 last;
+  }
+
+原来只是隐藏了入口文件index.php，现在改为将index.php?s=/ 这一块都简化，可以直接访问
+http://域名/admin/login。

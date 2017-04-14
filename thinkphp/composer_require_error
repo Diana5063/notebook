@@ -1,0 +1,5 @@
+#用composer安装thinkphp的扩展包时卡住下载不了
+
+我的做法：
+在项目vendor目录执行composer require 包名，然后命令一直处于等待状态；
+在根目录下执行相同命令，还是一直处于等待状态；

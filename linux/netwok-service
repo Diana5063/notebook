@@ -1,0 +1,24 @@
+#修改服务器的网卡设置
+
+
+vim /etc/sysconfig/network-scripts/ifcfg-e，用tab键补全文件名，
+系统默认网卡名是ifcfg-eth0，有的是ens0或其他，进到文件后修改相关参数
+
+DEVICE=eth0
+HWADDR=****
+ONBOOT=yes
+TYPE=Ethernet
+BOOTPROTO=none
+IPV6INIT=no
+USERCTL=no
+IPADDR=10.0.22.112
+GATEWAY=10.0.22.254
+NETMASK=255.255.255.0
+DNS1=****
+
+要注意IPADDR和GATEWAY要在同一网段内。
+
+
+
+修改完成后保存并退出，然后重启网卡
+service network restart，不然修改不生效。

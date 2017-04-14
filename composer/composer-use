@@ -1,0 +1,27 @@
+#用composer安装qiniu的php-sdk到当前项目
+1、如果系统中没有安装过composer，需要安装，执行如下命令：
+curl -sS https://getcomposer.org/installer | php
+
+注意： 如果上述方法由于某些原因失败了，你还可以通过 php >下载安装器：
+php -r "readfile('https://getcomposer.org/installer');" | php
+
+你可以通过 --install-dir 选项指定 Composer 的安装目录（它可以是一个绝对或相对路径）：
+curl -sS https://getcomposer.org/installer | php -- --install-dir=bin
+
+你可以执行这些命令让 composer 在你的系统中进行全局调用：
+curl -sS https://getcomposer.org/installer | php
+mv composer.phar /usr/local/bin/composer
+
+注意： 如果上诉命令因为权限执行失败， 请使用 sudo 再次尝试运行 mv 那行命令。
+然后给composer增加可执行命令：sudo chmod 777 composer
+现在只需要运行 composer 命令就可以使用 Composer 而不需要输入 php composer.phar
+
+
+如果系统中已经安装了composer(检查方法是sudo find / -name composer.phar )，如果
+找到了文件，用上面的sudo mv命令移动到全局目录，就可以执行composer命令安装依赖包了。
+
+
+
+2、
+sudo /usr/local/bin/composer self-update//更新composer源
+Use composer self-update --rollback to return to version 7adc41d02c3536b3e19a6b906cf0c4cf6d3beb70

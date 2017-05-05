@@ -1,0 +1,39 @@
+#php编译安装扩展
+
+php编译安装的时候有时候会遇到部分扩展没有安装的情况，此时可用phpize来安装想要的扩展。
+
+方法如下：
+首先进入到php安装时解压的源文件的扩展目录
+cd /php-5.6/ext
+
+进来后可以用ll命令，列出可用的扩展
+然后选择一个扩展，进入目录
+比如cd fileinfo，安装fileinfo扩展
+pwd 命令可查看当前所在目录
+/php-5.6/ext/fileinfo
+
+在这个目录执行phpize来添加扩展到php
+/usr/local/php/bin/phpize（这里需要找到phpize的正确路径，一般路径是我这个）
+
+然后配置，指定php安装的位置
+./configure --with-php-config=/usr/local/php/bin/php-config
+
+继续，编译安装扩展
+make && make install
+
+编译成功时会提示安装后的文件目录
+此时会生成fileinfo.so
+
+最后修改php.ini并重启php服务
+在php.ini中加入extension=fileinfo.so
+
+并执行
+service php-fpm restart
+
+
+在安装readline扩展的时候，提示错误
+configure: error: Please reinstall libedit - I cannot find readline.h
+
+需要重装libedit依赖，重装命令
+yum install libedit-devel -y
+然后执行上面的安装扩展步骤。

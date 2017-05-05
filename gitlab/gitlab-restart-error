@@ -1,0 +1,23 @@
+#gitlab 重启时部分服务无法启动解决方法
+
+重启gitlab所有服务：sudo gitlab-ctl restart
+
+如果重启成功：
+ok: run: gitaly: (pid 21300) 1s
+ok: run: gitlab-monitor: (pid 21307) 0s
+ok: run: gitlab-workhorse: (pid 21310) 1s
+ok: run: logrotate: (pid 21318) 0s
+ok: run: nginx: (pid 21326) 0s
+ok: run: node-exporter: (pid 21329) 1s
+ok: run: postgres-exporter: (pid 21334) 0s
+ok: run: postgresql: (pid 21354) 0s
+ok: run: prometheus: (pid 21363) 0s
+ok: run: redis: (pid 21369) 1s
+ok: run: redis-exporter: (pid 21372) 0s
+ok: run: sidekiq: (pid 21398) 0s
+ok: run: unicorn: (pid 21403) 0s
+
+
+各服务都ok，但是如果有其中一个或多个服务重启失败，
+比如nginx启动问题，可以用具体的重启命令：
+sudo gitlab-ctl restart nginx

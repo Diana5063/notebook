@@ -1,0 +1,32 @@
+#unknown directive "image_filter_buffer"
+nginx image filter报错
+
+原因：nginx编译安装的时候没有安装image_filter_buffer模块。
+
+
+解决方法：重新编译并安装该模块
+http://cwtea.blog.51cto.com/4500217/1333142
+
+
+1、安装依赖
+#yum install -y gd-devel 
+
+2、到nginx的configure目录配置模块
+#cd /nginx
+#./configure --prefix=/usr/local/nginx --with-http_image_filter_module
+#make
+如果不想覆盖安装的时候，千万别make install
+# make install
+
+安装完后重启nginx服务
+
+
+
+同理可安装nginx其他模块，如stub_status等，特别特别特别要注意，编译的时候要把所有参数都带上。
+当前安装后的nginx所有参数如下
+[root@localhost ~]# nginx -V
+nginx version: nginx/1.10.0
+built by gcc 4.4.7 20120313 (Red Hat 4.4.7-18) (GCC) 
+built with OpenSSL 1.0.1e-fips 11 Feb 2013
+TLS SNI support enabled
+configure arguments: --user=www --group=www --prefix=/usr/local/nginx --with-http_stub_status_module --with-http_ssl_module --with-http_v2_module --with-http_gzip_static_module --with-ipv6 --with-http_sub_module --with-ld-opt=-ljemalloc --with-http_image_filter_module

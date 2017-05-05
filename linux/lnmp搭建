@@ -1,0 +1,813 @@
+#搭建lnmp开发环境
+
+1、准备
+Centos6.5 系统 ＋nginx1.10.1 + php7.0.7 + mysql5.7.17
+需要的软件包都下载到/root目录
+
+
+2、安装
+
+2.1 安装nginx
+
+cd /root
+wget http://nginx.org/download/nginx-1.10.1.tar.gz
+wget https://www.openssl.org/source/openssl-1.0.2h.tar.gz
+(
+注意：pcre和zlib没有找到可以直接下载的地址，在浏览器下载后通过ftp工具上传到/root目录，
+下载的包分别为pcre-8.38.tar.gz和zlib-1.2.11.tar.gz，
+下载地址如下
+https://sourceforge.net/projects/pcre/files/pcre/8.38/、
+http://www.zlib.net/
+)
+
+
+将上面下载的4个包都解压到/usr/local目录
+在/root目录解压
+tar zxf nginx-1.10.1.tar.gz /usr/local/nginx-1.10.1
+tar zxf openssl-1.0.2h.tar.gz /usr/local/openssl-1.0.2h
+tar zxf pcre-8.38.tar.gz /usr/local/pcre-8.38
+tar zxf zlib-1.2.11.tar.gz /usr/local/zlib-1.2.11
+然后用mv 命令，目录名不变，移动到/usr/local目录。
+
+
+在nginx解压后的目录中编译参数
+cd /usr/local/nginx-1.10.1
+./configure --prefix=/etc/nginx 
+--user=root --group=root 
+--sbin-path=/usr/sbin/nginx 
+--conf-path=/etc/nginx/nginx.conf 
+--error-log-path=/var/log/nginx/error.log 
+--http-log-path=/var/log/nginx/access.log 
+--http-client-body-temp-path=/var/lib/nginx/tmp/client_body 
+--http-proxy-temp-path=/var/lib/nginx/tmp/proxy 
+--http-fastcgi-temp-path=/var/lib/nginx/tmp/fastcgi 
+--http-uwsgi-temp-path=/var/lib/nginx/tmp/uwsgi 
+--http-scgi-temp-path=/var/lib/nginx/tmp/scgi 
+--pid-path=/var/run/nginx.pid 
+--lock-path=/var/run/nginx.lock 
+--with-file-aio 
+--with-ipv6 
+--with-http_ssl_module 
+--with-http_spdy_module 
+--with-http_realip_module 
+--with-http_addition_module 
+--with-http_xslt_module 
+--with-http_image_filter_module 
+--with-http_geoip_module 
+--with-http_sub_module 
+--with-http_dav_module 
+--with-http_flv_module 
+--with-http_mp4_module 
+--with-http_gunzip_module 
+--with-http_gzip_static_module 
+--with-http_random_index_module 
+--with-http_secure_link_module 
+--with-http_degradation_module 
+--with-http_stub_status_module 
+--with-http_perl_module 
+--with-mail --with-mail_ssl_module 
+--with-pcre=/usr/local/pcre-8.38 
+--with-pcre-jit 
+--with-google_perftools_module 
+--with-debug 
+--with-cc-opt='-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -m64 -mtune=generic' 
+--with-ld-opt='-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -Wl,-E' 
+--with-zlib=/usr/local/zlib-1.2.11 
+--with-openssl=/usr/local/openssl-1.0.2h
+
+编译的时候如果报错误1：
+./configure: error: invalid option "--with-http_spdy_module"
+是因为nginx版本较高，1.9.5已经没有这个模块，取而代之的是--with-http_v2_module。
+
+如果报错误2：
+./configure: error: the invalid value in --with-ld-opt="-Wl,-z,relro -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -Wl,-E"
+去掉这个参数
+
+如果报错误3：
+./configure: no supported file AIO was found
+Currently file AIO is supported on FreeBSD 4.3+ and Linux 2.6.22+ only
+去掉这个参数
+
+如果报错误4：
+./configure: error: can not detect int size
+去掉--with-cc-opt
+
+如果报错误5：
+./configure: error: perl module ExtUtils::Embed is required
+缺少一个依赖组件，安装一下就可以
+yum install perl perl-devel perl-ExtUtils-Embed
+
+如果报错6：
+./configure: error: the GeoIP module requires the GeoIP library.
+You can either do not enable the module or install the library.
+去掉--with-http_geoip_module 参数
+
+如果报错7：
+./configure: error: the Google perftools module requires the Google perftools
+library. You can either do not enable the module or install the library.
+去掉--with-google_perftools_module参数
+
+
+编译和安装
+make
+make install
+
+
+安装好后检查nginx是否运行
+
+[root@localhost ~]# ps -A|grep nginx
+
+如果有返回结果表示已经运行
+没有返回结果表示还没运行，如果没有运行，则执行运行脚本
+使用which nginx命令查看nginx的安装目录
+
+[root@localhost ~]# which nginx
+
+得到结果是在/usr/sbin/nginx
+
+[root@localhost ~]# cd /usr/sbin/
+[root@localhost sbin]# ./nginx 
+
+运行nginx，如果出现如下报错
+
+[root@localhost sbin]# ./nginx 
+nginx: [emerg] mkdir() "/var/lib/nginx/tmp/client_body" failed (2: No such file or directory)
+
+表示这个目录不存在，使用命令创建要求的目录即可
+
+[root@localhost ~]# cd /var/lib/
+[root@localhost lib]# mkdir -p nginx/tmp/client_body
+[root@localhost lib]# chmod 777 -R nginx/
+
+
+创建目录后最可给目录写权限，再到/usr/sbin目录执行nginx启动脚本
+[root@localhost sbin]# ./nginx
+
+此时查看可以看到nginx已经启动
+[root@localhost ~]# ps -A|grep nginx
+16209 ?        00:00:00 nginx
+16210 ?        00:00:00 nginx
+
+
+检测nginx是否正常安装成功，在浏览器输入服务器ip，如果页面显示
+Welcome to nginx!
+
+If you see this page, the nginx web server is successfully installed and working. Further configuration is required.
+
+For online documentation and support please refer to nginx.org.
+Commercial support is available at nginx.com.
+
+Thank you for using nginx.
+
+
+
+表示安装成功，可以使用了。
+
+
+
+*******************************************************************************
+安装后的nginx没有加入到系统服务，不能用service命令启动和停止，解决方法：
+cd /etc/init.d
+vim nginx
+
+
+在创建的nginx脚本中添加如下内容
+
+#!/bin/sh
+#
+# nginx - this script starts and stops the nginx daemin
+#
+# chkconfig:   - 85 15 
+# description:  Nginx is an HTTP(S) server, HTTP(S) reverse \
+#               proxy and IMAP/POP3 proxy server
+# processname: nginx
+# config:      /etc/nginx/nginx.conf
+# pidfile:     /var/run/nginx.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+[ "$NETWORKING" = "no" ] && exit 0
+
+nginx="/usr/sbin/nginx"
+prog=$(basename $nginx)
+
+NGINX_CONF_FILE="/etc/nginx/nginx.conf"
+
+lockfile=/var/run/nginx.lock
+
+start() {
+    [ -x $nginx ] || exit 5
+    [ -f $NGINX_CONF_FILE ] || exit 6
+    echo -n $"Starting $prog: "
+    daemon $nginx -c $NGINX_CONF_FILE
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && touch $lockfile
+    return $retval
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog -QUIT
+    retval=$?
+    echo
+    [ $retval -eq 0 ] && rm -f $lockfile
+    return $retval
+}
+
+restart() {
+    configtest || return $?
+    stop
+    start
+}
+
+reload() {
+    configtest || return $?
+    echo -n $"Reloading $prog: "
+    killproc $nginx -HUP
+    RETVAL=$?
+    echo
+}
+
+force_reload() {
+    restart
+}
+
+configtest() {
+  $nginx -t -c $NGINX_CONF_FILE
+}
+
+rh_status() {
+    status $prog
+}
+
+rh_status_q() {
+    rh_status >/dev/null 2>&1
+}
+
+case "$1" in
+    start)
+        rh_status_q && exit 0
+        $1
+        ;;
+    stop)
+        rh_status_q || exit 0
+        $1
+        ;;
+    restart|configtest)
+        $1
+        ;;
+    reload)
+        rh_status_q || exit 7
+        $1
+        ;;
+    force-reload)
+        force_reload
+        ;;
+    status)
+        rh_status
+        ;;
+    condrestart|try-restart)
+        rh_status_q || exit 0
+            ;;
+    *)
+        echo $"Usage: $0 {start|stop|status|restart|condrestart|try-restart|reload|force-reload|configtest}"
+        exit 2
+esac
+
+
+
+添加完成保存并退出，然后给脚本可执行权限
+chmod a+x nginx
+
+
+就可以使用service命令来管理nginx
+[root@localhost init.d]# service nginx status
+nginx (pid  16209) is running...
+
+[root@localhost init.d]# service nginx restart
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+Stopping nginx:                                            [  OK  ]
+Starting nginx:                                            [  OK  ]
+
+*******************************************************************************
+
+
+
+
+
+2.2 安装php
+将Centos的yum源更换为国内的阿里云源，备份原镜像文件，
+
+mv /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo.backup
+
+
+下载新的源
+Centos6的源 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
+Centos7的源 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+
+我的系统是Centos6.5，所以我用的Centos6的源。
+
+
+生成缓存
+
+yum clean all
+yum makecache
+
+
+
+安装依赖
+yum install -y gcc gcc-c++ make cmake bison autoconf wget lrzsz
+yum install -y libtool libtool-ltdl-devel 
+yum install -y freetype-devel libjpeg.x86_64 libjpeg-devel libpng-devel gd-devel
+yum install -y python-devel  patch  sudo 
+yum install -y openssl* openssl openssl-devel ncurses-devel
+yum install -y bzip* bzip2 unzip zlib-devel
+yum install -y libevent*
+yum install -y libxml* libxml2-devel
+yum install -y libcurl* curl-devel 
+yum install -y readline-devel
+
+
+报错1：
+错误：libevent2-devel conflicts with libevent-devel-1.4.13-4.el6.x86_64
+ You could try using --skip-broken to work around the problem
+ You could try running: rpm -Va --nofiles --nodigest
+
+解决：
+
+yum remove libevent-devel-1.4.13-4.el6.x86_64
+yum install libevent2-devel
+
+
+
+
+需要编译libmcrypt、mhash、mcrypt库，安装都下载到了/root目录，解压后的目录在/usr/local中的相应目录。
+cd /libmcrypt-2.5.8 && ./configure && make && make install && cd - / && rm -rf /libmcrypt*
+cd mhash-0.9.9.9 && ./configure && make && make install && cd - / && rm -rf /mhash*
+cd mcrypt-2.6.8 && LD_LIBRARY_PATH=/usr/local/lib ./configure && make && make install && cd - / && rm -rf /mcrypt*
+
+
+开始安装
+cd /usr/local/php-7.0.13
+
+#安装时的参数 
+*************************************************************************
+./configure' '--prefix=/usr/local/php' '--with-config-file-scan-dir=/usr/local/php/etc' '--with-config-file-path=/usr/local/php/etc' '--enable-bcmath' '--with-bz2' '--enable-calendar' '--with-curl' '--enable-dba' '--enable-exif' '--enable-ftp' '--with-gd' '--enable-gd-native-ttf' '--with-gettext' '--with-mhash' '--with-iconv' '--enable-intl' '--with-libxml-dir' '--enable-mbstring' '--with-openssl' '--with-pcre-jit' '--with-pcre-dir' '--with-pdo-mysql=mysqlnd' '--with-pdo-sqlite' '--with-readline' '--enable-session' '--enable-shmop' '--enable-soap' '--enable-sockets' '--with-sqlite3' '--enable-sysvmsg' '--enable-sysvsem' '--enable-sysvshm' '--enable-wddx' '--enable-xml' '--with-xmlrpc' '--with-zlib' '--enable-zip' '--enable-inline-optimization' '--enable-fpm' '--with-mysqli=mysqlnd' '--enable-mbregex' '--with-mcrypt' '--with-jpeg-dir' '--with-png-dir' '--with-freetype-dir' '--with-iconv-dir' '--enable-gd-jis-conv' '--enable-embedded-mysqli' '--enable-mysqlnd' '--enable-debug
+*******************************************************************************
+
+
+
+make
+
+***
+make的时候报错
+
+collect2: ld returned 1 exit status
+make: *** [sapi/cli/php] 错误 1
+
+「undefined reference to libiconv_open'」之类的错误信息
+
+vim Makefile，大约第77行左右的地方: EXTRA_LIBS = ..... -lcrypt 在最后加上 -liconv，
+例如: EXTRA_LIBS = ..... -lcrypt -liconv 然后重新再次 make 即可。
+***
+
+make install
+
+安装完成后出现以下提示：
+
+Wrote PEAR system config file at: /usr/local/etc/pear.conf
+You may want to add: /usr/local/php/lib/php to your php.ini include_path
+/usr/local/php-7.0.13/build/shtool install -c ext/phar/phar.phar /usr/local/php/bin
+ln -s -f phar.phar /usr/local/php/bin/phar
+Installing PDO headers:           /usr/local/php/include/php/ext/pdo/
+
+
+一行一行来解决，第一行是因为之前安装过pear，有一个遗留的/root/.pearrc文件与现在的安装的pear冲突。
+找到这个文件并删除就可以，如果提示没有权限，使用chattr -i .pearrc后再rm。
+
+第二行增加php.ini，在/usr/local/php-7.0.13目录中使用命令cp php.ini-development /usr/local/php/etc/php.ini。
+后面几行不管。
+
+
+增加php配置文件
+cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf
+vim /usr/local/php/etc/php-fpm.conf.default
+将文件中pid=run/php-fpm.pid前面的逗号去掉，将error_log = log/php-fpm.log前面的逗号去掉，
+保存退出
+
+cp /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf
+vim /usr/local/php/etc/php-fpm.d/www.conf
+修改用户和组为下面两行
+user = nginx
+group = nginx
+
+重启php-fpm，如果无法停止全部进程，用killall php-fpm命令杀死所有php-fpm进程，然后执行
+[root@localhost ~]# cd /usr/local/php/sbin
+[root@localhost sbin]# ./php-fpm
+
+最后php -v查看php版本，出现以下返回结果表示安装成功。
+[root@localhost sbin]# ./php-fpm -v
+PHP 7.0.13 (fpm-fcgi) (built: May  2 2017 18:08:37)
+Copyright (c) 1997-2016 The PHP Group
+Zend Engine v3.0.0, Copyright (c) 1998-2016 Zend Technologies
+
+将php服务添加service管理
+[root@localhost php-fpm.d]# cd /usr/local/php-7.0.13/sapi/fpm/
+[root@localhost fpm]# cp init.d.php-fpm /etc/init.d/php-fpm
+chmod a+x /etc/init.d/php-fpm
+
+
+*******************************************************************************
+php-fpm添加到系统服务参考，因为已经有了/etc/init.d/php-fpm，所以不需要另外创建
+#! /bin/sh
+#
+# chkconfig: - 84 16
+# description:  PHP FastCGI Process Manager
+# processname: php-fpm
+# config: /etc/php-fpm.conf
+# config: /etc/sysconfig/php-fpm
+# pidfile: /var/run/php-fpm/php-fpm.pid
+#
+### BEGIN INIT INFO
+# Provides: php-fpm
+# Required-Start: $local_fs $remote_fs $network $named
+# Required-Stop: $local_fs $remote_fs $network
+# Short-Description: start and stop PHP FPM
+# Description: PHP FastCGI Process Manager
+### END INIT INFO
+
+# Standard LSB functions
+#. /lib/lsb/init-functions
+
+# Source function library.
+. /etc/init.d/functions
+
+# Check that networking is up.
+. /etc/sysconfig/network
+
+# Additional environment file
+if [ -f /etc/sysconfig/php-fpm ]; then
+      . /etc/sysconfig/php-fpm
+fi
+
+if [ "$NETWORKING" = "no" ]
+then
+        exit 0
+fi
+
+RETVAL=0
+prog="php-fpm"
+#pidfile=${PIDFILE-/var/run/php-fpm/php-fpm.pid}
+pidfile=/usr/local/php/var/run/php-fpm.pid
+lockfile=${LOCKFILE-/var/lock/subsys/php-fpm}
+start () {
+        echo -n $"Starting $prog: "
+        dir=$(dirname ${pidfile})
+        [ -d $dir ] || mkdir $dir
+        daemon --pidfile ${pidfile} /usr/local/php/sbin/php-fpm --daemonize
+        RETVAL=$?
+        echo
+        [ $RETVAL -eq 0 ] && touch ${lockfile}
+}
+stop () {
+        echo -n $"Stopping $prog: "
+        killproc -p ${pidfile} php-fpm
+        RETVAL=$?
+        echo
+        if [ $RETVAL -eq 0 ] ; then
+                rm -f ${lockfile} ${pidfile}
+        fi
+}
+
+restart () {
+        stop
+        start
+}
+
+reload () {
+        echo -n $"Reloading $prog: "
+        if ! /usr/sbin/php-fpm --test ; then
+                RETVAL=6
+                echo $"not reloading due to configuration syntax error"
+                failure $"not reloading $prog due to configuration syntax error"
+        else
+                killproc -p ${pidfile} php-fpm -USR2
+                RETVAL=$?
+        fi
+        echo
+}
+
+
+# See how we were called.
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  status)
+        status -p ${pidfile} php-fpm
+        RETVAL=$?
+        ;;
+  restart)
+        restart
+        ;;
+  reload|force-reload)
+        reload
+        ;;
+  configtest)
+        /usr/sbin/php-fpm --test
+        RETVAL=$?
+        ;;
+  condrestart|try-restart)
+        [ -f ${lockfile} ] && restart || :
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|status|restart|reload|force-reload|condrestart|try-restart|configtest}"
+        RETVAL=2
+        ;;
+esac
+                                                                                                                                                                                                                          
+exit $RETVAL
+*******************************************************************************
+现在可以用service php-fpm **来管理php服务。
+
+
+配置nginx支持php，在/etc/nginx目录增加php_enable.conf
+加入下面的内容
+location ~ \.php$ {
+                        root /var/www; #指定php的根目录
+                        fastcgi_pass 127.0.0.1:9000;#php-fpm的默认端口是9000
+                        fastcgi_index index.php;
+                        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                        include fastcgi_params;
+                }
+
+并在各项目配置文件*.conf中加入一行    
+include php_enable.conf;
+保存并重启nginx服务。
+
+将php加入到系统环境变量
+vim /etc/profile
+在PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin这一行后面加上php的运行路径变成如下所示：
+PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin:/usr/local/php/bin
+
+保存并退出后执行更新
+source /etc/profile，然后就可以在任意目录执行php -v了。
+
+
+其他没有安装的扩展用phpize安装，然后重启php-fpm服务。
+
+安装redis扩展，php7的扩展包中没有redis扩展，要另外安装。
+下载地址https://github.com/phpredis/phpredis/tree/php7，下载zip包上传到/root目录，
+解压到/usr/local/phpredis
+/usr/local/php/bin/phpize
+./configure --with-php-config=/usr/local/php/bin/php-config
+make && make install
+安装完成后将redis.so添加到php.ini中重启php服务。
+
+
+
+
+
+2.3 安装redis，不另外叙述。
+
+
+
+
+
+2.4 安装mysql
+先安装依赖
+yum -y install bison*
+yum install -y openssl openssl-devel
+yum install -y make gcc gcc-c++ ncurses-devel
+yum -y install wget cmake perl
+
+
+创建用户、组 为mysql
+groupadd mysql 
+useradd -r -g mysql mysq
+
+关闭Linux防火墙命令
+chkconfig iptables off
+
+修改SELINUX配置
+vim /etc/sysconfig/selinux
+
+SELINUX=enforcing
+#修改为：
+#SELINUX=disabled
+reboot
+
+
+在官网下载
+https://downloads.mysql.com/archives/community/
+
+选择下列筛选条件
+Product Version:5.7.17
+Operating System:Source Code
+OS Version:Generic Linux(Architecture independent)
+
+出现的结果只有两条，选择第2条，包含boost的包
+(mysql-boost-5.7.17.tar.gz)，点击下载。
+
+
+下载后传到服务器/root目录，解压到/usr/local目录。
+解压后的目录是/usr/local/mysql-5.7.17
+
+cd /usr/local/mysql-5.7.17
+
+cmake编译参数：
+cmake .
+-DCMAKE_INSTALL_PREFIX=/usr/local/mysql 
+-DMYSQL_UNIX_ADDR=/usr/local/mysql/tmp/mysql.sock 
+-DDEFAULT_CHARSET=utf8 
+-DDEFAULT_COLLATION=utf8_general_ci 
+-DWITH_MYISAM_STORAGE_ENGINE=1 
+-DWITH_INNOBASE_STORAGE_ENGINE=1 
+-DWITH_ARCHIVE_STORAGE_ENGINE=1 
+-DWITH_BLACKHOLE_STORAGE_ENGINE=1 
+-DWITH_MEMORY_STORAGE_ENGINE=1 
+-DWITH_READLINE=1 
+-DENABLED_LOCAL_INFILE=1 
+-DMYSQL_DATADIR=/usr/local/mysql/data 
+-DMYSQL_USER=mysql 
+-DMYSQL_TCP_PORT=3306 
+-DENABLE_DOWNLOADS=1 
+-DWITH_BOOST=boost/boost_1_59_0/
+
+
+cmake .  -DCMAKE_INSTALL_PREFIX=/usr/local/mysql -DMYSQL_UNIX_ADDR=/usr/local/mysql/tmp/mysql.sock -DDEFAULT_CHARSET=utf8mb4 -DDEFAULT_COLLATION=utf8mb4_general_ci -DWITH_MYISAM_STORAGE_ENGINE=1 -DWITH_INNOBASE_STORAGE_ENGINE=1 -DWITH_ARCHIVE_STORAGE_ENGINE=1 -DWITH_BLACKHOLE_STORAGE_ENGINE=1 -DWITH_MEMORY_STORAGE_ENGINE=1 -DWITH_READLINE=1 -DENABLED_LOCAL_INFILE=1 -DMYSQL_DATADIR=/usr/local/mysql/data -DMYSQL_USER=mysql -DMYSQL_TCP_PORT=3306 -DENABLE_DOWNLOADS=1 -DWITH_BOOST=boost/boost_1_59_0/
+
+make
+
+#看一下有没有错误
+echo $?
+
+#输出0，没有错误继续
+make install
+
+#清除安装临时文件
+make clean
+
+#修改目录拥有者
+chown -Rf mysql:mysql /usr/local/mysql5.7.17
+chown -Rf mysql:mysql /usr/local/mysql
+
+#创建自带的库和表
+#mysql5.7之前版本初始化配置表命令：
+#script/mysql_install_db #--user=mysql #--basedir=/application/mysql #--datadir=/home/mysql/data
+
+#mysql5.7已经放弃使用了，而且也没有script目录，可以使用下面这个
+
+cd /usr/local/myql
+./bin/mysqld --initialize  --user=mysql  --basedir=/usr/local/mysql  --datadir=/usr/local/mysql/data --explicit_defaults_for_timestamp
+
+初始化后返回结果如下：
+[root@localhost mysql]# ./bin/mysqld --initialize --user=mysql --basedir=/usr/local/mysql --datadir=/usr/local/mysql/data --explicit_defaults_for_timestamp
+2017-05-05T08:43:08.114587Z 0 [Warning] InnoDB: New log files created, LSN=45790
+2017-05-05T08:43:08.453550Z 0 [Warning] InnoDB: Creating foreign key constraint system tables.
+2017-05-05T08:43:08.642375Z 0 [Warning] No existing UUID has been found, so we assume that this is the first time that this server has been started. Generating a new UUID: dd433a34-316e-11e7-981b-f0921ce7132f.
+2017-05-05T08:43:08.682740Z 0 [Warning] Gtid table is not ready to be used. Table 'mysql.gtid_executed' cannot be opened.
+2017-05-05T08:43:08.683898Z 1 [Note] A temporary password is generated for root@localhost: =WG5qGpVHpww
+
+#初始化数据后注意文字提示，里面有root用户的初始密码
+
+#在/etc目录下如果存在一个my.cnf文件，建议将此文件更名为其他的名字，
+#否则该文件 会干扰源码安装的MySQL的正确配置，造成无法启动没有则不处理。
+#修改/etc/my.cnf操作如下：
+mv /etc/my.cnf /etc/my.cnf.bak
+
+
+#在启动MySQL服务时，会按照一定次序搜索my.cnf，先在/etc目录下找，
+#找不到则会搜索mysql程序目录下是否有my.cnf
+cp /usr/local/mysql/support-files/my-default.cnf  /etc/my.cnf
+
+
+#mysql5.7配置文件需要修改my.cnf关键配置， 
+#mysql5.7之前默认配置文件中是有配置项的，不用手动修改
+
+vim /etc/my.cnf
+
+#修改下面配置
+[mysqld]
+basedir =/usr/local/mysql
+datadir =/usr/local/mysql/data
+port = 3306
+socket = /usr/local/mysql/tmp/mysql.sock
+
+[client]
+socket=/usr/local/mysql/tmp/mysql.sock
+
+#client这个字段千万别忘了，如果没有就自己加。不然会不能登录，出现以下错误
+#ERROR 2002 (HY000): Can‘t connect to local MySQL server through socket ‘/application/mysql5.7/mysql.sock‘ (2)
+
+
+添加mysql到service 
+cp ./support-files/mysql.server /etc/init.d/mysqld
+# chmod +x /etc/init.d/mysqld
+
+
+将mysql运行路径添加系统环境变量
+vim /etc/profile
+在PATH变量后面加上
+:/usr/local/mysql/bin
+保存退出后执行
+source /etc/profile
+更新环境变量
+
+
+
+启动mysqld服务
+[root@localhost ~]# service mysqld start
+Starting MySQL...The server quit without updating PID file (/usr/local/mysql/data/localhost.localdomain.pid).                              [FAILED]
+
+
+出现这个问题可能有多个原因
+1、可能是/usr/local/mysql/data/mysql.pid文件没有写的权限
+解决方法 ：给予权限，执行 “chown -R mysql:mysql /var/data” “chmod -R 755 /usr/local/mysql/data”  然后重新启动mysqld！
+
+2、可能进程里已经存在mysql进程
+解决方法：用命令“ps -ef|grep mysqld”查看是否有mysqld进程，如果有使用“kill -9  进程号”杀死，然后重新启动mysqld！
+
+3、可能是第二次在机器上安装mysql，有残余数据影响了服务的启动。
+解决方法：去mysql的数据目录/data看看，如果存在mysql-bin.index，就赶快把它删除掉吧，它就是罪魁祸首了。本人就是使用第三条方法解决的 ！
+
+4、mysql在启动时没有指定配置文件时会使用/etc/my.cnf配置文件，请打开这个文件查看在[mysqld]节下有没有指定数据目录(datadir)。
+解决方法：请在[mysqld]下设置这一行：datadir = /usr/local/mysql/data
+
+5、skip-federated字段问题
+解决方法：检查一下/etc/my.cnf文件中有没有没被注释掉的skip-federated字段，如果有就立即注释掉吧。
+
+6、错误日志目录不存在
+解决方法：使用“chown” “chmod”命令赋予mysql所有者及权限
+
+
+
+我这里的原因是某些文件没有权限，我给了整个mysql目录所有权限，然后再开启，就没问题了
+[root@localhost local]# chmod 777 -R mysql
+[root@localhost local]# service mysqld start
+Starting MySQL.                                            [  OK  ]
+
+
+初次登录时，输入密码后
+[root@localhost ~]# mysql -uroot -p
+Enter password: 
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+
+解决方法
+[root@localhost ~]# service mysqld stop
+Shutting down MySQL.                                       [  OK  ]
+[root@localhost ~]# 2017-05-05T09:07:42.599489Z mysqld_safe Logging to '/usr/local/mysql/data/localhost.localdomain.err'.
+2017-05-05T09:07:42.602781Z mysqld_safe Logging to '/usr/local/mysql/data/localhost.localdomain.err'.
+2017-05-05T09:07:42.632961Z mysqld_safe Starting mysqld daemon with databases from /usr/local/mysql/data
+
+#使用root登录mysql数据库
+[root@localhost ~]# mysql -uroot mysql
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.17 Source distribution
+
+.更新root密码
+mysql> UPDATE user SET authentication_string=PASSWORD('newpassword') where USER='root';
+#5.7及以上版本MySQL请采用如下SQL：
+mysql> UPDATE user SET authentication_string=PASSWORD('newpassword') where USER='root';
+Query OK, 1 row affected, 1 warning (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 1
+ 
+#5.刷新权限 
+mysql> FLUSH PRIVILEGES;
+ 
+#6.退出mysql
+mysql> quit
+ 
+#7.重启mysql
+[root@localhost ~]# service mysqld restart
+Shutting down MySQL..2017-05-05T09:15:50.311564Z mysqld_safe mysqld from pid file /usr/local/mysql/data/localhost.localdomain.pid ended
+                                                           [  OK  ]
+Starting MySQL.                                            [  OK  ]
+[4]   Done                    mysqld_safe --user=mysql --skip-grant-tables --skip-networking
+ 
+#8.使用root用户重新登录mysql
+mysql -uroot -p 
+Enter password: <输入新设的密码newpassword>
+
+
+登录进去后还要执行一次
+SET PASSWORD = PASSWORD('12345677');
+才能进行读写操作!!!!!!!
+
+
+从125服务器上导出数据库
+mysqldump -h127.0.0.1 -uroot -p --default-character-set=utf8mb4 deyihome > deyihome20170505.sql

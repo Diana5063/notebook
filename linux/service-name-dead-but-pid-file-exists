@@ -1,0 +1,46 @@
+#由于非正常关机导致系统变成可读，部分服务提示service name dead but pid file exists
+
+解决方法http://blog.chinaunix.net/uid-21928709-id-1811022.html
+
+
+
+1、查看/目录所在区块，可以看到在/dev/sda3区块
+[root@localhost ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3        77G   18G   56G  24% /
+tmpfs           2.0G     0  2.0G   0% /dev/shm
+/dev/sda1        77G   18G   56G  24% /boot
+
+
+2、查看系统文件系统，由于系统已出错，一般查看命令可能无法正确体现，最直接的方法是
+查看系统配置文件
+[root@localhost ~]# cat /proc/mounts
+proc /proc proc rw,relatime 0 0
+sysfs /sys sysfs rw,relatime 0 0
+devtmpfs /dev devtmpfs rw,relatime,size=2011092k,nr_inodes=502773,mode=755 0 0
+devpts /dev/pts devpts rw,relatime,gid=5,mode=620,ptmxmode=000 0 0
+tmpfs /dev/shm tmpfs rw,relatime 0 0
+/dev/sda3 / ext4 ro,nodiratime,relatime,journal_checksum,journal_async_commit,nobarrier,data=writeback 0 0
+
+可以看到/dev/sda3是ext4系统
+
+
+3、关闭系统，然后用单机模式进入系统
+按下开机键，等电脑屏幕亮了后，按下键盘上的 e 键不放，进入编辑命令入口，
+在命令行输入single并回车进入了单用户模式，
+在出现的多个开机选项中，用上下箭头选择第2项，
+kernal，然后按键盘上的 b 键，进入系统
+
+
+4、对要修复的分区进行卸载
+sudo umount /dev/sda3
+
+
+5、然后执行fsck
+fsck.ext4 /dev/sda3
+
+命令运行过程中会向你确认是否修复，输入y表示是
+
+
+6、修复完成后重启系统
+reboot

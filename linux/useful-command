@@ -1,0 +1,29 @@
+find . -type f -name '*.php' | xargs -n1 grep -H5 'elasticsearch' |more
+
+
+
+find 查找命令
+
+. 当前目录查找
+
+f 查找文件
+
+-name 查找的文件名
+
+'*.php' 以php为后缀名的文件
+
+| 管道
+
+xargs 给其他命令传递参数的一个过滤器，也是组合多个命令的一个工具，它擅长将标准输入数据转换成命令行参数
+
+来自: http://man.linuxde.net/xargs
+
+-n1  多行输出，每行输出1个
+
+grep 正则匹配
+
+-H5 可以显示这个搜索到的结果的上下文本行数，上下各5行，并在结果前显示文件路径
+
+ 'elasticsearch' 正则匹配 elasticsearch
+
+more 将结果一页一页地显示在屏幕上

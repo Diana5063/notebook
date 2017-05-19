@@ -1,0 +1,43 @@
+#本地能连接mysql，远程无法连接
+
+可能的原因及解决方法：
+
+1、没有授予相应的权限
+
+例如，想让root使用123456从任何主机连接到mysql服务器。
+mysql>GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456' WITH GRANT OPTION;
+
+　　
+如果想允许用户jack从ip为10.10.50.127的主机连接到mysql服务器，并使用654321作为密码
+mysql>GRANT ALL PRIVILEGES ON *.* TO 'jack'@’10.10.50.127’ IDENTIFIED BY '654321' WITH GRANT OPTION;
+
+最后一定要刷新权限，否则不生效
+mysql>FLUSH RIVILEGES
+
+
+2、 防火墙禁止了3306端口，以iptable为例　　　　
+ 	
+　　　　vi /etc/sysconfig/iptables
+　　　　增加下面一行：
+　　　　-A RH-Firewall-1-INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT
+　   (或 -A -INPUT -m state --state NEW -m tcp -p tcp --dport 3306 -j ACCEPT，尝试)  
+　　　　service iptables restart
+
+　　　　ps:  iptables设置
+　　　　1) 重启后生效 
+　　　　开启： chkconfig iptables on 
+　　　　关闭： chkconfig iptables off 
+
+　　　　2) 即时生效，重启后失效 
+　　　　开启： service iptables start 
+　　　　关闭： service iptables stop
+
+
+3、 修改MySQL的配置文件/etc/mysql/my.cnf，因为默认3306端口只允许本地访问的
+注释掉这行
+　　　　#bind-address = 127.0.0.1
+
+或者将bind-address修改为0.0.0.0
+bind-address=0.0.0.0
+
+然后重启Mysql，service mysqld restart

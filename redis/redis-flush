@@ -1,0 +1,4 @@
+#Redis清空 数据
+进入redis目录下 
+redis-cli 
+flushall 

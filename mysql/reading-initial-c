@@ -1,0 +1,13 @@
+#ERROR 2013 (HY000): Lost connection to MySQL server at 'reading initial
+ communication packet', system error: 0
+
+docker 中数据库报错
+
+尝试解决方法：
+1、在my.cnf中增加一行skip-name-resolve
+
+2、修改innodb_buffer_pool_size=1024M
+
+3、电脑磁盘损坏导致系统变成只读，此时需要修复磁盘，使用fsck命令修复磁盘
+
+4、重装mysql

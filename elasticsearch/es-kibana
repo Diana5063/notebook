@@ -1,0 +1,13 @@
+#kibana使用
+
+1、按照官网教程安装好后，修改部分参数设置
+server.host: "0.0.0.0" //这里改成全0是为了让其他机器也能访问
+server.name: "jia-test.com" //这里改成自己的网站域名
+elasticsearch.url: "http://localhost:9200" //es配置
+
+然后重启kibana服务
+service kibana restart
+
+2、如果5601端口不能访问，尝试关闭防火墙
+service iptables stop //暂时关闭
+chkconfig iptables off //永久关闭

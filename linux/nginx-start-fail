@@ -1,0 +1,18 @@
+#修改了nginx某些配置后nginx服务无法启动
+
+尝试解决方法：
+1、service nginx restart
+
+2、如果service服务无法启动，则使用强制停止进程再启动
+killall nginx
+service nginx restart
+
+3、还不能启动时
+lsof -i:80看看哪些进程在使用80端口，将这些进程的一一停止
+
+kill -9 pid
+最后再重启nginx
+
+4、重启系统再启动nginx服务
+
+5、重新安装nginx。。。。。。。。

@@ -1,0 +1,58 @@
+#部分配置
+
+配置文件在/etc/elasticsearch/elasticsearch.yml
+注意：elasticsearch.yml中设置项中冒号右边要加一个空格
+
+配置集群名称
+cluster.name: jia-test.com
+
+配置访问ip（默认是192.168.0.1）,无法让其他机器访问，测试环境改成如下
+network.host: 0.0.0.0
+
+然后重启es服务
+service elasticsearch restart
+
+如果启动失败，查看日志，发现
+1、
+system call filters failed to install; check the logs and fix your configuration or disable system call filters at your own risk
+
+
+此时需要修改配置，添加配置项如下
+bootstrap.system_call_filter: false
+
+2、
+max number of threads [1024] for user [elasticsearch] is too low, increase to at least [2048]
+
+解决方法
+修改 /etc/security/limits.conf，添加Elasticsearch 用户的配置。如下：
+
+elasticsearch   soft  nproc 2048
+elasticsearch   hard  nproc 4096
+
+3、
+max file descriptors [65535] for elasticsearch process is too low, increase to at least [65536]
+
+vim /etc/security/limits.conf 
+
+添加如下内容:
+
+* soft nofile 65535
+* hard nofile 65536
+* soft nproc 2048
+* hard nproc 4096
+
+4、
+max number of threads [1024] for user [elasticsearch] is too low, increase to at least [2048]
+vim /etc/security/limits.d/90-nproc.conf 
+修改如下内容：
+
+* soft nproc 1024
+#修改为
+* soft nproc 2048
+
+
+然后重启es服务。
+[root@localhost ~]# service elasticsearch restart
+Stopping elasticsearch:                                    [FAILED]
+Starting elasticsearch:                                    [  OK  ]
+[root@localhost ~]

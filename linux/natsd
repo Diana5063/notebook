@@ -1,0 +1,13 @@
+#nats消息异步队列管理
+
+从官网下载gnatsd-v0.9.6-linux-amd64.zip放到/work/opt/nats目录，
+将zip包解压到/work/opt/nats目录，给gnatsd文件可执行权限。
+
+命令如下：
+cd /work/opt/nats
+unzip gnatsd-v0.9.6-linux-amd64.zip
+cd gnatsd-v0.9.6-linux-amd64
+将gnatsd-v0.9.6-linux-amd64中的文件全部复制到上一层目录（即/work/opt/nats）
+chmod a+x gnatsd
+
+nohup ./gnatsd -p 4222:4222 & //后台运行

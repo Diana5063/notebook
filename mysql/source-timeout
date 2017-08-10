@@ -1,0 +1,8 @@
+#source导入sql文件时发生ERROR 2006 (HY000): MySQL server has gone away
+
+
+修改超时时间设置
+vim /etc/my.cnf，在文件末尾增加如下三行并重启mysql，再次导入
+interactive_timeout = 120
+wait_timeout = 120
+max_allowed_packet = 256M

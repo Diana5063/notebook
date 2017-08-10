@@ -1,0 +1,6 @@
+#查看一个长文件中是否有需要的内容
+
+grep 'aaaa' filename
+
+eg.
+grep '/create' access_.log

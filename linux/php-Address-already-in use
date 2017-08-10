@@ -1,0 +1,42 @@
+#php重启服务的时候报错，ip地址已被使用
+
+
+[root@localhost ~]# service php-fpm restart
+Stopping php-fpm:                                          [  OK  ]
+Starting php-fpm: [04-Jul-2017 15:28:03] ERROR: unable to bind listening socket for address '127.0.0.1:9000': Address already in use (98)
+[04-Jul-2017 15:28:03] ERROR: FPM initialization failed
+                                                           [FAILED]
+[root@localhost ~]# service php-fpm restart
+Stopping php-fpm:                                          [FAILED]
+Starting php-fpm: [04-Jul-2017 15:28:08] ERROR: unable to bind listening socket for address '127.0.0.1:9000': Address already in use (98)
+[04-Jul-2017 15:28:08] ERROR: FPM initialization failed
+                                                           [FAILED]
+[root@localhost ~]# service php-fpm stop
+Stopping php-fpm:                                          [FAILED]
+[root@localhost ~]# service php-fpm start
+Starting php-fpm: [04-Jul-2017 15:28:27] ERROR: unable to bind listening socket for address '127.0.0.1:9000': Address already in use (98)
+[04-Jul-2017 15:28:27] ERROR: FPM initialization failed
+                                                           [FAILED]
+
+
+
+查看发现有如下进程
+[root@localhost ~]# ps -ef|grep php-fpm
+nginx    17110     1  0 Jul03 ?        00:00:17 php-fpm: pool www            
+nginx    17111     1  0 Jul03 ?        00:00:15 php-fpm: pool www            
+nginx    17112 17110  0 Jul03 ?        00:00:16 php-fpm: pool www            
+nginx    17187 17111  0 Jul03 ?        00:00:11 php-fpm: pool www            
+nginx    17188 17111  0 Jul03 ?        00:00:11 php-fpm: pool www            
+nginx    17189 17187  0 Jul03 ?        00:00:10 php-fpm: pool www            
+root     18546 18425  0 15:28 pts/0    00:00:00 grep php-fpm
+
+查看9000端口的使用情况
+[root@localhost ~]# netstat -lntup | grep 9000
+tcp        0      0 127.0.0.1:9000              0.0.0.0:*                   LISTEN      18580/php-fpm
+
+
+
+解决方法
+[root@localhost ~]# killall php-fpm
+[root@localhost ~]# service php-fpm start
+Starting php-fpm:                                          [  OK  ]

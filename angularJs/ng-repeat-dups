@@ -1,0 +1,5 @@
+#使用ng-repeat的新发现
+
+一般情况可以简单使用 ng-repeat=" a in arr"，
+当数组中有重复的元素时，这样使用会报错，说有dups，此时可以使用数组下标来区分每个元素，
+如ng-repeat="a in arr track by $index"，这两种情况都是直接使用a变量。

@@ -1,0 +1,38 @@
+#更新nodejs版本
+
+1、先安装n模块，n模块是专门用来管理nodejs版本的
+diana@diana-All-Series:~$ sudo npm install -g n
+[sudo] diana 的密码： 
+/usr/local/bin/n -> /usr/local/lib/node_modules/n/bin/n
+n@2.1.8 /usr/local/lib/node_modules/n
+
+
+2、升级node.js到最新稳定版本
+diana@diana-All-Series:~$ sudo n stable
+
+     install : node-v8.4.0
+       mkdir : /usr/local/n/versions/node/8.4.0
+       fetch : https://nodejs.org/dist/v8.4.0/node-v8.4.0-linux-x64.tar.gz
+######################################################################## 100.0%
+   installed : v8.4.0
+
+
+
+n后面也可以跟随版本号比如：
+
+n v0.10.26
+
+或
+
+n 0.10.26
+
+
+3、查看安装后的node版本
+diana@diana-All-Series:~$ node -v
+v0.10.25
+
+发现与安装的版本不一致，此时重启电脑再查看
+diana@diana-All-Series:~$ node -v
+v8.4.0
+
+就是安装后的node版本了

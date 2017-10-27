@@ -1,0 +1,32 @@
+#Linux su和sudo命令的区别，并获得root权限
+http://www.cnblogs.com/EasonJim/p/6047823.html
+
+
+su(superuser)
+
+su表示切换用户，如： 输入：su命令后回车表示切换当前的用户到root用户，或者： 输入：su - root(或者其他用户名)这里加了"-"后表示也切换的当前的环境变量到新用户的环境变量。
+
+su root（或者其他用户名）表示不切换环境变量到当前用户下。
+
+sudo 表示获取临时的root权限命令，如： sudo gedit /etc/shadow，表示临时使用root权限来编辑/etc/shadow密码文件，因为/etc/shadow密码文件需要使用root权限才能打开与编辑。所以这里使用了sudo命令临时使用root权限来做一些普通账户无法完成的工作。
+
+sudo -i表示以root身份登录，进程的实际用户ID和有效用户ID都变成了root，主目录也切换为root的主目录。
+
+获得root权限：
+
+1、sudo su（实质上就是su，而su默认是获得root权限）
+
+2、su
+
+3、su root
+
+4、su -root
+
+5、sudo -i
+
+
+退出超级用户
+
+exit
+或 logout
+或 ctrl+d

@@ -1,0 +1,8 @@
+#mysql时间比较
+ 1、SELECT 字段名 FROM 表名 where 时间字段>= unix_timestamp(now()-interval 30 minute);//适用于时间以unix时间戳保存的情况，如1415070541
+
+2、SELECT 字段名 FROM 表名 where 时间字段>= now()-interval 30 minute;//适用于时间以日期时间保存的情况，如2017-07-12 11:21:20
+
+30 minute表示30分钟，sql的作用是查找某个表中30分钟内指定字段的数据，
+30可以更改为想要的时间，minute表示分，可以改为second，表示秒。
+其他更详细参数及取值可上网查找相关资料。

@@ -1,0 +1,128 @@
+#安装grunt-cli，-g表示全局安装
+
+1、安装grunt-cli
+
+diana@diana-All-Series:~$ sudo npm install -g grunt-cli
+[sudo] diana 的密码： 
+/usr/local/bin/grunt -> /usr/local/lib/node_modules/grunt-cli/bin/grunt
++ grunt-cli@1.2.0
+added 11 packages, removed 12 packages and updated 5 packages in 10.361s
+
+2、查看grunt-cli版本
+diana@diana-All-Series:~$ grunt --version
+grunt-cli v1.2.0
+
+3、在需要使用grunt的目录创建package.json
+diana@diana-All-Series:~/workspace/deyihome-phpsource/static/v2$ pwd
+/home/diana/workspace/deyihome-phpsource/static/v2
+diana@diana-All-Series:~/workspace/deyihome-phpsource/static/v2$ npm init
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+
+See `npm help json` for definitive documentation on these fields
+and exactly what they do.
+
+Use `npm install <pkg>` afterwards to install a package and
+save it as a dependency in the package.json file.
+
+Press ^C at any time to quit.
+package name: (v2) jia.deyi.com
+version: (1.0.0) 
+description: 得意家WAP前台页面
+entry point: (Gruntfile.js) 
+test command: 
+git repository: 
+keywords: 
+author: 
+license: (ISC) 
+About to write to /home/diana/workspace/deyihome-phpsource/static/v2/package.json:
+
+{
+  "name": "jia.deyi.com",
+  "version": "1.0.0",
+  "description": "得意家WAP前台页面",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-uglify": "^3.0.1",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-sass": "^2.0.0",
+    "grunt-svgmin": "^4.0.0",
+    "requirejs": "^2.3.3",
+    "node-sass": "^4.5.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
+
+
+Is this ok? (yes) yes
+
+
+4、安装grunt插件，如果当前目录已有插件可直接删除插件目录（如node_modules目录）
+
+diana@diana-All-Series:~/workspace/deyihome-phpsource/static/v2$ npm install grunt --save-dev
+npm notice save grunt is being moved from dependencies to devDependencies
+npm notice created a lockfile as package-lock.json. You should commit this file.
+npm WARN jia.deyi.com@1.0.0 No repository field.
+
++ grunt@1.0.1
+added 92 packages in 31.254s
+
+
+5、测试grunt
+diana@diana-All-Series:~/workspace/deyihome-phpsource/static/v2$ grunt all
+>> Local Npm module "grunt-contrib-watch" not found. Is it installed?
+>> Local Npm module "grunt-contrib-uglify" not found. Is it installed?
+>> Local Npm module "grunt-sass" not found. Is it installed?
+Loading "build.js" tasks...ERROR
+>> Error: Cannot find module 'requirejs'
+>> Local Npm module "grunt-svgmin" not found. Is it installed?
+Warning: Task "sass:ui" not found. Use --force to continue.
+
+Aborted due to warnings.
+
+发现有报错，提示有几个模块未安装，分别安装他们
+1、
+diana@diana-All-Series:~/workspace/deyihome-phpsource/static/v2$ npm install grunt-contrib-watch --save-dev
+npm notice save grunt-contrib-watch is being moved from dependencies to devDependencies
+npm WARN jia.deyi.com@1.0.0 No repository field.
+
++ grunt-contrib-watch@1.0.0
+added 32 packages in 74.1s
+
+
+2、
+diana@diana-All-Series:~/workspace/deyihome-phpsource/static/v2$ npm install grunt-contrib-uglify --save-dev
+npm notice save grunt-contrib-uglify is being moved from dependencies to devDependencies
+npm WARN jia.deyi.com@1.0.0 No repository field.
+
++ grunt-contrib-uglify@3.0.1
+added 20 packages in 18.452s
+
+3、
+diana@diana-All-Series:~/workspace/deyihome-phpsource/static/v2$ npm install grunt-sass --save-dev
+
+......此处忽略很多行安装过程
+
+make: Leaving directory '/home/diana/workspace/deyihome-phpsource/static/v2/node_modules/grunt-sass/node_modules/node-sass/build'
+gyp info ok 
+Installed to /home/diana/workspace/deyihome-phpsource/static/v2/node_modules/grunt-sass/node_modules/node-sass/vendor/linux-x64-57/binding.node
+npm notice save grunt-sass is being moved from dependencies to devDependencies
+npm WARN jia.deyi.com@1.0.0 No repository field.
+
++ grunt-sass@2.0.0
+added 109 packages in 217.814s
+
+
+4、
+diana@diana-All-Series:~/workspace/deyihome-phpsource/static/v2$ npm install grunt-svgmin --save-dev
+npm notice save grunt-svgmin is being moved from dependencies to devDependencies
+npm WARN jia.deyi.com@1.0.0 No repository field.
+
++ grunt-svgmin@4.0.0
+added 11 packages in 14.385s

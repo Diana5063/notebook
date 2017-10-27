@@ -1,0 +1,12 @@
+＃某天使用phpstorm编辑代码时，非常卡，重启电脑好几次都没有用，在网上找的方法
+
+方法1
+在phpstorm的执行文件所在目录（bin）找到phpstorm.vmoptions文件，在文件末尾加两行
+-Dawt.usesystemAAFontSettings=lcd  
+-Dawt.java2d.opengl=true
+
+保存并重启phpstorm，尝试后依然不行。
+
+方法2
+在phpstorm官网下载最新版本，我的系统是ubuntu linux，下载的.tar.gz包，解压后打开启动脚本，
+可以正常输入了。

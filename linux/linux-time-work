@@ -1,0 +1,97 @@
+#linux设置定时运行任务
+
+
+1、cron服务【Ubuntu环境】
+查看cron状态  #sudo  service cron status　
+开启cron            #sudo /etc/init.d/cron start
+关闭cron            #sudo /etc/init.d/cron stop
+重启cron            #sudo /etc/init.d/cron restart
+
+
+
+
+
+2、 crontab用法
+crontab 是用来让使用者在固定时间或固定间隔执行程序之用，换句话说，也就是类似使用者的时程表。-u user 是指设定指定
+user 的时程表，这个前提是你必须要有其权限(比如说是 root)才能够指定他人的时程表。如果不使用 -u user 的话，就是表示设
+定自己的时程表。
+参数 :
+crontab -e : 执行文字编辑器来设定时程表，内定的文字编辑器是 VI，如果你想用别的文字编辑器，则请先设定 VISUAL 环境变数
+来指定使用那个文字编辑器(比如说 setenv VISUAL joe)
+crontab -r : 删除目前的时程表
+crontab -l : 列出目前的时程表
+crontab file [-u user]-用指定的文件替代目前的crontab。
+
+在crontab文件中写入需要执行的命令和时间，该文件中每行都包括六个域，其中前五个域是指定命令被执行的时间，最后一个域是要被执行的命令。每个域之间使用空格或者制表符分隔。格式如下： 
+
+{minute} {hour} {day-of-month} {month} {day-of-week} {full-path-to-shell-script} 
+minute: 区间为 0 – 59 
+hour: 区间为0 – 23 
+day-of-month: 区间为0 – 31 
+month: 区间为1 – 12. 1 是1月. 12是12月. 
+Day-of-week: 区间为0 – 7. 周日可以是0或7.
+
+除了数字还有几个特殊的符号："*"、"/"和"-"、","
+
+*代表所有的取值范围内的数字
+"/"代表每的意思,"/5"表示每5个单位
+"-"代表从某个数字到某个数字
+","分开几个离散的数字
+
+f1 f2 f3 f4 f5 program
+其中 f1 是表示分钟，f2 表示小时，f3 表示一个月份中的第几日，f4 表示月份，f5 表示一个星期中的第几天。program 表示要执
+行的程序。
+当 f1 为 * 时表示每分钟都要执行 program，f2 为 * 时表示每小时都要执行程序，其馀类推
+当 f1 为 a-b 时表示从第 a 分钟到第 b 分钟这段时间内要执行，f2 为 a-b 时表示从第 a 到第 b 小时都要执行，其馀类推
+当 f1 为 */n 时表示每 n 分钟个时间间隔执行一次，f2 为 */n 表示每 n 小时个时间间隔执行一次，其馀类推
+当 f1 为 a, b, c,... 时表示第 a, b, c,... 分钟要执行，f2 为 a, b, c,... 时表示第 a, b, c...个小时要执行，其馀类推
+使用者也可以将所有的设定先存放在档案 file 中，用 crontab file 的方式来设定时程表
+
+注：commands 注意以下几点
+要是存在文件，要写绝对路径
+即使是打印也不会显示在显示屏，在后台运行，最好重定向日志
+
+
+
+
+
+3、流程举例
+step1：写cron脚本文件，命名为crontest.cron。
+15,30,45,59 * * * * echo "xgmtest....."     表示，每隔15分钟，执行一次打印命令 
+
+step2：添加定时任务。执行命令
+crontab /home/del/crontest.cron >~/log
+
+step3："crontab -l" 查看定时任务是否成功或者检测/var/spool/cron下是否生成对应cron脚本
+crontab -l
+
+结果程序会每个15分钟往脚本里写一次“xgmtest.....”
+
+
+
+
+
+4、几个例子（http://www.cnblogs.com/aminxu/p/5993769.html）
+01. 在 12:01 a.m 运行，即每天凌晨过一分钟。这是一个恰当的进行备份的时间，因为此时系统负载不大。
+
+1 0 * * * /root/bin/backup.sh
+
+02. 每个工作日(Mon – Fri) 11:59 p.m 都进行备份作业。
+
+59 11 * * 1,2,3,4,5 /root/bin/backup.sh
+
+下面例子与上面的例子效果一样：
+
+59 11 * * 1-5 /root/bin/backup.sh
+
+03. 每5分钟运行一次命令
+
+*/5 * * * * /root/bin/check-status.sh
+
+04. 每个月的第一天 1:10 p.m 运行
+
+10 13 1 * * /root/bin/full-backup.sh
+
+05. 每个工作日 11 p.m 运行。
+
+0 23 * * 1-5 /root/bin/incremental-backup.sh

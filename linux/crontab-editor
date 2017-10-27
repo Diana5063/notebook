@@ -1,0 +1,20 @@
+#修改crontab默认的编辑
+
+crontab默认编辑器为nano
+
+修改crontab默认编辑器为vi或者其他的编辑器
+
+ 可以用命令select-editor修改
+
+
+root@diana-All-Series:~# sudo select-editor
+
+Select an editor.  To change later, run 'select-editor'.
+  1. /bin/ed
+  2. /bin/nano        <---- easiest
+  3. /usr/bin/vim.basic
+  4. /usr/bin/vim.nox
+  5. /usr/bin/vim.tiny
+
+Choose 1-5 [2]: 3     <----选择3后回车
+root@diana-All-Series:~# 

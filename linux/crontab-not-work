@@ -1,0 +1,45 @@
+#Crontab无法自动执行，直接运行脚本却能执行
+
+http://bbs.chinaunix.net/thread-1926428-1-1.html
+
+crontab -e
+
+crontab内容为
+* * * * * /root/auto.sh
+
+/root/auto.sh的内容为
+#！/bin/bash
+ping -c 1 192.168.0.1 &>/dev/null && result=0 || result=1
+if ["$result"==1];then
+       ifdown eth0
+       ifup      eth0
+fi
+
+果然好了
+ping改成/bin/ping
+ifdown 改为/sbin/ifdown
+ifup 改为/sbin/ifup
+
+ 
+
+crontab任务没有环境变量,命令需要用绝对路径
+
+
+http://blog.csdn.net/shenwansangz/article/details/50110125
+
+定时执行失败原因分析
+
+http://www.cnblogs.com/mengzhijia/p/5359964.html
+
+对于crontab定时任务不能自动执行的总结
+
+http://www.cnblogs.com/wang3680/p/5383645.html
+
+    
+
+        Linux定时任务crontab执行脚本出错                         
+http://blog.csdn.net/ling913/article/details/51500637
+
+shell脚本直接执行没有问题，crontab定时执行失败的解决方法
+
+http://blog.csdn.net/jkunzhang/article/details/7440215

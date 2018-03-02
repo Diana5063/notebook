@@ -1,0 +1,15 @@
+#更新版本或插件时无法连接FTP服务器
+
+解决办法1：
+在wp-config.php中添加一行
+define('FS_METHOD', "direct");
+
+刷新页面后再更新即可。
+
+
+如果上述方法不行，可尝试方法2：
+ps -aux 查看nginx使用的用户
+然后把wp整个目录的所有者改成nginx的用户，如
+chown www:www -R wordpress
+
+然后刷新页面。

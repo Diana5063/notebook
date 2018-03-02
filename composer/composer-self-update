@@ -1,0 +1,5 @@
+diana@diana-All-Series:~/workspace/jike$ sudo composer self-update
+[sudo] diana 的密码： 
+Updating to version 1.6.3 (stable channel).
+   Downloading (100%)         
+Use composer self-update --rollback to return to version 1.4.1

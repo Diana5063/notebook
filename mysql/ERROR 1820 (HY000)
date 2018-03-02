@@ -1,0 +1,25 @@
+#mysql提示要修改密码才能进行操作
+
+
+mysql> show databases;
+ERROR 1820 (HY000): You must reset your password using ALTER USER statement before executing this statement.
+mysql> SET PASSWORD=PASSWORD('12345677');
+Query OK, 0 rows affected, 1 warning (0.06 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| deyihome           |
+| dybusiness         |
+| dyhome_test        |
+| dyweixin           |
+| mysql              |
+| performance_schema |
+| sys                |
+| ultrax             |
+| x_ucenter          |
+| yixin1             |
++--------------------+
+11 rows in set (0.30 sec)

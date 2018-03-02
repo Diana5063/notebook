@@ -1,0 +1,91 @@
+#将lubuntu15.10升级到ubuntu16.04
+
+1、确认已正确连网
+
+2、将软件源完全指向 16.04(xenial)（参考http://blog.csdn.net/guotong1988/article/details/51761433）
+将 /etc/apt/sources.list.d/ 中的全部文件重命名，文件名末尾加上 .backup（我的做法是将/etc/apt/sources.list.d/中的文件全部备份到/etc/apt/sources.list.d/backup20171128/中）
+将 /etc/apt/sources.list 内容全部清空 更换为以下内容（我的做法是将/etc/apt/sources.list和/etc/apt/sources.list.save中的全部内容注释，然后在文件中添加以下内容）
+
+deb http://mirrors.ustc.edu.cn/ubuntu/ xenial main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ xenial-security main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
+deb http://mirrors.ustc.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ xenial main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ xenial-security main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse
+
+
+3、使用如下命令对系统进行更新
+sudo apt-get update && sudo apt-get dist-upgrade
+
+升级了 1499 个软件包，新安装了 272 个软件包，要卸载 74 个软件包，有 0 个软件包未被升级。
+需要下载 1,019 MB 的软件包。
+解压缩后会消耗掉 1,147 MB 的额外空间。
+您希望继续执行吗？ [Y/n] Y
+
+
+
+
+解决方法：
+diana@diana-All-Series:~$ cd /etc/apt/
+diana@diana-All-Series:/etc/apt$ ll
+总用量 76
+drwxr-xr-x   6 root root  4096  9月 14 15:07 ./
+drwxr-xr-x 141 root root  8192 11月 28 11:23 ../
+drwxr-xr-x   2 root root  4096  7月 15  2016 apt.conf.d/
+drwxr-xr-x   2 root root     6 10月  5  2015 preferences.d/
+-rw-rw-r--   1 root root  2194 11月 28 11:32 sources.list
+drwxr-xr-x   2 root root  4096  9月 18 09:25 sources.list.d/
+-rw-rw-r--   1 root root  2194 11月 28 11:32 sources.list.save
+-rw-r--r--   1 root root 20395  9月  8 08:54 trusted.gpg
+-rw-r--r--   1 root root 18768  5月 30  2016 trusted.gpg~
+drwxr-xr-x   2 root root  4096  9月  8 08:54 trusted.gpg.d/
+diana@diana-All-Series:/etc/apt$ sudo cp sources.list sources.list.bak20171128
+[sudo] diana 的密码： 
+diana@diana-All-Series:/etc/apt$ sudo cp sources.list.save sources.list.save.bak20171128
+diana@diana-All-Series:/etc/apt$ ll
+总用量 84
+drwxr-xr-x   6 root root  4096 11月 28 12:00 ./
+drwxr-xr-x 141 root root  8192 11月 28 11:23 ../
+drwxr-xr-x   2 root root  4096  7月 15  2016 apt.conf.d/
+drwxr-xr-x   2 root root     6 10月  5  2015 preferences.d/
+-rw-rw-r--   1 root root  2194 11月 28 11:32 sources.list
+-rw-r--r--   1 root root  2194 11月 28 11:59 sources.list.bak20171128
+drwxr-xr-x   2 root root  4096  9月 18 09:25 sources.list.d/
+-rw-rw-r--   1 root root  2194 11月 28 11:32 sources.list.save
+-rw-r--r--   1 root root  2194 11月 28 12:00 sources.list.save.bak20171128
+-rw-r--r--   1 root root 20395  9月  8 08:54 trusted.gpg
+-rw-r--r--   1 root root 18768  5月 30  2016 trusted.gpg~
+drwxr-xr-x   2 root root  4096  9月  8 08:54 trusted.gpg.d/
+diana@diana-All-Series:/etc/apt$ sudo vim sources.list
+[sudo] diana 的密码： 
+
+然后将报404相关的软件源注释，保存退出后再重新执行1中的更新命令
+
+
+出现以下报错
+N: 忽略‘google-chrome.list.1’(于目录‘/etc/apt/sources.list.d/’)，鉴于它的文件扩展名无效
+
+原因：
+
+使用终端安装谷歌浏览器时，它会自动在/etc/apt/sources.list.d/这个目录下添加google-chrome.list文件，
+但是如果它原来就有一个google-chrome.list的话，会添加一个新的文件同时会在新文件的后面加上1来和原文件区分，
+这时就有两个google-chrome.list文件存在了。所以第一个忽略信息是安装Chrome时创建的新文件重复导致格式不对。
+
+解决方法：（参考http://tieba.baidu.com/p/4712039075）
+由于谷歌浏览器是不是必需软件，所以这一报错可不解决，如果确实需要，
+可将google-chrome.list.1文件的下载源复制到google-chrome.list（先清空），然后删除google-chrome.list.1文件，
+最后再执行更新操作。
+
+
+2、上述命令将为当前系统安装最新可用的软件包，升级完成后请使用如下命令重启系统以完成更新安装
+sudo reboot
+
+3、系统重启完成后，执行如下命令可将 Ubuntu 升级到最新的 Ubuntu 16.04 LTS 版本
+sudo update-manager –d
+
+4、此时「软件更新器」将搜索最新的系统可用版本，一些时间后将可以看到如下界面，
+提示已不再为lubuntu提供软件更新，可以升级到16.04.3，是否升级？点击 升级

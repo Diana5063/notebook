@@ -1,0 +1,9 @@
+#升级lubuntu到17.04后，phpstorm的外观字体变成细长细长那种，很不好看
+
+修改方法
+File -> Settings ->Appearanch，
+在Override default fonts by(not recommend): 前面的筛选框打勾，并将
+Name(字体名)改成自己喜欢的
+Size(字体尺寸)改成合适的
+
+点击右下角的 OK 即可。

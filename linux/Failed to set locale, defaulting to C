@@ -1,0 +1,23 @@
+#
+Failed to set locale, defaulting to C
+
+错误描述：
+
+当在centos中使用yum命令时，输出错误：
+
+ 
+
+Failed to set locale, defaulting to C 
+用locale检测，出现如下提示：
+
+locale：Cannot set LC_CTYPE to default locale： No such file or directory 
+locale：Cannot set LC_MESSAGES to default locale： No such file or directory 
+locale：Cannot set LC_ALL to default locale： No such file or directory 
+错误分析：
+
+查询可知locale是用来设置语言环境的，故此需要查看并正确设置locale
+
+解决方案：
+
+echo "export LC_ALL=en_US.UTF-8"  >>  /etc/profile 
+执行命令后重新登录即可！

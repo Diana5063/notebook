@@ -1,0 +1,30 @@
+#composer安装zend framework时提示如下错误
+
+Your configuration does not allow connections to http://packagist.phpcompos  
+  er.com/p/zendframework/zend-json-server%24cdccb70caf71cba26b352f6bff3203b40  
+  9b1780a9f193a5f9559460befe8e964.json. See https://getcomposer.org/doc/06-co  
+  nfig.md#secure-http for details.    
+
+
+
+原因：composer默认必须使用https，而我的镜像是http的。
+解决方法：修改配置，具体方法如下
+cd .composer
+cp config.json config.json.bak20180208
+vim config.json
+
+
+将repositories.packagist.url的http改成https，改完后的内容参考下面示例
+{
+    "config": {},
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
+    }
+}
+
+
+
+保存退出后，重新执行composer安装zf即可。

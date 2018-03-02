@@ -1,0 +1,17 @@
+#ssh连接远程Centos服务器时被拒绝，例如
+
+diana@diana-All-Series:~$ ssh root@10.0.18.87 -p2222
+ssh: connect to host 10.0.18.87 port 2222: Connection refused
+
+
+解决方法：
+1、ping ip，如果ping不通，说明是ip错误，检查远程服务器的ip设置，得到正确的ip；
+ip设置在/etc/sysconfig/network-scripts/目录的网卡设置文件中，一般是ifcfg-eth0，
+也可能是其他名称，与网卡名称一致，查看网络可用 ip addr 命令。修改后重启网卡，
+service network restart
+
+2、如果网卡设置正确，检查ssh服务器的端口设置，端口设置在/etc/ssh/sshd_config，
+检查 ListenAddress和Port设置是否正确，如果本设置与网卡设置不一致，修改后重启sshd，
+service sshd restart
+
+3、如果没有sshd，需要安装。

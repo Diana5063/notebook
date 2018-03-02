@@ -1,0 +1,18 @@
+#composer安装zf2时报错
+
+Installation failed, reverting ./composer.json to its original content.
+
+查看错误发现是缺少php的某些扩展，更新源后安装php扩展
+
+1.
+Problem 1
+    - zendframework/zend-crypt 3.2.1 requires ext-mbstring * -> the requested PHP extension mbstring is missing from your system.
+这个错误需要安装php的mbstring扩展，
+sudo apt-get install php7.0-mbstring
+
+2.
+Problem 1
+    - phpunit/phpunit 6.5.6 requires ext-dom * -> the requested PHP extension dom is missing from your system.
+
+这个错误需要安装php的xml扩展，
+sudo apt-get install php7.0-xml

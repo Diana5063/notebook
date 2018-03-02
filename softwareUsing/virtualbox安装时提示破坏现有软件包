@@ -1,0 +1,10 @@
+#升级virtualbox从5.1到5.2.6时，提示破坏现有软件包
+
+下载地址：https://download.virtualbox.org/virtualbox/5.2.6/index.html
+系统环境：lubuntu17.04
+vbox升级包版本：virtualbox-5.2_5.2.6-120293~Ubuntu~trusty_amd64.deb 
+
+
+
+尝试解决1：
+更换升级包为：virtualbox-5.2_5.2.6-120293~Ubuntu~xenial_amd64.deb

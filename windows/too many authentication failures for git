@@ -1,0 +1,4 @@
+#从gitlab拉取代码时提示too many authentication failures for git
+
+解决方法：
+删除默认的git用户，配置自己的用户名和密码

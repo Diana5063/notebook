@@ -1,0 +1,29 @@
+#composer安装zendframework2.*版本
+
+进入https://packages.zendframework.com/，选择第一个 zendframework/skeleton-application，选择版本下载，这里我选的2.5.0，
+下载到本地后解压，复制目录中的composer.json文件到需要开发的项目的根目录，比如这里的/work/web/ywt，
+
+编辑/work/web/ywt/composer.json，在文件中添加以下内容
+"repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.zendframework.com"
+        }
+    ]
+
+
+然后进入项目根目录
+cd /work/web/ywt //进入项目根目录
+composer install //执行安装命令
+
+
+
+安装时报如下错误
+ [Composer\Downloader\TransportException]
+  Content-Length mismatch, received 91717 bytes out of the expected 731042
+
+
+可能原因是 composer 的安装包网址是国外镜像所致，解决办法，更换源
+composer config -g repo.packagist composer https://packagist.phpcomposer.com
+
+再执行composer install

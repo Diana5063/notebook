@@ -370,7 +370,7 @@ sudo apt-get install mysql-server #安装，中途会提示输入密码，输入
 sudo mysql_secure_installation #运行安全脚本，会提示输入刚才设置的root密码，其他直接Y或回车接受后续的默认值
 
 上述步骤完成后就安装结束，下面测试安装情况
-systemctl status mysql
+systemctl status mysql.service
 
 可看到mysql.service是active状态，如果不是，可手动启动mysql
-sudo systemctl start|restart|stop mysql
+sudo systemctl mysql start|restart|stop

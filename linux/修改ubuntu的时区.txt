@@ -1,0 +1,20 @@
+使用date查看ubuntu当前时间，发现与本机windows时间不一致，
+
+操作步骤如下
+
+1、先查看当前系统时间
+diana@xin:~$ date -R
+Mon, 25 Jun 2018 08:36:43 +0000
+发现时区是0000，我需要的是东八区，需要修改
+
+2、运行tzselect 
+依次选择 Asia -> China -> Beijing Time 对应的数字编号并enter提交
+
+3、复制文件到etc目录
+sudo cp /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+
+
+4、再次查看时间，已更新
+
+diana@xin:~$ date -R
+Mon, 25 Jun 2018 16:39:09 +0800

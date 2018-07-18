@@ -1,0 +1,14 @@
+https://blog.csdn.net/noway5456/article/details/72993866
+
+
+1、重启ubuntu，随即长按shirft进入grub菜单；
+2、选择recovery mode，按"e"键进入编辑页面
+3、将ro single替换为rw single init=/bin/bash；
+（或者将 ro recovery nomodeset 改为rw single init=/bin/bash）
+4、按ctrl+x进入单用户模式，当前用户即为root；
+5、到/etc目录下修改sudoers权限：chmod 0740 sudoers，在
+root ALL=（ALL：ALL） ALL
+下添加一行 
+andreas  ALL=（ALL：ALL） ALL
+然后修改sudoers权限：chmod 0440 sudoers
+6、从虚拟机热键向系统发送ctrl+alt+del重启；

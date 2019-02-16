@@ -1,0 +1,592 @@
+环境
+主机 windows10
+虚拟机服务器 ubuntu18.04
+
+安装当前最新版的下列软件
+nginx
+php
+redis
+mysql
+
+
+步骤
+
+1、更新系统
+sudo apt update
+sudo apt upgrade
+
+
+2、提前规划相应安装目录
+mkdir -p work/src
+mkdir -p work/opt
+mkdir -p work/web
+sudo -i
+
+
+3、安装nginx
+
+3.1安装依赖
+apt install zlib1g-dev libpcre3-dev -y
+
+cd /work/src
+wget https://www.openssl.org/source/openssl-1.1.1-pre8.tar.gz
+wget https://sourceforge.net/projects/pcre/files/pcre/8.42/pcre-8.42.tar.gz
+wget http://www.zlib.net/zlib-1.2.11.tar.gz
+
+tar xvf openssl-1.1.1-pre8.tar.gz -C /work/opt/
+tar xvf pcre-8.42.tar.gz -C /work/opt/
+tar xvf zlib-1.2.11.tar.gz -C /work/opt/
+
+cd /work/opt/openssl-1.1.1-pre8/
+./config --prefix=/work/opt/lib --openssldir=/work/opt/lib/openssl
+make -j5
+
+（提示make命令不存在
+root@xin:/work/src/openssl-1.1.1-pre8# make -j5
+
+Command 'make' not found, but can be installed with:
+
+apt install make      
+apt install make-guile
+
+安装make后继续）
+
+
+（提示gcc不存在
+/bin/sh: 1: gcc: not found
+安装gcc后继续 apt install gcc）
+
+make install
+
+
+
+3.2建立用户组并设置不能ssh登录
+groupadd -r www
+useradd -r -M -s /sbin/nologin -g www www
+sed -i "s/\/home\/www://" /etc/passwd
+
+3.3下载nginx
+cd /work/src
+wget http://nginx.org/download/nginx-1.15.0.tar.gz
+
+3.4解压
+tar xvf nginx-1.15.0.tar.gz -C /work/opt/
+cd /work/opt/nginx-1.15.0/
+
+3.5编译安装
+./configure --prefix=/etc/nginx --user=www --group=www --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --pid-path=/run/nginx.pid --lock-path=/run/nginx.lock --http-client-body-temp-path=/tmp/client --http-proxy-temp-path=/tmp/proxy --http-fastcgi-temp-path=/tmp/fastcgi --http-uwsgi-temp-path=/tmp/uwsgi --http-scgi-temp-path=/tmp/scgi --http-log-path=/work/log/nginx/access.log --error-log-path=/work/log/nginx/error.log --with-http_ssl_module --with-http_v2_module --with-stream_realip_module --with-openssl=/work/opt/openssl-1.1.1-pre8 --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_stub_status_module --with-http_perl_module --with-mail --with-mail_ssl_module --with-debug --with-pcre-jit  --with-pcre=/work/opt/pcre-8.42 --with-zlib=/work/opt/zlib-1.2.11
+
+（提示需要libxml2模块
+./configure: error: the HTTP XSLT module requires the libxml2/libxslt
+libraries. You can either do not enable the module or install the libraries.
+安装后继续 apt install -y libxml2 libxml2-dev;apt install libxslt-dev）
+
+（提示需要gd模块
+./configure: error: the HTTP image filter module requires the GD library.
+You can either do not enable the module or install the libraries.
+安装后继续，需要在/etc/apt/sources.list添加一行deb http://security.ubuntu.com/ubuntu trusty-security main，再执行 apt-get install libgd2-xpm-dev）
+
+（提示需要GeoIP模块
+安装后继续apt-get install libgeoip-dev）
+
+（提示./configure: warning: the "--with-ipv6" option is deprecated
+在编译参数中去掉--with-ipv6 后继续）
+
+make -j5
+（提示找到不lperl
+/usr/bin/x86_64-linux-gnu-ld: cannot find -lperl
+安装后继续 apt-get install libperl-dev）
+
+make install
+
+3.6测试
+ps -A|grep nginx
+如果有返回结果表示已经运行
+，没有返回结果表示还没运行。
+如果没有运行，则执行运行脚本
+使用which nginx命令查看nginx的安装目录
+
+
+[root@localhost ~]# which nginx
+
+
+得到结果是在/usr/sbin/nginx
+
+
+[root@localhost ~]# cd /usr/sbin/
+
+[root@localhost sbin]# ./nginx 
+root@xin:/usr/sbin# ps -A|grep nginx
+28424 ?        00:00:00 nginx
+28430 ?        00:00:00 nginx
+此时nginx已经运行
+
+修改配置文件使主机可以访问nginx
+如果浏览器中出现如下内容，说明安装成功，可以使用了！
+Welcome to nginx!
+If you see this page, the nginx web server is successfully installed and working. Further configuration is required.
+
+For online documentation and support please refer to nginx.org.
+Commercial support is available at nginx.com.
+
+Thank you for using nginx.
+
+
+
+3.7增加nginx管理脚本
+**************************************************************************************
+
+#!/bin/bash
+# 
+# nginx Start up the nginx server daemon 
+# 
+# chkconfig: 2345 55 25 
+# Description: starts and stops the nginx web server 
+# 
+### BEGIN INIT INFO 
+# Provides: nginx 
+# Required-Start: $all 
+# Required-Stop: $all 
+# Default-Start: 2 3 4 5 
+# Default-Stop: 0 1 6 
+# Description: starts and stops the nginx web server 
+### END INIT INFO 
+# To install: 
+# copy this file to /etc/init.d/nginx 
+# shell> chkconfig --add nginx (RedHat) 
+# shell> update-rc.d -f nginx defaults (debian) 
+# To uninstall: 
+# shell> chkconfig --del nginx (RedHat) 
+# shell> update-rc.d -f nginx remove 
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin
+NAME=nginx
+DAEMON=/usr/sbin/$NAME
+CONFIGFILE=/etc/nginx/$NAME.conf
+PIDFILE=/run/$NAME.pid
+ULIMIT=10240
+set -e 
+[ -x "$DAEMON" ] || exit 0
+do_start() {
+echo "Starting $NAME ..." 
+ulimit -SHn $ULIMIT
+$DAEMON -c $CONFIGFILE
+}
+do_stop() {
+echo "Shutting down $NAME ..." 
+kill `cat $PIDFILE`
+}
+do_reload() {
+echo "Reloading $NAME ..." 
+kill -HUP `cat $PIDFILE`
+}
+case "$1" in
+start)
+[ ! -f "$PIDFILE" ] && do_start || echo "nginx already running" 
+echo -e ".\ndone" 
+;;
+stop)
+[ -f "$PIDFILE" ] && do_stop || echo "nginx not running" 
+echo -e ".\ndone" 
+;;
+restart)
+[ -f "$PIDFILE" ] && do_stop || echo "nginx not running" 
+do_start
+echo -e ".\ndone" 
+;;
+reload)
+[ -f "$PIDFILE" ] && do_reload || echo "nginx not running" 
+echo -e ".\ndone" 
+;;
+*)
+N=/etc/init.d/$NAME
+echo "Usage: $N {start|stop|restart|reload}" >&2
+exit 1
+;;
+esac
+exit 0
+**************************************************************************************
+
+配置后用/etc/init.d/nginx start|stop|restart|reload来控制nginx的开启和关闭
+
+
+4安装php
+
+4.1安装依赖
+apt install libsystemd-dev libgd-dev libxml2-dev libcurl4-gnutls-dev -y
+
+4.2下载并解压
+从官网下载http://au1.php.net/get/php-7.2.7.tar.gz/from/this/mirror，并用ftp工具上传到/work/src目录
+tar xvf php-7.2.7.tar.gz -C /work/opt/
+
+4.3安装
+cd /work/opt/php-7.2.7
+./configure --prefix=/work/opt/php --enable-fpm --with-fpm-systemd --with-fpm-user=www --with-fpm-group=www --with-config-file-scan-dir=/work/opt/php/etc/additional.d --with-config-file-path=/work/opt/php/etc --enable-bcmath --with-bz2 --enable-calendar --with-curl --enable-dba --enable-exif --enable-ftp --with-gd --with-gettext --with-mhash --with-iconv --enable-intl --with-libxml-dir --enable-mbstring --with-openssl --with-pcre-jit --with-pcre-dir --with-pdo-mysql=mysqlnd --with-pdo-sqlite --with-readline --enable-session --enable-shmop --enable-soap --enable-sockets --enable-sysvmsg --enable-sysvsem --enable-sysvshm --enable-wddx --enable-xml --with-xmlrpc --with-zlib --enable-zip --enable-inline-optimization --with-mysqli=mysqlnd --enable-mbregex --with-jpeg-dir --with-png-dir --with-freetype-dir --with-iconv-dir --enable-gd-jis-conv --enable-embedded-mysqli --enable-mysqlnd --enable-debug
+
+（提示找不到openssl
+configure: error: Cannot find OpenSSL's <evp.h>
+安装后继续 apt-get install openssl libssl-dev）
+
+（提示重新安装bzip2
+configure: error: Please reinstall the BZip2 distribution
+安装后继续
+cd /work/src ; wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz ;
+tar xvf bzip2-1.0.6.tar.gz -C /work/opt/ ; cd /work/opt/bzip2-1.0.6/ ; make && make install）
+
+（提示重新安装readline
+configure: error: Please reinstall readline - I cannot find readline.h
+安装后继续 apt install -y libedit-dev libreadline-dev）
+
+make -j5
+
+make install
+
+Wrote PEAR system config file at: /work/opt/php/etc/pear.conf
+You may want to add: /work/opt/php/lib/php to your php.ini include_path
+/work/opt/php-7.2.7/build/shtool install -c ext/phar/phar.phar /work/opt/php/bin
+ln -s -f phar.phar /work/opt/php/bin/phar
+Installing PDO headers:           /work/opt/php/include/php/ext/pdo/
+
+安装成功！接着增加配置文件
+
+cp php.ini-development ../php/etc/php.ini
+
+cd /work/opt/php/etc
+
+cp php-fpm.conf.default php-fpm.conf
+
+vim php-fpm.conf
+
+将php-fpm.conf中的pid=run/php-fpm.pid前面的逗号去掉，将error_log = log/php-fpm.log前面的逗号去掉，
+ 保存退出。
+
+然后
+
+cd php-fpm.d/
+
+cp www.conf.default www.conf
+
+cd /work/opt/php/sbin/
+
+./php-fpm(启动php服务)
+
+./php-fpm -v (查看php版本)
+
+PHP 7.2.7 (fpm-fcgi) (built: Jun 26 2018 11:41:09) (DEBUG)
+Copyright (c) 1997-2018 The PHP Group
+Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
+
+4.4配置nginx支持php，在/etc/nginx目录增加php_enable.conf
+加入下面的内容
+
+location ~ \.php$ {
+
+                        fastcgi_pass 127.0.0.1:9000;#php-fpm的默认端口是9000
+                        			fastcgi_index index.php;
+
+                        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+                        		include fastcgi_params;
+
+                }
+
+
+并在各项目配置文件*.conf中加入一行 
+include php_enable.conf;
+
+保存并重启nginx服务。
+
+4.5配置php启动命令
+
+cd /work/opt/php-7.2.7/sapi/fpm
+
+cp init.d.php-fpm /etc/init.d/php-fpm
+
+cd /etc/init.d/
+
+chmod a+x php-fpm
+
+配置后使用/etc/init.d/php-fpm start|stop|restart|status来控制php-fpm的开启和关闭
+
+4.6将php命令添加到系统环境变量
+
+vim /etc/profile
+在export下一行修改PATH变量，如果没有PATH就加一个
+PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin这一行后面加上php的运行路径变成如下所示：
+
+PATH=$PATH:/work/opt/php/bin
+
+保存并退出后执行更新
+source /etc/profile，然后就可以在任意目录执行php -v了。
+
+4.7编译安装后找不到配置文件
+原因环境缓存，编译前需要清缓存
+
+make clean
+
+
+5安装redis
+
+5.1安装redis
+cd /work/src
+wget http://download.redis.io/releases/redis-4.0.10.tar.gz
+tar xvf redis-4.0.10.tar.gz -C /work/opt/
+cd /work/opt/redis-4.0.10/
+make
+make test 
+
+（make test的时候报错，提示需要tcl8.5或以上
+You need tcl 8.5 or newer in order to run the Redis test
+安装后继续
+wget http://downloads.sourceforge.net/tcl/tcl8.6.8-src.tar.gz
+tar xvf tcl8.6.8-src.tar.gz  -C /work/opt/  
+
+cd  /work/opt/tcl8.6.8/unix/
+./configure  
+ 
+make  
+ 
+make install
+）
+
+All tests passed without errors!
+
+Cleanup: may take some time... OK
+make[1]: Leaving directory '/work/opt/redis-4.0.10/src'
+
+root@xin:/work/opt/redis-4.0.10# make install
+cd src && make install
+make[1]: Entering directory '/work/opt/redis-4.0.10/src'
+
+Hint: It's a good idea to run 'make test' ;)
+
+    INSTALL install
+    INSTALL install
+    INSTALL install
+    INSTALL install
+    INSTALL install
+make[1]: Leaving directory '/work/opt/redis-4.0.10/src
+
+安装目录在/work/opt/redis-4.0.10/src
+
+先设置配置文件参数，
+
+cd /work/opt/redis-4.0.10
+cp redis.conf redis.conf.bak20180626
+vim redis.conf
+将“daemonize no”修改为“daemonize yes”，即设置成作为后台进程运行，修改完成后保存退出。
+
+然后运行redis服务器
+
+cd /src
+./redis-server ../redis.conf（使用刚才修改的配置文件）
+
+启动redis服务器后，连接redis客户端
+
+./redis-cli
+
+127.0.0.1:6379> ping
+
+PONG
+输出PONG表示安装成功！
+
+5.2将redis添加到系统服务
+先创建Redis用户、群组与目录
+
+sudo adduser --system --group --no-create-home redis
+
+mkdir mkdir /work/opt/redis-4.0.10/data
+
+chown redis:redis /work/opt/redis-4.0.10/data
+
+chmod 770 /work/opt/redis-4.0.10/data
+
+
+mkdir -p /etc/redis
+
+cp /work/opt/redis-4.0.10/redis.conf /etc/redis/
+
+vim /etc/redis/redis.conf
+
+在文件中找到supervised命令。
+现在其被设置为no。
+由于我们运行的操作系统使用systemd init系统，
+因此需要将其变更为systemd
+supervised systemd
+
+
+下面找到dir目录。此选项指定Redis用于放置持久数据的目录。
+
+我们需要挑选合适的位置，并确保Redis有权限写入但普通用户无权查看。
+
+dir /work/opt/redis-4.0.10/data
+
+创建redis systemd unit文件
+
+vim /etc/systemd/system/redis.service
+
+向其中添加以下内容
+
+[Unit]
+
+Description=Redis In-Memory Data Store
+
+After=network.target
+
+
+[Service]
+
+User=redis
+
+Group=redis
+
+ExecStart=/work/opt/redis-4.0.10/src/redis-server /etc/redis/redis.conf
+
+ExecStop=/work/opt/redis-4.0.10/src/redis-cli
+
+shutdownRestart=always
+
+
+[Install]
+
+WantedBy=multi-user.target
+
+
+
+保存退出后可用
+
+sudo systemctl start|stop redis管理
+
+5.3安装php redis扩展
+从https://github.com/phpredis/phpredis下载zip包，用ftp工具上传到/work/src目录；
+解压到/work/opt
+unzip -d /work/opt phpredis-develop.zip
+cd /work/opt/phpredis-develop
+../php/bin/phpize
+
+（提示无法找到autoconf
+Cannot find autoconf. Please check your autoconf installation and the
+$PHP_AUTOCONF environment variable. Then, rerun this script
+解决如下：
+从 http://ftp.gnu.org/gnu下载m4-1.4.18.tar.gz和autoconf-2.69.tar.gz并解压到/work/opt目录，
+cd /work/opt/m4-1.4.18/
+./configure
+make && make install
+
+cd /work/opt/autoconf-2.69/
+./configure
+make && make install
+）
+
+../php/bin/phpize
+./configure --with-php-config=/work/opt/php/bin/php-config
+make
+make install
+
+root@xin:/work/opt/phpredis-develop# make install
+Installing shared extensions:     /work/opt/php/lib/php/extensions/debug-non-zts-20170718/
+
+安装完成后将redis.so添加到php.ini，php.ini的目录是/work/opt/php/etc/php.ini,
+添加一行
+extension=/work/opt/php/lib/php/extensions/debug-non-zts-20170718/redis.so
+
+重启php服务后，使用php -m可看到已安装redis扩展。
+
+
+6.安装mysql
+
+sudo apt-get update   #更新软件源
+
+sudo apt-get install mysql-server #安装
+sudo mysql_secure_installation #运行安全脚本
+直接Y或回车接受后续的默认值
+
+上述步骤完成后就安装结束，下面测试安装情况
+
+systemctl status mysql.service
+
+
+可看到mysql.service是active状态，如果不是，可手动启动mysql
+
+sudo systemctl start|restart|stop mysql
+
+登录时使用
+mysql -uroot 回车就登录进去了，运行安全脚本时设置的root用户密码没有生效
+
+root@xin:~# mysql -uroot
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 4
+Server version: 5.7.22-0ubuntu18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>
+
+
+需要手动执行sql更新一下密码，更新步骤如下
+6.1先关闭mysql服务
+systemctl stop mysql
+
+6.2重启mysql服务，并用root登录mysql数据库
+root@xin:~# systemctl start mysql
+root@xin:~# mysql -uroot mysql
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 2
+Server version: 5.7.22-0ubuntu18.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2018, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql>
+
+
+6.3更新root密码
+
+5.7及以上版本MySQL请采用如下SQL：
+
+mysql> UPDATE user SET authentication_string=PASSWORD('newpassword') where USER='root';
+
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 1
+
+（修改密码时提示不符合安全规则
+ERROR 1819 (HY000): Your password does not satisfy the current policy requirements
+这个与validate_password_policy的值有关。validate_password_policy默认是1，即MEDIUM，所以刚开始设置的密码必须符合长度，且必须含有数字，小写或大写字母，特殊字符。需要修改validate_password_policy值为0 set global validate_password_policy=0;这样密码就可以直接是数字了，查看数字密码需要的最小长度，
+select @@validate_password_length;发现最小值是8，所以需要设置最少8位数字的密码 然后继续执行修改）
+
+6.4.刷新权限 
+
+mysql> FLUSH PRIVILEGES;
+ 
+
+
+6.5退出mysql
+
+mysql> quit
+ 
+
+
+6.6重启mysql
+systemctl restart mysql
+
+6.7使用root用户重新登录mysql
+root@xin:~# mysql -uroot -p
+Enter password:<输入新设的密码newpassword>
+
+登录进去后还要执行一次
+
+SET PASSWORD = PASSWORD('12345677');
+才能进行读写操作!!!!!!!

@@ -1,0 +1,5 @@
+#composer install phpseclib 安装第三方加密库
+#官网 https://packagist.org/packages/phpseclib/phpseclib
+
+cd /work/web/ywt
+composer require phpseclib/phpseclib:~2.0

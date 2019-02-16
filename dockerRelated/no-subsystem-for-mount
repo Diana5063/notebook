@@ -1,0 +1,43 @@
+#升级lubuntu17.04到17.10后，docker 容器启动失败，提示错误如下：
+
+diana@diana-All-Series:~$ docker start db
+Error response from daemon: invalid header field value "oci runtime error: container_linux.go:247: starting container process caused \"process_linux.go:359: container init caused \\\"rootfs_linux.go:53: mounting \\\\\\\"cgroup\\\\\\\" to rootfs \\\\\\\"/var/lib/docker/aufs/mnt/1bed390f3d6a5a34a99f08cf36141c45a78d492ab7b5c201050e927a99d9ba76\\\\\\\" at \\\\\\\"/sys/fs/cgroup\\\\\\\" caused \\\\\\\"no subsystem for mount\\\\\\\"\\\"\"\n"
+Error: failed to start containers: db
+
+
+
+其中注意到 no subsystem for mount，在网上查了相关资料后，发现原因如下
+是 systemd v32 以 cgroup v２ 结构层次挂载导致 runc 出现错误提示 “no subsystem for mount”
+
+
+解决方法有如下两种：
+1、所有 container 启动时添加一个参数 -v /sys/fs/cgroup:/sys/fs/cgroup:ro 。
+2、添加 systemd.legacy_systemd_cgroup_controller=yes 到你的 grub2、syslinux 等启动器的内核启动参数中。
+
+我采用的第2种方法，具体操作如下：
+cd /etc/default
+sudo cp grub grub.bak20180522
+sudo vim grub
+
+在打开的文件中修改一行配置为如下值
+原值: GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"
+新值: GRUB_CMDLINE_LINUX_DEFAULT="quiet systemd.legacy_systemd_cgroup_controller=yes"
+
+#更新系统配置
+diana@diana-All-Series:/etc/default$ sudo update-grub
+Generating grub configuration file ...
+Warning: Setting GRUB_TIMEOUT to a non-zero value when GRUB_HIDDEN_TIMEOUT is set is no longer supported.
+Found linux image: /boot/vmlinuz-4.13.0-41-generic
+Found initrd image: /boot/initrd.img-4.13.0-41-generic
+Found linux image: /boot/vmlinuz-4.13.0-16-generic
+Found initrd image: /boot/initrd.img-4.13.0-16-generic
+Found linux image: /boot/vmlinuz-4.10.0-43-generic
+Found initrd image: /boot/initrd.img-4.10.0-43-generic
+Found memtest86+ image: /memtest86+.elf
+Found memtest86+ image: /memtest86+.bin
+done
+
+sudo reboot  #重启电脑
+
+ok!解决问题
+

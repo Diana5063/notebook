@@ -1,0 +1,32 @@
+#Fiddler 突然不能抓取请求
+
+参考 https://www.jianshu.com/p/ead1e301d194
+
+
+
+如果Fiddler 突然不能抓取请求了，可以从以下几个角度试试看
+
+Web浏览器的请求，Fiddler不能抓取的解决方法：
+1、是否有新安装代理相关的插件？如有安装管理代理的插件，插件会屏蔽Fiddler的设置，此时把插件禁掉、或者设置默认的代理就可以解决了。2、Chrome浏览器访问任何一个Https的链接 都提示不安全，每个链接都要反复点击信任并前往不安全的链接，如下图所示。
+
+
+Chrome浏览器访问任何一个Https的链接 都提示不安全，每个链接都要反复点击信任并前往不安全的链接，
+虽然关闭Fiddler可以解决这个问题，但显然不是我们想要的结果。
+这种情况的发生是因为Chrome 不信任 Fiddler的根证书，需要去更换证书。
+Fiddler直接提供了不同拦截证书，这个时候的选择Tools——Options——Https——点击蓝色的证书链接，进行更换。
+更换完成后还需重置Fiddler的证书。具体的位置在 Tools——Options——Https——Actions——Reset All Certificates
+如果你的证书被误删，导致浏览器无法访问https链接，可以直接Reset一下。
+
+
+
+手机端浏览器的请求，Fiddler不能抓取的解决方法：
+1、Fiddler是否打开 客户端请求抓取？Tools——Options——Connections，里面的Allow remote computers to connect 一定要勾选。修改后，注意需要重新打开Fiddler。
+2、Fiddler 是否被准许监听8888端口？CMD命令行里 执行 netstat -anop tcp 命令，可以查看 Fiddler是否正常监听默认的8888端口，如果服务没有开启，同样在Tools——Options——Connections里，修改端口号，如上图的显示。修改后 仍然要记得关闭重新打开Fiddler才生效。当端口过多时，可根据netstat -ano|findstr "端口号"，查看Fiddler是否成功占用当前端口号。
+3、防火墙被拦
+防火墙或者一些360类似的杀毒软件，我们可以在防火墙下设置为fiddler通过。
+
+
+
+iOS 10.3 Fiddler突然不能抓取Https的链接的解决方法：
+设置——通用——关于本机——证书信任设置
+iOS 10.3以后，需要手动对证书进行信任，否则无法获取https的请求，不知道的很坑有木有。

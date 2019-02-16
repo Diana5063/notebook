@@ -1,0 +1,67 @@
+#之前由于磁盘爆满导致mysql服务异常，主从数据库连接失败，mysql日志中有如下错误
+[ERROR] Slave I/O: error connecting to master 'slave@******
+
+
+
+#*DD94C57100E5CAC25F68392E34D19E8EF1214B58
+解决方法
+查看从服务器上mysql中的slave状态
+mysql> show slave status;
+找到如下异常：
+Got fatal error 1236 from master when reading data from binary log: 'Could not find first log file name in binary log index file'
+发现是从服务器对主服务器的日志读取错误，需要修正日志读取位置。
+
+
+首先在主服务器上查看日志位置
+mysql> show master status;
++------------------+----------+--------------+------------------+-------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |
++------------------+----------+--------------+------------------+-------------------+
+| mysql-bin.000026 |     1702 |              |                  |                   |
++------------------+----------+--------------+------------------+-------------------+
+记住File和Position值，
+
+然后到从服务器，
+停止slave服务并将日志读取修正到当前位置，重新启动slave。
+mysql> STOP SLAVE;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CHANGE MASTER TO MASTER_HOST='192.168.1.212',MASTER_LOG_FILE='mysql-bin.000026',MASTER_LOG_POS=1702;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> START SLAVE;
+Query OK, 0 rows affected (0.01 sec)
+
+
+最后查看从服务器上的slave服务状态
+mysql> show slave status;
+
+#121.196.196.181
+再查看主服务器mysql错误如下
+Slave has read all relay log; waiting for the slave I/O thread to update it
+
+
+在 MySQL 的复制协议里，由 Slave 发送一个 COM_BINLOG_DUMP 命令后，就完全由 Master 来推送数据，Master、Slave 之间不再需要交互。如果 Master 没有更新，也就不会有数据流，Slave 就不会收到任何数据包。但是如果由于某种原因造成 Master 无法把数据发送到 Slave ，比如发生过网络故障或其他原因导致 Master 上的 TCP 连接丢失，由于 TCP 协议的特性，Slave 没有机会得到通知，所以也没法知道收不到数据是因为 Master 本来就没有更新呢还是由于出了故障。好在 MySQL 5.5 开始增加了一个复制心跳的功能。
+如：
+stop slave;
+change master to master_heartbeat_period = 10;
+set global slave_net_timeout = 25;
+start slave;
+
+
+就会让 Master 在没有数据的时候，每 10 秒发送一个心跳包。这样 Slave 就能知道 Master 是不是还正常。slave_net_timeout 是设置在多久没收到数据后认为网络超时，之后 Slave 的 IO 线程会重新连接 Master 。结合这两个设置就可以避免由于网络问题导致的复制延误。master_heartbeat_period 单位是秒，可以是个带上小数，如 10.5。最高精度为 1 毫秒。
+slave_net_timeout 的默认是 3600，也就是一小时。也就是说，在之前的情况下，Slave 要延误 1 小时后才会尝试重连。而在没有设置 master_heartbeat_period 时，将 slave_net_timeout 设得很短会造成 Master 没有数据更新时频繁重连。
+
+很奇怪的是，当前的 master_heartbeat_period 值无法通过 show slave status 查看，而要使用 show status like ‘Slave_heartbeat_period' 查看。此外，状态变量 Slave_last_heartbeat 表示最后一次收到心跳的时间，Slave_received_heartbeats 表示总共收到的心跳次数。
+mysql> show status like 'slave%';
++----------------------------+---------------------+
+| Variable_name              | Value               |
++----------------------------+---------------------+
+| Slave_heartbeat_period     | 5.000               |
+| Slave_last_heartbeat       | 2014-05-08 11:48:57 |
+| Slave_open_temp_tables     | 0                   |
+| Slave_received_heartbeats  | 1645                |
+| Slave_retried_transactions | 0                   |
+| Slave_running              | ON                  |
++----------------------------+---------------------+
+6 rows in set (0.00 sec)

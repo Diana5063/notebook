@@ -1,0 +1,15 @@
+#安装完成phalcon后，在php.ini中添加phalcon.so，重启php-fpm时报如下错误：
+PHP Fatal error:  Class 'jsonserializable' not found in Unknown on line 0
+
+
+
+解决方法参考
+https://stackoverflow.com/questions/36848664/php-fatal-error-class-jsonserializable-not-found-in-unknown-on-line-0
+
+
+在/etc/php/7.0/mods-available目录中创建phalcon.ini文件，在文件中添加extension=phalcon.so，去掉php.ini文件中添加的extension=phalcon.so。
+然后在/etc/php/7.0/cli/conf.d中创建到phalcon.ini的软链接，
+sudo ln -s /etc/php/7.0/mods-available/phalcon.ini 30-phalcon.ini
+
+
+前面的数字30是取的比20-json.ini前面数字大的，这个数字的作用是使phalcon在json后面加载，phalcon在json前面加载时会出现异常。然后重启php-fpm服务，使用php -m可以看到已经加载了phalcon扩展。

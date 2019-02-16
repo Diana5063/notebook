@@ -1,0 +1,56 @@
+#yum命令已废弃，转向dnf
+
+bash-4.3# yum update
+Yum command has been deprecated, redirecting to '/usr/bin/dnf update'.
+See 'man dnf' and 'man yum2dnf' for more information.
+To transfer transaction metadata from yum to DNF, run:
+'dnf install python-dnf-plugins-extras-migrate && dnf-2 migrate'
+
+
+
+bash-4.3# dnf install python-dnf-plugins-extras-migrate && dnf-2 migrate
+Failed to synchronize cache for repo 'phalcon_stable' from 'https://packagecloud.io/phalcon/stable/fedora/22/x86_64': Cannot download repomd.xml: Cannot download repodata/repomd.xml: All mirrors were tried, disabling.
+MySQL 5.6 Community Server                                                                                                                                                                                   227 kB/s | 452 kB     00:01    
+determining the fastest mirror (10 hosts).. done.
+Failed to synchronize cache for repo 'remi-php70' from 'http://rpms.remirepo.net/fedora/22/php70/mirror': Cannot download repomd.xml: Cannot download repodata/repomd.xml: All mirrors were tried, disabling.
+Failed to synchronize cache for repo 'phalcon_stable-source' from 'https://packagecloud.io/phalcon/stable/fedora/22/SRPMS': repomd.xml GPG signature verification error: gpgme_op_verify() error: Inappropriate ioctl for device, disabling.
+determining the fastest mirror (1 hosts).. done.
+MySQL 5.7 Community Server Development Milestone Release - Source                                                                                                                                             82  B/s | 2.0 kB     00:25    
+MySQL Tools Community - Source                                                                                                                                                                               3.6 kB/s | 2.7 kB     00:00    
+MySQL Tools Community                                                                                                                                                                                         81 kB/s |  66 kB     00:00    
+Remi's RPM repository - Fedora 22 - x86_64                                                                                                                                                                   321 kB/s | 2.2 MB     00:07    
+MySQL Connectors Community                                                                                                                                                                                    10 kB/s |  10 kB     00:01    
+MySQL Connectors Community - Source                                                                                                                                                                          1.9 kB/s | 2.1 kB     00:01    
+MySQL 5.6 Community Server - Source                                                                                                                                                                          2.3 kB/s | 2.4 kB     00:01    
+Last metadata expiration check performed 0:00:00 ago on Thu Mar 15 06:34:23 2018.
+Dependencies resolved.
+=============================================================================================================================================================================================================================================
+ Package                                                                  Arch                                          Version                                                 Repository                                              Size
+=============================================================================================================================================================================================================================================
+Installing:
+ cpio                                                                     x86_64                                        2.11-33.fc22                                            fedora                                                 216 k
+ python-dnf-plugins-extras-common                                         noarch                                        0.0.11-1.fc22                                           updates                                                 27 k
+ python-dnf-plugins-extras-migrate                                        noarch                                        0.0.11-1.fc22                                           updates                                                 25 k
+ python-pycurl                                                            x86_64                                        7.19.5.1-3.fc22                                         updates                                                177 k
+ python-urlgrabber                                                        noarch                                        3.10.1-6.fc22                                           fedora                                                 112 k
+ pyxattr                                                                  x86_64                                        0.5.3-4.fc22                                            fedora                                                  33 k
+ yum                                                                      noarch                                        3.4.3-508.fc22                                          updates-testing                                        1.2 M
+ yum-metadata-parser                                                      x86_64                                        1.1.4-14.fc22                                           fedora                                                  39 k
+
+Transaction Summary
+=============================================================================================================================================================================================================================================
+Install  8 Packages
+
+Total download size: 1.9 M
+Installed size: 7.5 M
+Is this ok [y/N]: y
+Downloading Packages:
+
+The downloaded packages were saved in cache till the next successful transaction.
+You can remove cached packages by executing 'dnf clean packages'.
+Error: Error downloading packages:
+  Curl error (6): Couldn't resolve host name for https://mirrors.fedoraproject.org/metalink?repo=fedora-22&arch=x86_64 [Could not resolve host: mirrors.fedoraproject.org]
+bash-4.3# dnf clean packages
+Cleaning repos: phalcon_stable mysql56-community updates-source updates-testing remi-test updates-testing-source remi-php70 phalcon_stable-source fedora mysql57-community-dmr-source mysql-tools-community-source updates fedora-source
+              : mysql-tools-community remi mysql-connectors-community mysql-connectors-community-source mysql56-community-source
+0 package files removed

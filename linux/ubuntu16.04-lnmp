@@ -156,7 +156,7 @@ tar xvf php-7.1.7.tar.xz -C /work/opt
 
 4.4编译安装
 cd ../opt/php-7.1.7/
-./configure --prefix=/work/opt/php --enable-fpm --with-fpm-systemd --with-fpm-user=www --with-fpm-group=www --with-config-file-scan-dir=/work/opt/php-7.1.7/ext --with-config-file-path=/work/opt/php --enable-bcmath --with-bz2 --enable-calendar --with-curl --enable-dba --enable-exif --enable-ftp --with-gd --enable-gd-native-ttf --with-gettext --with-mhash --with-iconv --enable-intl --with-libxml-dir --enable-mbstring --with-openssl --with-pcre-jit --with-pcre-dir --with-pdo-mysql=mysqlnd --with-pdo-sqlite --with-readline --enable-session --enable-shmop --enable-soap --enable-sockets --enable-sysvmsg --enable-sysvsem --enable-sysvshm --enable-wddx --enable-xml --with-xmlrpc --with-zlib --enable-zip --enable-inline-optimization --with-mysqli=mysqlnd --enable-mbregex --with-mcrypt --with-jpeg-dir --with-png-dir --with-freetype-dir --with-iconv-dir --enable-gd-jis-conv --enable-embedded-mysqli --enable-mysqlnd --enable-debug
+./configure --prefix=/work/opt/php --enable-fpm --with-fpm-systemd --with-fpm-user=www --with-fpm-group=www --with-config-file-scan-dir=/work/opt/php/etc/additional.d --with-config-file-path=/work/opt/php/etc --enable-bcmath --with-bz2 --enable-calendar --with-curl --enable-dba --enable-exif --enable-ftp --with-gd --enable-gd-native-ttf --with-gettext --with-mhash --with-iconv --enable-intl --with-libxml-dir --enable-mbstring --with-openssl --with-pcre-jit --with-pcre-dir --with-pdo-mysql=mysqlnd --with-pdo-sqlite --with-readline --enable-session --enable-shmop --enable-soap --enable-sockets --enable-sysvmsg --enable-sysvsem --enable-sysvshm --enable-wddx --enable-xml --with-xmlrpc --with-zlib --enable-zip --enable-inline-optimization --with-mysqli=mysqlnd --enable-mbregex --with-mcrypt --with-jpeg-dir --with-png-dir --with-freetype-dir --with-iconv-dir --enable-gd-jis-conv --enable-embedded-mysqli --enable-mysqlnd --enable-debug
 
 编译时报错
 1、configure: error: Cannot find OpenSSL's <evp.h>
@@ -245,6 +245,11 @@ PATH=$PATH:/work/opt/php/bin
 
 保存并退出后执行更新
 source /etc/profile，然后就可以在任意目录执行php -v了。
+
+
+4.8编译安装后找不到配置文件
+原因环境缓存，编译前需要清缓存
+make clean
 
 
 

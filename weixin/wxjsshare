@@ -1,0 +1,7 @@
+#微信js-sdk分享朋友圈，不显示自定义的title和img
+
+解决步骤：
+1、本地查看img和link的访问路径是否正确，特别是link的域名要跟js sdk配置的域名一致；
+2、使用微信web开发工具（下载地址https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1455784140），
+测试wx.config配置是否正常，调试时wx.config.debug要设置为true。使用web开发工具前，需要将自己的微信号绑定为公众号
+的开发者，需要登录微信公众后台绑定。

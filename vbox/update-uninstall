@@ -42,3 +42,12 @@ diana@diana-All-Series:~$
 3、从官网安装5.1
 http://download.virtualbox.org/virtualbox/5.1.26/virtualbox-5.1_5.1.26-117224~Ubuntu~wily_amd64.deb
 在浏览器打开这个网址，然后按照提示用GDebi安装方式安装。
+
+3.1升级安装5.2.12
+
+
+
+4、查看安装位置并运行
+diana@diana-All-Series:~$ whereis virtualbox
+virtualbox: /usr/bin/virtualbox /usr/lib/virtualbox /usr/share/virtualbox
+diana@diana-All-Series:~$ /usr/bin/virtualbox

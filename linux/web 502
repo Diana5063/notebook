@@ -1,0 +1,12 @@
+#网站502错误，排查从3个方向，分别是php、nginx、程序代码
+
+1、先检查php进程是否运行或检查9000端口是否在监听
+ps -ef|grep php-fpm
+lsof -i:9000或ps -ef|grep 9000
+
+如果没有运行，重启php-fpm
+service php-fpm restart
+
+2、视情况重启nginx服务
+
+3、检查程序代码

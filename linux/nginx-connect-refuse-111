@@ -1,0 +1,3 @@
+#2018/12/18 17:00:12 [error] 51550#0: *87752 connect() failed (111: Connection refused) while connecting to upstream, client: 10.0.18.214, server: ws-dev.xx.com, request: "GET /chatroom?p=035avW6tGSZK37f1XWov5G0MI69DRXnXQl4TQtap2jCoCBKI HTTP/1.1", upstream: "http://10.0.18.120:6780/chatroom?p=035avW6tGSZK37f1XWov5G0MI69DRXnXQl4TQtap2jCoCBKI", host: "ws-dev.xx.com"
+ 
+iptables -I INPUT -p tcp --dport 6780 -j ACCEPT

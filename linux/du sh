@@ -1,0 +1,25 @@
+[root@iZuf68g9czsi3u2z21ox9hZ log]# du -sh *
+19G	access.log
+4.6G	access_play.wanfantian.com.log
+24K	mongodb.log
+8.0K	mongodb.log.2016-12-07T07-55-37
+132K	mongodb.log.2016-12-12T03-30-30
+12K	mongodb.log.2017-04-22T00-16-35
+1008K	mysql_error.log
+189M	nginx_error.log
+217M	php_errors.log
+32M	php-fpm.log
+43M	redis.log
+0	www.log.slow
+988K	zabbix_agentd.log
+1.1M	zabbix_agentd.log.old
+
+
+[root@iZuf68g9czsi3u2z21ox9hZ log]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/vda1        40G  7.4G   30G  20% /
+tmpfs           7.8G     0  7.8G   0% /dev/shm
+/dev/vdb1        99G   70G   24G  75% /work
+
+
+du -h --max-depth=1

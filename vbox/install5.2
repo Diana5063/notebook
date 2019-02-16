@@ -1,0 +1,53 @@
+#升级安装virtualbox5.2.2
+
+1、卸载旧版，参考文档update-install
+
+2、安装新版 https://www.linuxidc.com/Linux/2017-11/148870.htm
+
+2.1更新系统
+sudo apt update && sudo apt upgrade
+
+2.2下载并安装Virtualbox 5.2.2
+
+从以下链接下载Ubuntu的Virtualbox 5.2.2：
+
+http://download.virtualbox.org/virtualbox/5.2.2/
+
+打开终端并cd到您的下载目录。 然后使用以下命令安装它：
+
+cd 下载
+sudo gdebi virtualbox-5.2_5.2.2-119230~Ubuntu~xenial_amd64.deb
+
+
+
+diana@diana-All-Series:~/下载$ sudo gdebi virtualbox-5.2_5.2.2-119230~Ubuntu~xenial_amd64.deb 
+Reading package lists... Done
+Building dependency tree        
+Reading state information... Done
+Reading state information... Done
+
+Oracle VM VirtualBox
+ VirtualBox is a powerful PC virtualization solution allowing you to run a
+ wide range of PC operating systems on your Linux system. This includes
+ Windows, Linux, FreeBSD, DOS, OpenBSD and others. VirtualBox comes with a broad
+ feature set and excellent performance, making it the premier virtualization
+ software solution on the market.
+您是否想安装这个软件包？[y/N]:y
+正在选中未选择的软件包 virtualbox-5.2。
+(正在读取数据库 ... 系统当前共安装有 248254 个文件和目录。)
+正准备解包 virtualbox-5.2_5.2.2-119230~Ubuntu~xenial_amd64.deb  ...
+正在解包 virtualbox-5.2 (5.2.2-119230~Ubuntu~xenial) ...
+正在设置 virtualbox-5.2 (5.2.2-119230~Ubuntu~xenial) ...
+addgroup: 组"vboxusers"已经是系统组。退出。
+Created symlink /etc/systemd/system/multi-user.target.wants/vboxdrv.service → /lib/systemd/system/vboxdrv.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/vboxballoonctrl-service.service → /lib/systemd/system/vboxballoonctrl-service.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/vboxautostart-service.service → /lib/systemd/system/vboxautostart-service.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/vboxweb-service.service → /lib/systemd/system/vboxweb-service.service.
+正在处理用于 libc-bin (2.26-0ubuntu2.1) 的触发器 ...
+正在处理用于 systemd (234-2ubuntu12.4) 的触发器 ...
+正在处理用于 ureadahead (0.100.0-20) 的触发器 ...
+正在处理用于 hicolor-icon-theme (0.17-1) 的触发器 ...
+正在处理用于 shared-mime-info (1.8-1) 的触发器 ...
+正在处理用于 desktop-file-utils (0.23-1ubuntu3.17.10.1) 的触发器 ...
+正在处理用于 mime-support (3.60ubuntu1) 的触发器 ...
+

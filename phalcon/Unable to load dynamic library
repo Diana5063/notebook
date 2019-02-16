@@ -1,0 +1,7 @@
+PHP Warning:  PHP Startup: Unable to load dynamic library ‘/usr/lib64/php/modules/phalcon.so‘ - /usr/lib64/php/modules/phalcon.so: undefined symbol: php_json_decode_ex in Unknown on line 0
+
+这是因为和json扩展加载顺序冲突导致的
+
+解决方法：
+
+不要在php.ini里加入extension=phalcon.so这行，可在php.d文件夹下创建新文件phalcon.ini，在phalcon.ini里加入extension=phalcon.so这行，重启php，发现扩展加上了

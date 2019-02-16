@@ -1,0 +1,22 @@
+#/bin/bash 
+log_path='/work/log/nginx'
+date_yesterday=`date -d "yesterday" +%Y%m%d`
+cd $log_path
+mkdir $date_yesterday
+find access_* -exec mv {} ./$date_yesterday/ \;
+find error.log -exec mv {} ./$date_yesterday/ \;
+find error_* -exec mv {} ./$date_yesterday/ \;
+kill -USR1 `cat /work/opt/nginx/logs/nginx.pid `
+
+
+lastweek=`date -d "-8 days" +%Y%m%d`
+if [ -d $lastweek ]; then
+	tar zcf $lastweek.tar.gz ./$lastweek
+	rm $lastweek -rf 
+fi
+
+lastmonth=`date -d "-30 days" +%Y%m%d`
+if [ -f $lastmonth.tar.gz ]; then
+	rm $lastmonth.tar.gz 
+fi
+

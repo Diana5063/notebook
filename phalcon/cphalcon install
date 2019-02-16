@@ -1,0 +1,19 @@
+cphalcon 框架安装
+git clone --depth=1 git://github.com/phalcon/cphalcon.git
+
+cd cphalcon/build
+
+sudo ./install
+
+添加cphalcon扩展到php.ini extension=phalcon.so
+
+重启php-fpm
+
+
+
+可能碰到的问题
+1、按照phalcon官网安装，
+
+提示错误：php-config is not installed
+
+解决办法：sudo apt-get install php7.1-dev -y，再执行  sudo ./install

@@ -1,0 +1,27 @@
+#ubuntu升级到17.04后，每次重启电脑就会重置/etc/resolv.conf里面的内容，导致无法上网
+
+解决方法：
+方法1、创建 /etc/resolvconf/resolv.conf.d/tail文件 (etc/resolvconf/resolv.conf.d 文件夹下已有了 head和base文件)，在该文件中写入自己需要的dns服务器（如：nameserver 1.1.1.1），然后重启resolvconf服务，sudo /etc/init.d/resolvconf restart，如果此时无效，可重启电脑后查看网络是否连接。
+
+方法2、修改 /etc/network/interfaces文件，此方法我电脑尝试无效，仅作参考。
+###interfaces中#######     
+auto eth0     
+iface eth0 inet static     
+address 192.168.1.200     
+netmask 255.255.255.0                  #子网掩码     
+gateway 192.168.1.1                      #网关
+broadcast 192.168.1.255     
+dns-nameservers 1.1.1.1    #设置dns服务器  ---这一行是新添加的
+
+
+方法3、权限设置
+修改 /etc/resolv.conf , 添加 "nameserver ip".
+既然NetworkManager会去重置/etc/resolv.conf文件，那么就把这个文件锁定不让修改
+/usr/bin/chattr +i /etc/resolv.conf  +i是加锁，-i是解锁
+以 root 身份运行 "service NetworkManager restart".
+
+
+
+方法4、停用NetworkManager
+临时关闭：systemctl stop NetworkManager.service
+永久关闭：chkconfig NetworkManager off

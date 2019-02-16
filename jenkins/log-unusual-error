@@ -1,0 +1,26 @@
+#今天发现mysql服务报28错误（28错误是磁盘空间不足导致），查看服务器的磁盘空间使用情况，发现jenkins日志异常增加，一天之内产生了26G日志。
+#https://blog.csdn.net/allen_tsang/article/details/72775773
+
+
+解决方法：
+由于dns解析异常的问题，jenkins会不断写日志，很短时间就可以把磁盘写满，处理方法：
+当发现这个问题时，首先当然是删除日志文件，这些文件可以有十几G的体积。
+删除文件后并不会马上释放空间，需要重启/关闭jenkins进程。
+再次启动jenkins后，点击 系统管理->System Log->日志级别，增加配置项 javax.jmdns，值为off。
+这种通过系统配置的办法在jenkins重启后会失效。
+
+
+
+尝试如下做法：
+在/etc/sysconfig目录下新建文件 jenkins.logging.properties，写入一行代码.level = INFO，
+编辑文件jenkins配置文件/etc/sysconfig/jenkins，加入一行代码
+
+JENKINS_JAVA_OPTIONS="-Djava.util.logging.config.file=/etc/sysconfig/jenkins.logging.properties"，
+
+如果配置文件中已有JENKINS_JAVA_OPTIONS参数设置，则将-Djava.util.logging.config.file=/etc/sysconfig/jenkins.logging.properties拼接在参数值后面，如
+
+JENKINS_JAVA_OPTIONS="-Djava.awt.headless=true  -Xms256m -Xmx512m -XX:MaxNewSize=256m -Djava.util.logging.config.file=/etc/sysconfig/jenkins.logging.properties"
+
+重启jenkins即可。
+
+

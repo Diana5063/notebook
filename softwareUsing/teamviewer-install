@@ -1,0 +1,13 @@
+1、去官网下载安装包。官网链接：（https://www.teamviewer.com/zhcn/download/linux/）
+
+2、在命令行进行安装
+（在下载文件夹下打开命令行，输入：sudo dpkg -i  teamviewer_13.0.6634_amd64.deb）（teamviewer_13.0.6634_amd64.deb为安装包名，根据自己安装包）
+
+3、安装出错，一行语句搞定依赖关系
+sudo apt-get install -f
+
+4、再次安装
+sudo dpkg -i  teamviewer_13.0.6634_amd64.deb
+
+5、在安装目录(上一步的下载目录)命令行运行teamviewer
+diana@diana-All-Series:~/Diana-new$ teamviewer

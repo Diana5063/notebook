@@ -1,0 +1,4 @@
+#在centos执行service cron status查看cron是否运行时提示cron未被识别的命令
+
+查资料得知不同系统此服务的名称不同，ubuntu中使用cron名称
+centos使用crond名称，效果相同。

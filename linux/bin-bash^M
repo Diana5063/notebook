@@ -1,0 +1,14 @@
+#/bin/bash^M: 坏的解释器: 没有那个文件或目录
+
+在Linux下编译运行脚本的时候出现”/bin/bash^M: 坏的解释器: 没有那个文件或目录“这样的错误
+解决方法：
+
+    使用在终端输入sed -i 's/\r$//' test.sh即可
+
+    其中test.sh为我的文件名，这里改成自己需要的即可
+
+原因：
+
+    这个文件在Windows 下编辑过，在Windows下每一行结尾是\n\r，而Linux下则是\n
+
+    sed -i 's/\r$//' test.sh 会把test.sh中的行尾的\r替换为空白

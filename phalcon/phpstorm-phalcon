@@ -1,0 +1,7 @@
+#ubuntu下使phpstorm支持phalcon语法
+
+cd /work
+git clone https://github.com/phalcon/ide-stubs.git //下载phalcon语法工具
+
+在项目目录中，右键点击 External Libraries  ，选择Configure PHP Include Paths，
+点击 + 号，然后选择Specify Other...，浏览到下载好的ide-stubs目录，点击应用和确定。

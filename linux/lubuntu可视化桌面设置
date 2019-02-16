@@ -1,0 +1,15 @@
+#升级lubuntu17.10后没有可视化桌面
+解决方法：安装一个
+
+步骤：
+参考https://www.sinosky.org/set-nemo-as-the-default-file-manager-on-ubuntu.html
+
+
+
+1、首先，安装需要的程序，dconf 是一个编辑系统配置（主要是桌面环境）的程序
+sudo apt-get install dconf-tools nemo
+
+2、然后禁用 Nautilus 绘制桌面图标，也可以使用 dconf-editor 来修改
+gsettings set org.gnome.desktop.background show-desktop-icons false
+
+3、右键单击 菜单栏->面板设置->高级->文件管理器，选择 文件。

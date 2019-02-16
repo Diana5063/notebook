@@ -1,0 +1,64 @@
+#For centos
+Stable releases
+curl -s https://packagecloud.io/install/repositories/phalcon/stable/script.rpm.sh | sudo bash
+or
+
+
+Nightly releases
+curl -s https://packagecloud.io/install/repositories/phalcon/nightly/script.rpm.sh | sudo bash
+
+
+sudo yum update
+sudo yum install php70u-phalcon
+or
+
+dnf update
+dnf install php70u-phalcon
+
+
+#For ubuntu
+curl -s "https://packagecloud.io/install/repositories/phalcon/stable/script.deb.sh" | sudo bash
+
+sudo apt-get install php5-phalcon
+
+# Ubuntu 16.04+, Debian 9+
+sudo apt-get install php7.0-phalcon
+
+
+报错
+Failed to synchronize cache for repo 'phalcon_stable' from 'https://packagecloud.io/phalcon/stable/fedora/22/x86_64': Cannot download repomd.xml: Cannot download repodata/repomd.xml: All mirrors were tried, disabling.
+Failed to synchronize cache for repo 'phalcon_stable-source' from 'https://packagecloud.io/phalcon/stable/fedora/22/SRPMS': Cannot download repomd.xml: Cannot download repodata/repomd.xml: All mirrors were tried, disabling.
+
+
+
+
+
+
+
+方法2：
+git clone --depth=1 git://github.com/phalcon/cphalcon.git
+cd cphalcon/build
+sudo ./install
+
+
+上面安装的是3.3.2,下面安装的是7
+git clone --depth=1 git://github.com/dreamsxin/cphalcon7.git
+cd cphalcon7/ext
+phpize
+./configure
+make && sudo make install
+
+
+Add extension to your php configuration:
+
+# Suse: Add this line in your php.ini
+extension=phalcon.so
+
+# Centos/RedHat/Fedora: Add a file called phalcon.ini in /etc/php.d/ with this content:
+extension=phalcon.so
+
+# Ubuntu/Debian: Add a file called 30-phalcon.ini in /etc/php5/conf.d/ with this content:
+extension=phalcon.so
+
+# Debian with php5-fpm: Add a file called 30-phalcon.ini in /etc/php5/fpm/conf.d/30-phalcon.ini with this content:
+extension=phalcon.so

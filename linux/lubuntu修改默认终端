@@ -1,0 +1,17 @@
+#Ubuntu 安装terminator 后更改默认终端设置
+
+参考
+https://blog.csdn.net/qq_20336817/article/details/46122849
+
+
+1、安装 terminator
+sudo apt-get install terminator
+
+2、接下来，安装dconf-tools，这个是设置默认终端的必须
+sudo apt-get install dconf-tools
+
+3、打开dconf-tools,就像Windows的注册表一样，打开 org > gnome > desktop > terminal
+或者是在 org > gnome > desktop > applications > terminal，更改结果为
+
+exec  gnome-terminal
+exec-arg -x

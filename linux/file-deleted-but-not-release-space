@@ -1,0 +1,15 @@
+#删除一个大文件后，磁盘空间并未释放
+
+使用nohup模式运行ufastlog服务后，产生了一个超大日志文件nohup.out，接近300G，
+删除此日志文件后，df -h 查看磁盘，发现空间并没有释放，于是用 lsof |grep deleted 命令查看删除文件是否被其他程序使用，
+果然有
+tail      28101                root    3r      REG              253,1 309740501039   19797892 /work/opt/ufastlog/nohup.out (deleted)
+tail      28184                root    3r      REG              253,1 309740501039   19797892 /work/opt/ufastlog/nohup.out (deleted)
+
+原来是之前使用tail 命令查看过日志，解决方法，kill这两个进程
+kill -s 9 28101
+kill -s 9 28184
+
+使用 kill -s 9 是因为正常kill无法结束这两个进程，用到了强制结束进程，
+再查看 df -h ，磁盘空间释放了。
+

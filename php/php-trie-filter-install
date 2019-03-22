@@ -1,0 +1,113 @@
+#安装php的trie-filter扩展，用于过滤敏感词，以下是步骤
+
+环境：centos6.5/ubuntu17.10 + php7.*
+
+1、安装依赖libiconv，这个是libdatrie的依赖项,
+从官网(http://ftp.gnu.org/pub/gnu/libiconv/)下载较新的版本，
+我下载的是1.15，
+
+cd /
+wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.15.tar.gz
+tar zxvf libiconv-1.15.tar.gz
+mv libiconv-1.15 /work/opt/
+cd /work/opt/libiconv-1.15/
+./configure
+make
+make install
+
+
+2、安装libdatrie，这是trie-filter的依赖，
+从官网(ftp://linux.thai.net/pub/ThaiLinux/software/libthai/)下载较新版本，
+我下载的是0.2.9
+cd /
+wget ftp://linux.thai.net/pub/ThaiLinux/software/libthai/libdatrie-0.2.9.tar.xz
+tar xvf libdatrie-0.2.9.tar.xz
+mv libdatrie-0.2.9 /work/opt/
+cd /work/opt/libdatrie-0.2.9/
+./configure --prefix=/usr/local/libdatrie/
+make ICONV_LIBS='/usr/local/lib/libiconv.so'
+make install
+
+注：解压xz文件时如果报错
+tar (child): xz: Cannot exec: No such file or directory
+是因为缺少xz程序的支持，安装一个就好：
+yum install -y xz
+然后再执行解压
+
+
+3、安装php trie-filter扩展
+cd /work/opt
+git clone https://github.com/zzjin/php-ext-trie-filter.git(不支持https的电脑可用git协议：git://github.com/zzjin/php-ext-trie-filter.git)
+cd php-ext-trie-filter/
+/usr/local/php/bin/phpize
+./configure --with-php-config=/usr/local/php/bin/php-config  --with-trie_filter=/usr/local/libdatrie/
+make
+make install
+
+
+4、在php.ini中添加一行 extensions = trie_filter.so，然后重启php-fpm服务。
+
+
+
+****************************************************************************************************************************************************
+
+环境centos6.5 + php5.6.40
+
+1、安装依赖libiconv，这个是libdatrie的依赖项,
+从官网(http://ftp.gnu.org/pub/gnu/libiconv/)下载较新的版本，
+我下载的是1.14，
+
+cd /work/opt
+wget http://ftp.gnu.org/pub/gnu/libiconv/libiconv-1.14.tar.gz
+tar zxvf libiconv-1.14.tar.gz
+cd libiconv-1.14/
+./configure
+make
+make install
+
+
+2、安装libdatrie，从官网(ftp://linux.thai.net/pub/ThaiLinux/software/libthai/)下载较新版本，
+我下载的是0.2.4
+cd /
+wget ftp://linux.thai.net/pub/ThaiLinux/software/libthai/libdatrie-0.2.4.tar.gz
+tar xvf libdatrie-0.2.4.tar.gz
+cd libdatrie-0.2.4/
+./configure --prefix=/usr/local/libdatrie/
+make ICONV_LIBS='/usr/local/lib/libiconv.so'
+make install
+
+
+3、安装php trie-filter扩展
+cd /work/opt
+git clone git://github.com/wulijun/php-ext-trie-filter(如果克隆失败，可以直接下载zip包后解压)
+cd php-ext-trie-filter/
+phpize
+./configure --with-php-config=/usr/bin/php-config  --with-trie_filter=/usr/local/libdatrie/
+make
+
+
+
+注：make时报错
+
+[root@localhost php-ext-trie-filter-master]# make
+/bin/sh /work/opt/php-ext-trie-filter-master/libtool --mode=compile cc  -I. -I/work/opt/php-ext-trie-filter-master -DPHP_ATOM_INC -I/work/opt/php-ext-trie-filter-master/include -I/work/opt/php-ext-trie-filter-master/main -I/work/opt/php-ext-trie-filter-master -I/usr/include/php -I/usr/include/php/main -I/usr/include/php/TSRM -I/usr/include/php/Zend -I/usr/include/php/ext -I/usr/include/php/ext/date/lib -I/usr/local/libdatrie//include  -DHAVE_CONFIG_H  -g -O2   -c /work/opt/php-ext-trie-filter-master/trie_filter.c -o trie_filter.lo 
+libtool: compile:  cc -I. -I/work/opt/php-ext-trie-filter-master -DPHP_ATOM_INC -I/work/opt/php-ext-trie-filter-master/include -I/work/opt/php-ext-trie-filter-master/main -I/work/opt/php-ext-trie-filter-master -I/usr/include/php -I/usr/include/php/main -I/usr/include/php/TSRM -I/usr/include/php/Zend -I/usr/include/php/ext -I/usr/include/php/ext/date/lib -I/usr/local/libdatrie//include -DHAVE_CONFIG_H -g -O2 -c /work/opt/php-ext-trie-filter-master/trie_filter.c  -fPIC -DPIC -o .libs/trie_filter.o
+/work/opt/php-ext-trie-filter-master/trie_filter.c: 在函数‘zif_trie_filter_write’中:
+/work/opt/php-ext-trie-filter-master/trie_filter.c:557: 警告：传递‘open_memstream’的第 2 个参数时在不兼容的指针类型间转换
+/usr/include/stdio.h:324: 附注：需要类型‘size_t *’，但实参的类型为‘zend_size_t *’
+/work/opt/php-ext-trie-filter-master/trie_filter.c:565:27: 错误：宏“RETVAL_STRINGL”需要 3 个参数，但只给出了 2 个
+/work/opt/php-ext-trie-filter-master/trie_filter.c:565: 错误：‘RETVAL_STRINGL’未声明(在此函数内第一次使用)
+/work/opt/php-ext-trie-filter-master/trie_filter.c:565: 错误：(即使在一个函数内多次出现，每个未声明的标识符在其
+/work/opt/php-ext-trie-filter-master/trie_filter.c:565: 错误：所在的函数内也只报告一次。)
+make: *** [trie_filter.lo] 错误 1
+
+(此问题暂未解决，by 20190322)
+解决问题后，
+make clean
+./configure --with-php-config=/usr/bin/php-config  --with-trie_filter=/usr/local/libdatrie/
+make
+make install
+
+
+
+4、在php.ini中添加一行 extensions = trie_filter.so，然后重启php-fpm服务。

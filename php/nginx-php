@@ -1,0 +1,44 @@
+#配置nginx支持php，有如下两种方式
+
+*****************************************************************************
+方式一、tcp端口监听
+location ~ \.php$ {
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+    fastcgi_pass 127.0.0.1:9000;
+    fastcgi_index index.php;
+    fastcgi_max_temp_file_size 0;
+    fastcgi_param  SCRIPT_FILENAME   $document_root$fastcgi_script_name;
+    include fastcgi_params;
+}
+需要进行如下操作：
+修改配置文件(根据自己实际)/usr/local/php/etc/php-fpm.d/www.conf
+listen = 127.0.0.1:9000  #端口号可根据需要设置为其他端口
+
+在nginx配置时端口号需要根php配置一致。
+*****************************************************************************
+
+
+
+*****************************************************************************
+方式二、socket监听，此方式需要php安装sockets扩展
+location ~ \.php {
+    fastcgi_index /index.php;
+    fastcgi_pass unix:/dev/shm/php-fpm.sock;#绝对路径
+    include fastcgi_params;
+    fastcgi_split_path_info       ^(.+\.php)(/.+)$;
+    fastcgi_param PATH_INFO       $fastcgi_path_info;
+    fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
+    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+}
+需要进行如下操作：
+修改配置文件(根据自己实际)/usr/local/php/etc/php-fpm.d/www.conf
+listen = /dev/shm/php-fpm.sock
+
+重启php后会自动生成sock文件，
+需要给/dev/shm/php-fpm.sock文件读写权限
+chmod 666 /dev/shm/php-fpm.sock
+
+此方法比方式一响应更快，因为/dev/shm在内存里，sock文件常驻内存加快了php的响应速度。
+*****************************************************************************
+
+注意：修改配置文件后重启nginx和php生效。

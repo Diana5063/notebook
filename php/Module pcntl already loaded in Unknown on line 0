@@ -1,0 +1,4 @@
+#PHP Warning:  Module 'pcntl' already loaded in Unknown on line 0
+
+说明php已经安装了pcntl扩展，不需要另外手动安装，如已重复安装，可在php.ini中注释掉extension=pcntl.so,
+在这一行前面加上 ; 即可。

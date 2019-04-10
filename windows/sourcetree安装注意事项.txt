@@ -1,0 +1,24 @@
+windows电脑上首次安装sourcetree时注意事项如下：
+1、创建密钥对，用于跟远程git仓库通信
+
+打开sourcetree终端，输入如下命令
+
+ssh-keygen -t rsa -C xxx@xx.xx.com (xxx@xx.xx.com是邮箱地址，替换为自己实际邮箱)
+
+然后一路按回车键，直到生成密钥，终端上回提示密钥保存路径。
+
+2、打开sourcetree->工具->选项，ssh客户端配置，
+SSH密钥找到刚才生成的密钥，
+SSH客户端 选择 OpenSSH
+
+
+3、打开sourcetree->Git,Git版本，默认是Embedded，这是sourcetree内部集成的版本，可以直接用，
+也可以自己安装git，然后选用System版本，浏览到自己的git安装目录。
+
+
+4、在终端中输入如下命令测试
+ssh -T git@git.deyi.link
+Welcome to GitLab, chyxin!
+
+
+能看到仓库中的自己的用户名表示链接成功，OK!!!!

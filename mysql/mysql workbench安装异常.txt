@@ -1,0 +1,22 @@
+在win7上安装mysql workbench时提示文件api-ms-win-crt-runtime-l1-1-0.dll不存在
+
+
+本系统是64位，文件存在于C:\Windows\SysWOW64目录中（32位系统应该存在于C:\Windows\System32）
+
+
+在C:\Windows\SysWOW64目录中找到了该文件（原本已存在），重新安装workbench时还是报错，
+参考了网上的方法，修复成功，具体步骤如下
+
+
+
+
+1、卸载安装异常的workbench
+
+2、备份C:\Windows\SysWOW64\api-ms-win-crt-runtime-l1-1-0.dll到其他文件夹，并删除此文件，
+删除时可能提示文件被占用，因为这个文件是MFC运行必需的，腾讯系的电脑应用都用到了这个文件，
+如果有腾讯电脑管家、QQ、微信等或其他应用时，请先退出软件再删除。
+
+3、在微软官网下载vs2015（下载地址：https://www.microsoft.com/en-us/download/confirmation.aspx?id=48145）
+安装后会重新生成C:\Windows\SysWOW64\api-ms-win-crt-runtime-l1-1-0.dll
+
+4、重启电脑并再次安装workbench，安装成功！

@@ -30,7 +30,7 @@ make install
 
 3、重启服务
 安装完成后在php.ini中增加一行    extension=redis.so
-重新php  service php-fpm restart
+重启php  service php-fpm restart
 
 
 4、查看扩展

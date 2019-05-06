@@ -1,0 +1,15 @@
+#在php命令行运行php指令
+
+方法：进入项目入口目录，即index.php文件所在目录，在命令行上执行
+php index.php
+
+Zend Framework 2.3.9 application
+Usage:
+                                                            
+
+Reason for failure: Invalid arguments or no arguments provided
+
+报错提示没有提供参数，在console路由表中找到可以使用的参数test，如
+php index test
+
+即可运行test对应的控制器或相关文件。

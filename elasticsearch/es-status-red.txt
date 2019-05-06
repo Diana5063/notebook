@@ -1,0 +1,35 @@
+#最近ES写入数据时老是报错，类似如下信息
+
+======================================================================
+   The application has thrown an exception!
+======================================================================
+ Elasticsearch\Common\Exceptions\ServerErrorResponseException
+ unavailable_shards_exception: [index][0] primary shard is not active Timeout: [1m], request: [index {[index][search_play][60], source[{"id":60,"title":"\u91cd\u8fd4\u4f8f\u7f57\u7eaa\uff0c\u63a2\u79d8\u9177\u70ab\u5947\u77f3\uff0c\u5bfb\u627e\u6050\u9f99\u8e2a\u8ff9","key":"\u91cd\u8fd4\u4f8f\u7f57\u7eaa\uff0c\u63a2\u79d8\u9177\u70ab\u5947\u77f3\uff0c\u5bfb\u627e\u6050\u9f99\u8e2a\u8ff9\u4e9e","cover":"http:\/\/img.com\/uploads\/2016\/11\/16\/752a1922cd4f57f17b05a65ba5434db0.jpg","begin_time":"11\u670827\u65e5","end_time":"11\u670827\u65e5","join_number":80,"labels":"[{\"name\":\"\u4e0d\u597d\u73a9\u5305\u9000\",\"img\":\"http:\\\/\\\/img.com\\\/uploads\\\/2016\\\/10\\\/26\\\/e0a125f5ebc06da72e82f4b99faae5e8.png\"}]","tags":["\u6050\u9f99\u5bc6\u5ba4","\u535a\u7269\u9986\u5bfb\u5b9d"],"city":"WH","kidsplay_status":1,"status":2,"update_dateline":1557026730}]}]
+----------------------------------------------------------------------
+
+======================================================================
+   Previous Exception(s):
+======================================================================
+ Elasticsearch\Common\Exceptions\ServerErrorResponseException
+ {"error":{"root_cause":[{"type":"unavailable_shards_exception","reason":"[index][0] primary shard is not active Timeout: [1m], request: [index {[index][search_play][60], source[{\"id\":60,\"title\":\"\\u91cd\\u8fd4\\u4f8f\\u7f57\\u7eaa\\uff0c\\u63a2\\u79d8\\u9177\\u70ab\\u5947\\u77f3\\uff0c\\u5bfb\\u627e\\u6050\\u9f99\\u8e2a\\u8ff9\",\"key\":\"\\u91cd\\u8fd4\\u4f8f\\u7f57\\u7eaa\\uff0c\\u63a2\\u79d8\\u9177\\u70ab\\u5947\\u77f3\\uff0c\\u5bfb\\u627e\\u6050\\u9f99\\u8e2a\\u8ff9\\u4e9e\",\"cover\":\"http:\\/\\/img.com\\/uploads\\/2016\\/11\\/16\\/752a1922cd4f57f17b05a65ba5434db0.jpg\",\"begin_time\":\"11\\u670827\\u65e5\",\"end_time\":\"11\\u670827\\u65e5\",\"join_number\":80,\"labels\":\"[{\\\"name\\\":\\\"\\u4e0d\\u597d\\u73a9\\u5305\\u9000\\\",\\\"img\\\":\\\"http:\\\\\\/\\\\\\/img.com\\\\\\/uploads\\\\\\/2016\\\\\\/10\\\\\\/26\\\\\\/e0a125f5ebc06da72e82f4b99faae5e8.png\\\"}]\",\"tags\":[\"\\u6050\\u9f99\\u5bc6\\u5ba4\",\"\\u535a\\u7269\\u9986\\u5bfb\\u5b9d\"],\"city\":\"WH\",\"kidsplay_status\":1,\"status\":2,\"update_dateline\":1557026730}]}]"}],"type":"unavailable_shards_exception","reason":"[index][0] primary shard is not active Timeout: [1m], request: [index {[index][search_play][60], source[{\"id\":60,\"title\":\"\\u91cd\\u8fd4\\u4f8f\\u7f57\\u7eaa\\uff0c\\u63a2\\u79d8\\u9177\\u70ab\\u5947\\u77f3\\uff0c\\u5bfb\\u627e\\u6050\\u9f99\\u8e2a\\u8ff9\",\"key\":\"\\u91cd\\u8fd4\\u4f8f\\u7f57\\u7eaa\\uff0c\\u63a2\\u79d8\\u9177\\u70ab\\u5947\\u77f3\\uff0c\\u5bfb\\u627e\\u6050\\u9f99\\u8e2a\\u8ff9\\u4e9e\",\"cover\":\"http:\\/\\/img.com\\/uploads\\/2016\\/11\\/16\\/752a1922cd4f57f17b05a65ba5434db0.jpg\",\"begin_time\":\"11\\u670827\\u65e5\",\"end_time\":\"11\\u670827\\u65e5\",\"join_number\":80,\"labels\":\"[{\\\"name\\\":\\\"\\u4e0d\\u597d\\u73a9\\u5305\\u9000\\\",\\\"img\\\":\\\"http:\\\\\\/\\\\\\/img.com\\\\\\/uploads\\\\\\/2016\\\\\\/10\\\\\\/26\\\\\\/e0a125f5ebc06da72e82f4b99faae5e8.png\\\"}]\",\"tags\":[\"\\u6050\\u9f99\\u5bc6\\u5ba4\",\"\\u535a\\u7269\\u9986\\u5bfb\\u5b9d\"],\"city\":\"WH\",\"kidsplay_status\":1,\"status\":2,\"update_dateline\":1557026730}]}]"},"status":503}
+----------------------------------------------------------------------
+
+
+
+
+
+
+
+
+根据ES官方文档(https://www.elastic.co/guide/cn/elasticsearch/guide/current/_cluster_health.html)的指导，
+
+最后解决方法：重启es服务.
+
+如果es加入了系统服务，使用service elasticsearch restart，
+没有加入的话，先kill掉es进程，再到es的安装目录中，找到bin/elasticsearch文件，执行
+./elasticsearch -d 
+启动es，最后再次执行写入es命令，成功！
+
+
+
+写在最后：没有什么是重启不能解决的，如果不能，就再重启一次！！！

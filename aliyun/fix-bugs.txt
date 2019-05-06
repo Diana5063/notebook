@@ -1,0 +1,37 @@
+1、RHSA-2016:2779-中危: nss 和 nss-util 安全更新
+yum update nss-util
+yum update nss
+yum update nss-sysinit
+yum update nss-tools
+
+更新nss后可能导致nginx和php的web应用不能访问，此时可重启php和nginx，刷新页面后重试访问。
+
+2、RHSA-2017:2478-重要: httpd 安全更新
+yum update httpd-tools
+
+3、RHSA-2018:1879-中危: glibc 安全和BUG修复更新
+yum update glibc
+yum update glibc-common
+yum update glibc-devel
+yum update glibc-headers
+yum update nscd
+
+4、RHSA-2016:0496-重要: git 安全更新
+yum update git
+yum update perl-Git
+
+5、RHSA-2015:1123-重要: cups 安全更新
+yum update cups-libs
+
+6、RHSA-2017:0184-重要: mysql 安全更新
+yum update mysql-libs
+
+7、RHSA-2015:0165-中危: subversion 安全更新
+yum update subversion
+
+8、RHSA-2015:0700-中危: unzip 安全更新
+yum update unzip
+
+9、RHSA-2015:1459-中危: ntp 安全和BUG修复更新
+yum update ntp
+yum update ntpdate

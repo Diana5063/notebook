@@ -1,0 +1,17 @@
+#今天登录wordpress，后台首页样式错误，浏览器Console中提示
+
+GET http://yixin510.online/wp-admin/load-styles.php?c=1&dir=ltr&load%5B%5D=dashicons,admin-bar,common,forms,admin-menu,dashboard,list-tables,edit,revisions,media,themes,about,nav-menus,wp-pointer,widgets&load%5B%5D=,site-icon,l10n,buttons,wp-auth-check,media-views&ver=5.2 net::ERR_INCOMPLETE_CHUNKED_ENCODING 200 (OK)
+
+
+
+经查看nginx错误日志时，发现如下记录
+019/05/14 10:01:31 [crit] 1471#0: *339249 mkdir() "/tmp/fastcgi/8" failed 
+(2: No such file or directory) while reading upstream, client: 219.140.188.110, server: xxxx.xxx, 
+request: "GET /wp-admin/load-scripts.php?c=1&load%5B%5D=hoverIntent,common,admin-bar,underscore,wp-util,wp-a11y,updates,jquery-ui-core,thickbox,plugin-install,svg-painter,jquery-ui-wid&load%5B%5D=get,jquery-ui-mouse,jquery-ui-sortable,jquery-ui-position,wp-pointer&ver=5.2 HTTP/1.1", 
+upstream: "fastcgi://127.0.0.1:9000", host: "xxxx.xxxx", 
+referrer: "http://xxxx.xxxx/wp-admin/plugins.php"
+
+
+
+原来是在创建样式目录时没有权限，在tmp目录中创建fastcgi目录并给他777权限，刷新页面后即可恢复正常。
+

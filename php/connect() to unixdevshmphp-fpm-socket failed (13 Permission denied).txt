@@ -1,0 +1,16 @@
+#今天服务器意外断电后，重启php和nginx服务，发现nginx无法连接到php
+
+
+查看nginx错误日志发现是权限原因：
+[crit] 4150#0: *1 connect() to unix:/dev/shm/php-fpm.sock failed (13: Permission denied) while connecting to upstream
+
+
+解决方法：
+
+修改php-fpm.conf
+
+listen.owner = www
+listen.group = www
+listen.mode = 0660
+
+保存文件并重启php服务即可。

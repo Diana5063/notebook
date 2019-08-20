@@ -20,11 +20,9 @@ OS Version:Windows (x86, 64-bit)
 
 1.2. 配置环境变量：
 右键 我的电脑->属性->高级系统设置->高级->环境变量->系统变量，
-添加一个变量，
-变量名：MYSQL_HOME
-变量值：D:\Program Files\MySQL\mysql-5.7.26-winx64
 
-修改系统变量中的“path”，末尾添加：%MYSQL_HOME%\bin;
+找到“path”，末尾新建一项：D:\Program Files\MySQL\mysql-5.7.26-winx64\bin，
+保存，就可以在命令行直接使用mysql命令（如果还不能直接使用，重启电脑后重试）。
 
 
 1.3. 生成data文件：

@@ -1,0 +1,16 @@
+#使用ide-helper:models命令给类添加注释时提示
+
+Exception: could not find driver
+Could not analyze class 
+
+
+看提示原因是找不到数据库驱动，于是本地安装了mysql，使用windows dos窗口能正常
+连接到数据库，phpstorm里面直接连接数据库也OK，但是laravel项目中执行这个命令仍然
+报错，
+
+php -m查看php的pdo扩展，扩展列表已安装，再查看php.ini，发现是没有加载这个扩展，
+加载方法，在php.ini中将 
+
+;extension=pdo_mysql
+
+这一行前面的分号去掉，再次运行 ide-helper:models 即可。

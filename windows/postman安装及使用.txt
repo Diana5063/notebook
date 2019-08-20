@@ -1,0 +1,10 @@
+#google chrome安装postman及postman interceptor插件
+
+步骤如下：
+1、在chrome网上应用店搜索 Postman Interceptor，将其添加到 Chrome，这时在
+google浏览器上会出现interceptor的图标，现在图标是橙色，表示插件关闭，
+点击图标并打开开关变成蓝色，表示开启。
+
+2、点击图标，弹出窗口中有个“Helps you send requests which use browser cookies through the Postman Chrome app”，
+点击 Postman Chrome app链接，添加postman扩展到google浏览器，可以在浏览器左上角的应用里面看到postman。
+重启浏览器，试试发送请求，测试OK。

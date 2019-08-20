@@ -1,0 +1,70 @@
+#将git的多次提交合并为一个
+
+实验变量
+
+dev： 工作分支，这个分支上有超过10个提交，且这些提交不连续，
+因为开发过程中会不断把master分支的代码合并到这个分支；
+dev1、dev2： 基于最新的master分支检出的新分支；
+
+
+步骤
+首先将dev分支上的本次功能提交逐个遴选（git cherry-pick）到dev1，
+这时dev1上最新且连续的几个提交就都是你的提交；
+
+然后切换到dev2，将dev1上最新的几个提交使用git 命令进行合并到dev2，
+合并方式目前总结有两种
+
+方式1：
+git checkout dev1 $(git diff --name-only dev1)
+此方法是先比较dev2与dev1的差异文件，再将这些差异文件检出到dev2分支；
+
+方式2：
+git checkout -p dev1
+此方式是直接将dev1上的差异修改合并到dev2；
+
+
+这时dev2的状态是修改未提交状态，执行提交操作即可。
+
+
+效果比较
+
+这两种方式都能达到目的，但各有优缺点，
+方式1的优点是速度快且不需要交互，缺点是当合并过来的提交中有删除文件操作时
+会报错，提示找不到删除的那些文件，这个缺陷暂未找到解决方法；
+方式2的优点是不限合并过来的操作类型，缺点是需要交互，进行文件逐个确认，有点麻烦。
+
+
+
+
+方式2的交互问题
+Apply this hunk to index and worktree [y,n,q,a,d,/,K,j,J,g,e,?]??
+
+y - stage this hunk 
+n - do not stage this hunk 
+q - quit; do not stage this hunk nor any of the remaining ones 
+a - stage this hunk and all later hunks in the file 
+d - do not stage this hunk nor any of the later hunks in the file 
+g - select a hunk to go to 
+/ - search for a hunk matching the given regex 
+j - leave this hunk undecided, see next undecided hunk 
+J - leave this hunk undecided, see next hunk 
+k - leave this hunk undecided, see previous undecided hunk 
+K - leave this hunk undecided, see previous hunk 
+s - split the current hunk into smaller hunks 
+e - manually edit the current hunk 
+? - print help
+
+y - 存储这个hunk 
+n - 不存储这个hunk 
+q - 离开，不存储这个hunk和其他hunk 
+a - 存储这个hunk和这个文件后面的hunk 
+d - 不存储这个hunk和这个文件后面的hunk 
+g - 选择一个hunk 
+/ - 通过正则查找hunk 
+j - 不确定是否存储这个hunk，看下一个不确定的hunk 
+J - 不确定是否存储这个hunk，看下一个hunk 
+k - 不确定是否存储这个hunk，看上一个不确定的hunk 
+K -不确定是否存储这个hunk，看上一个hunk 
+s - 把当前的hunk分成更小的hunks 
+e - 手动编辑当前的hunk 
+? - 输出帮助信息

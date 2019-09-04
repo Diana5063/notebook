@@ -27,6 +27,7 @@ mysql> STOP SLAVE;
 Query OK, 0 rows affected (0.00 sec)
 
 mysql> CHANGE MASTER TO MASTER_HOST='192.168.1.212',MASTER_LOG_FILE='mysql-bin.000026',MASTER_LOG_POS=1702;
+#change master to master_host='192.168.1.212', master_port=3306, master_user='slave', master_password='', master_log_file='bin.000036', master_log_pos=799072709;
 Query OK, 0 rows affected (0.03 sec)
 
 mysql> START SLAVE;
@@ -65,3 +66,22 @@ mysql> show status like 'slave%';
 | Slave_running              | ON                  |
 +----------------------------+---------------------+
 6 rows in set (0.00 sec)
+
+
+如果还是报错，可以查看mysql的错误日志，tail -f mysql_error.log
+发现如下错误日志：
+[ERROR] Slave I/O: error connecting to master 'slave@192.168.1.212:3306' - retry-time: 10  retries: 21, Error_code: 1045
+
+然后使用perror命令查看详细错误日志，perror命令在mysql的bin目录里面
+[root@iZuf68g9czsi3u2z21ox9hZ bin]# ./perror 1045
+MySQL error code 1045 (ER_ACCESS_DENIED_ERROR): Access denied for user '%-.48s'@'%-.64s' (using password: %s)
+
+原来是密码错误，经过确认发现slave用户连接master是空密码
+mysql> stop slave;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> change master to master_host='192.168.2.40', master_port=3306, master_user='repl', master_password='REPLsafe!@#$41', master_log_file='bin.000043', master_log_pos=799072709;
+Query OK, 0 rows affected, 2 warnings (0.05 sec)
+
+mysql> start slave;
+Query OK, 0 rows affected (0.01 sec)

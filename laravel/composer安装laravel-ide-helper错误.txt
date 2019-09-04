@@ -1,0 +1,27 @@
+#composer安装laravel-ide-helper时提示包文件无法下载，如下
+
+D:\workspace\soudian_php_backend_v2>composer require --dev barryvdh/laravel-ide-helper
+
+                                                                                                                                                                                    
+  [Composer\Downloader\TransportException]                                                                                                                                          
+  The "https://packagist.laravel-china.org/packages.json" file could not be downloaded: Peer certificate CN=`*.phphub.org' did not match expected CN=`packagist.laravel-china.org'  
+  Failed to enable crypto                                                                                                                                                           
+  failed to open stream: operation failed   
+
+require [--dev] [--prefer-source] [--prefer-dist] [--no-progress] [--no-suggest] [--no-update] [--no-scripts] [--update-no-dev] [--update-with-dependencies] [--update-with-all-dependencies] [--ignore-platform-r
+eqs] [--prefer-stable] [--prefer-lowest] [--sort-packages] [-o|--optimize-autoloader] [-a|--classmap-authoritative] [--apcu-autoloader] [--] [<packages>]...
+
+
+出现上述错误信息是因为，composer 全局下载换成中国镜像的原因.
+只需将下载源换回默认的就可以。可以使用下面命令修改 composer 配置信息
+
+composer config -g repo.packagist composer https://packagist.phpcomposer.com
+
+如果上述操作无效，则需要修改项目中composer.json文件，将composer成换回默认，找到repositories
+
+"repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.laravel-china.org"
+        }
+    }

@@ -1,0 +1,68 @@
+有时候MySQL主从同步不一致比较严重的时候，需要手动同步。
+
+然而网上看大很多需要锁表的同步的方法基本如下
+
+1.先对主库锁表
+
+FLUSH TABLES WITH READ LOCK;
+
+2.备份数据
+
+mysqldump -uroot -p -hlocalhost > mysql.bak.sql
+
+3.解锁主库
+
+unlock tables;
+
+4.查看主库的binlog文件和位置
+
+show master status; 找出File和Position
+
+mysql> show master status;
++------------------+----------+--------------+------------------+-------------------+
+| File             | Position | Binlog_Do_DB | Binlog_Ignore_DB | Executed_Gtid_Set |
++------------------+----------+--------------+------------------+-------------------+
+| mysql-bin.000036 | 23685708 |              |                  |                   |
++------------------+----------+--------------+------------------+-------------------+
+1 row in set (0.00 sec)
+
+
+5.使用scp命令把文件移动到从库
+
+scp mysql.bak.sql root@192.168.128.101:/tmp/
+如果是指定连接端口，则需要加上端口号，如
+scp -P 8998 mysql.bak.sql root@192.168.128.101:/tmp/
+
+6.在从库上停止同步
+
+mysql> stop slave;
+
+7.导入数据
+
+mysql> source /tmp/mysql.bak.sql
+
+8.设置从库的同步开始文件和开始位置
+
+change master to master_host = '主库主机', master_user = '同步用户名', master_port=3306, master_password='', master_log_file = '第3步中获取的file', master_log_pos=第3步中获取的position;
+
+9.从库上启动同步并检查
+
+mysql> start slave;
+
+mysql> show slave status\G  查看：
+ 
+Slave_IO_Running: Yes
+Slave_SQL_Running: Yes
+ 
+ 
+上网查了下，有外国友人说不需要锁表的方法。 大致是不需要执行第1和第3步，在第2导出数据的时候加上参数
+mysqldump --skip-lock-tables --single-transaction --flush-logs --hex-blob --master-data=2 -A
+ 
+--skip-lock-tables 不锁表
+--master-data=2 在导出的时候同时生成binlog文件名和位置在导出的文件开头。这个很重要。因此第4步也不需要执行了，binlog的文件和位置可以从这里拿到。
+--single-transaction 通过将导出操作封装在一个事务内来使得导出的数据是一个一致性快照
+其他参数意义可以看这里：http://www.penglixun.com/tech/database/the_process_of_mysqldump.html（有翻译）
+最后把第8步的binlog文件和位置替换成导出的文件开头找到的那个带有注释的file和position就好了。
+ 
+ 
+转载并总结自：http://plusbryan.com/mysql-replication-without-downtime 但也不保证100%一丝不漏的同步过来。 不过也请熟悉这方面的朋友发表下看法。

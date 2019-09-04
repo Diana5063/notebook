@@ -1,0 +1,38 @@
+#ubuntu系统安装图形桌面
+
+在软件更新器中选择国内阿里云的源并选择重要安全更新和推荐更新，然后升级软件
+sudo apt-get update #更新软件库
+sudo apt-get upgrade #升级软件
+sudo aptitude install ubuntu-desktop #安装Ubuntu桌面系统
+
+安装过程中需要选择默认显示管理器（gdm3或lightdm），选择lightdm，回车继续，安装时间较长，
+最后报如下错误：
+
+正在设置 gdm3 (3.26.1-3ubuntu3) ...
+dpkg: 处理软件包 gdm3 (--configure)时出错：
+ 子进程 已安装 post-installation 脚本 返回错误状态 10
+dpkg: 依赖关系问题使得 ubuntu-desktop 的配置工作不能继续：
+ ubuntu-desktop 依赖于 gdm3；然而：
+  软件包 gdm3 尚未配置。
+
+dpkg: 处理软件包 ubuntu-desktop (--configure)时出错：
+ 依赖关系问题 - 仍未被配置
+因为错误消息指示这是由于上一个问题导致的错误，没有写入 apport 报告。
+                                                                    在处理时有错误发生：
+ gdm3
+ ubuntu-desktop
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+
+
+解决方法：
+cd /var/lib/dpkg/
+sudo mv info info.bak201903222
+sudo mkdir info
+cd
+sudo apt-get -f install
+
+安装成功了！
+
+然后reboot重启
+
+

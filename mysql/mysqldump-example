@@ -1,0 +1,59 @@
+#! /bin/sh
+dest_dir=/home/data  #导出文件所放目录
+log_path=/home/data.log  #日志文件目录
+ 
+back_date=`date "+%Y-%m-%d"`  #定义当前时间变量，时间格式例如2018-12-13
+back_time=$((3*24*60*60))  #定义3天秒数（这个是为了删除3天前生成的文件，只保留近三天产出的文件）
+ntime=$(date +%s -d $back_date)   #获取当前日期秒数
+ 
+source_mysql_host=ipdaar  #数据库地址
+source_mysql_database=dbname  #数据库名称
+source_mysql_user=user  #用户名
+source_mysql_password=userpwd  #用户名密码
+source_mysql_port=port   #数据库端口号
+ 
+source_mysql_cmd=`which mysqldump`" -u$source_mysql_user -p$source_mysql_password -P$source_mysql_port -h$source_mysql_host --single-transaction "  #定义执行指令 
+#--single-transaction会将隔离级别设置为：REPEATABLE READ。并且随后再执行一条START TRANSACTION语句，让整个数据在dump过程中保证数据的一致性，这个选项对InnoDB的数据表很有用，且不会锁表。但是这个不能保证MyISAM表和MEMORY表的数据一致性。
+ 
+function delefile(){  #循环遍历删除过期文件（这里定义为3天）
+	 echo `date "+%Y-%m-%d %H:%M:%S"` "Start delefile Data" >> $log_path  #打印开始删除日期追加到日志文件里
+        if [ $? eq 0 ]  #检验上一指令是否执行成功
+        then
+        for fname in `ls $dest_dir`   #循环遍历产出文件所在目录
+        do
+        fileday=`echo $fname|cut -d . -f 2`   #截取文件产出日期
+        filetime=$(date +%s -d $fileday)   #将文件产出日期转成秒
+        if [ $? eq 0 ]  #若上一指令执行成功
+        then
+                stime=$(($ntime-$filetime))   #当前日期秒数减去产出文件日期秒数
+                if [ $stime -gt $back_time ]  #若差值大于三天的秒数，则删除该文件，即删除前三天的文件
+                then
+                        rm -rf $dest_dir/$fname  #删除文件指令
+                fi
+        fi
+        done
+        fi
+}
+ 
+function copy_database(){   #定义导出文件函数
+     
+	echo `date "+%Y-%m-%d %H:%M:%S"` >> $log_path   #记录追加到日志文件里
+ 
+	echo `date "+%Y-%m-%d %H:%M:%S"` "Start Copy Data" >> $log_path
+        
+    echo `date "+%Y-%m-%d %H:%M:%S"` "start dump $source_mysql_database to $dest_dir/filename.$back_date " >> $log_path
+       
+	$source_mysql_cmd --replace -t $source_mysql_database table_name1 --skip-tz-utc --where="table_name1.id > 100" > $dest_dir/filename.$back_date \   #将table_name1表数据导出filename.$back_date文件中
+	&& $source_mysql_cmd --replace -t $source_mysql_database table_name2 --skip-tz-utc --where="table_name2.id > 100" >> $dest_dir/filename.$back_date \  #将table_name2表数据追加到filename.$back_date文件中
+	
+ 
+	echo `date "+%Y-%m-%d %H:%M:%S"` "import complete $?" >> $log_path  #将导出完成时间记录到日志文件里
+ 
+        echo `date "+%Y-%m-%d %H:%M:%S"` "Copy Data End" >> $log_path  #
+	echo `date "+%Y-%m-%d %H:%M:%S"` "Start delefile Data" >> $log_path  #进行文件删除
+        delefile    #调用删除文件函数
+ 
+	echo `date "+%Y-%m-%d %H:%M:%S"` >> $log_path   #完成时间
+ 
+}
+copy_database   #调用copy_database函数

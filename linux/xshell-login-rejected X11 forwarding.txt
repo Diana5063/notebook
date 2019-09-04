@@ -1,0 +1,7 @@
+#xshell登录linux服务器时，提示
+WARNING! The remote SSH server rejected X11 forwarding request
+
+解决办法
+
+在xshell对话框中，选择要登录的服务器会话，右键选择属性->隧道，将 
+ 转发X11连接到(X)  前面的打勾去掉，点击确定后重新连接即正常。

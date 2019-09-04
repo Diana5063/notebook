@@ -1,0 +1,14 @@
+#ubuntu本地时间与当前服务器时间不一致
+RequestTimeTooSkewed: The difference between the request time and the current time is too large
+
+
+解决办法，在ubuntu中执行 ntpdate ntp.ubuntu.com
+查看时间 date
+
+
+[root@localhost ~]# date
+Tue May 21 16:07:11 CST 2019
+[root@localhost ~]# ntpdate ntp.ubuntu.com
+21 May 16:23:54 ntpdate[11089]: step time server 91.189.89.199 offset 961.572870 sec
+[root@localhost ~]# date
+Tue May 21 16:25:54 CST 2019

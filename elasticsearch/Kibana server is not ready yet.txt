@@ -1,0 +1,45 @@
+#配置好了es和kibana后，浏览器访问kibana时提示
+
+Kibana server is not ready yet
+
+说明kibana与Elasticsearch版本号可能不一致
+
+# 查看版本号
+rpm -qa elasticsearch kibana
+
+如果版本号一模一样，那就多刷新几次页面吧。。。。
+如果版本号不一样，将kibana重新安装，版本号与es一致。
+
+
+配置有几点需要注意：
+1、要想让远程用户能访问到kibana，需要将server.host设置为一个非localhost的值（不能设置为localhost或127.0.0.1），
+不考虑安全权限的话，设置为0.0.0.0，所有人都可以访问；
+
+2、elasticsearch.url必须是一个带有http或https协议的完整可访问地址，即ES的访问地址，如果ES和Kibana在同一台服务器上，
+可以设置为http://localhost:9200，确认这个地址是否可访问，可在服务器上执行 curl http://localhost:9200 测试，有ES正常
+返回表示地址可用，也可以将localhost改成具体ip地址，测试方法同理；
+
+3、修改配置文件后需要重启kibana服务。
+
+
+安装方法参考官方文档  https://www.elastic.co/guide/en/kibana/current/install.html
+推荐使用rpm方法手动安装，源安装下载速度太慢了。
+
+因为版本问题重装kibana，所以需要先卸载，使用npm -e命令,
+首先查看当前安装的版本号
+rpm -qa elasticsearch kibana，查到elasticsearch的版本号是5.1.1，kibana版本号是7.0.0，要安装kibana5.1.1,
+
+rpm -e kibana-7.0.0-1.x86_64(卸载的版本号以实际查到的为准)
+wget https://artifacts.elastic.co/downloads/kibana/kibana-5.1.1-x86_64.rpm
+rpm --install kibana-5.1.1-x86_64.rpm （这一步安装完后就安装好了）
+
+将kibana加入系统服务，查看系统服务管理工具 
+ps -p 1
+发现系统使用init管理系统服务，执行如下操作将kibana加入系统服务
+chkconfig --add kibana
+
+
+现在可以用service命令管理kibana了，
+service kibana start|stop|restart|status
+
+最后修改配置文件即可。

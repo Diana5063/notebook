@@ -1,0 +1,59 @@
+#phpstorm支持laravel语法步骤  参考官网教程 https://www.jetbrains.com/help/phpstorm/laravel.html
+1、在phpstorm中安装laravel插件，点击File->settings->Plugins，在插件面板查找laravel，安装laravel插件并启用（勾选）；
+
+2、安装composer（https://docs.phpcomposer.com/00-intro.html#Using-the-Installer）
+下载并且运行 Composer-Setup.exe，它将安装最新版本的 Composer ，
+并设置好系统的环境变量，因此你可以在任何目录下直接使用 composer 命令。
+
+3、安装php，参考 https://laravelacademy.org/post/2380.html
+composer需要指定php版本才能安装正确的依赖库版本，所以需要安装php。安装方法：
+到 PHP 官网 http://windows.php.net/download#php-7.0 下载与本机系统对应的安装版本，我这里安装是
+https://windows.php.net/downloads/releases/php-7.2.20-Win32-VC15-x64.zip，线程安全版7.2，免安装版本，
+解压到自己想存放的目录（如我的目录是D:\Program Files\php7），复制php.ini-development为php.ini，然后在
+命令行运行php -v，可以看到安装的php版本
+
+[D:\Program Files\php7]$ php -v
+PHP 7.2.20 (cli) (built: Jul  2 2019 13:01:33) ( ZTS MSVC15 (Visual C++ 2017) x64 )
+Copyright (c) 1997-2018 The PHP Group
+Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
+
+4、设置phpstorm集成composer
+点击File->settings->Language & Frameworks->PHP->Composer，设置本项目的composer.json文件地址，
+勾选 Add packages as libraries和Synchronize IDE Settings with composer.json(勾选本设置后不可修改phpstorm的php版本)，
+选择'composer' executable并填写composer可执行文件的路径（因为前一步安装的是全局的，此处可以直接填写composer）,保存；
+
+5、安装laravel-ide-helper
+需要安装barryvdh/laravel-ide-helper，使得phpstorm支持laravel的语法，由于composer.json文件中已经添加了库名称，
+所以直接安装composer.json中的依赖，点击Tools->Composer->Install，可以开始安装依赖库了，生成的依赖库放在vendor目录中。
+
+安装中遇到以下问题
+Your requirements could not be resolved to an installable set of packages.
+?
+?  Problem 1
+?    - Installation request for endroid/qrcode 2.3.3 -> satisfiable by endroid/qrcode[2.3.3].
+?    - endroid/qrcode 2.3.3 requires ext-gd * -> the requested PHP extension gd is missing from your system.
+?  Problem 2
+?    - Installation request for intervention/image 2.4.2 -> satisfiable by intervention/image[2.4.2].
+?    - intervention/image 2.4.2 requires ext-fileinfo * -> the requested PHP extension fileinfo is missing from your system.
+?  Problem 3
+?    - Installation request for league/flysystem 1.0.52 -> satisfiable by league/flysystem[1.0.52].
+?    - league/flysystem 1.0.52 requires ext-fileinfo * -> the requested PHP extension fileinfo is missing from your system.
+?  Problem 4
+?    - Installation request for phpoffice/phpspreadsheet 1.8.2 -> satisfiable by phpoffice/phpspreadsheet[1.8.2].
+?    - phpoffice/phpspreadsheet 1.8.2 requires ext-fileinfo * -> the requested PHP extension fileinfo is missing from your system.
+?  Problem 5
+?    - league/flysystem 1.0.52 requires ext-fileinfo * -> the requested PHP extension fileinfo is missing from your system.
+?    - laravel/framework v5.5.45 requires league/flysystem ^1.0.8 -> satisfiable by league/flysystem[1.0.52].
+?    - Installation request for laravel/framework v5.5.45 -> satisfiable by laravel/framework[v5.5.45].
+
+发现是php缺少gd和fileinfo的扩展，
+解决方法：修改php.ini，将这两个扩展前面的;去掉，保存后重试安装即可。
+
+6、安装依赖后，phpstorm依然无法识别laravel的Router类及其他部分类和方法，
+解决方法：打开phpstorm的终端，执行如下命令
+D:\workspace\soudian_php_backend>php artisan ide-helper:generate
+Exception: Use of undefined constant CURLOPT_IPRESOLVE - assumed 'CURLOPT_IPRESOLVE' (this will throw an Error in a future version of PHP)
+Skipping \Overtrue\LaravelWechat\Facade.
+Exception: Use of undefined constant CURLOPT_IPRESOLVE - assumed 'CURLOPT_IPRESOLVE' (this will throw an Error in a future version of PHP)
+Skipping \Overtrue\LaravelWechat\Facade.
+A new helper file was written to _ide_helper.php

@@ -1,0 +1,86 @@
+#windows安装mysql5.7注意事项
+
+
+参考 https://www.cnblogs.com/reyinever/p/8551977.html
+
+
+1.1. 下载：
+我下载的是64位系统的zip包：
+
+下载地址：https://downloads.mysql.com/archives/community/
+筛选条件：
+Product Version: 5.7.26
+Operating System: Microsoft Windows
+OS Version:Windows (x86, 64-bit)
+
+筛选结果中选择(mysql-5.7.26-winx64.zip)
+
+下载后解压到：D:\Program Files\MySQL\mysql-5.7.26-winx64
+
+
+1.2. 配置环境变量：
+右键 我的电脑->属性->高级系统设置->高级->环境变量->系统变量，
+
+找到“path”，末尾新建一项：D:\Program Files\MySQL\mysql-5.7.26-winx64\bin，
+保存，就可以在命令行直接使用mysql命令（如果还不能直接使用，重启电脑后重试）。
+
+
+1.3. 生成data文件：
+以管理员身份运行cmd（在桌面左下角的搜索中查找cmd.exe，在搜索结果中找到并右键选择 以管理员身份运行）
+
+cd D:\Program Files\MySQL\mysql-5.7.26-winx64\bin (如果cd命令切换目录失败，在本步执行后继续执行  d: )
+
+执行命令：
+mysqld --initialize-insecure --user=mysql  
+在D:\Program Files\MySQL\mysql-5.7.26-winx64目录下生成data目录
+
+
+1.4. 启动服务：
+执行命令：
+net start mysql  启动mysql服务，若提示：服务名无效...(后面有解决方法==步骤：1.5）；
+
+
+1.5. 解决启动服务失败（报错）：
+提示：服务名无效
+
+解决方法：
+
+执行命令：mysqld -install  即可（不需要my.ini配置文件 
+注意：网上写的很多需要my.ini配置文件，其实不需要my.ini配置文件也可以，
+我之前放置了my.ini文件，反而提示服务无法启动，把my.ini删除后启动成功了）
+
+若提示 “服务正在启动或停止中，请稍候片刻后再试一次”，
+需要去资源管理器中把mysql进程全结束了，重新启动即可；
+
+
+1.6. 登录mysql:
+登录mysql:(因为之前没设置密码，所以密码为空，不用输入密码，直接回车即可）
+
+E:\mysql-5.7.20-winx64\bin>mysql -u root -p
+
+Enter password: 
+
+
+1.7. 查询用户密码:
+查询用户密码命令：mysql> select host,user,authentication_string from mysql.user;
+
+
+1.8. 设置（或修改）root用户密码：
+设置（或修改）root用户密码：
+
+mysql> update mysql.user set authentication_string=password("123456") where user
+
+="root";   #password("123456"),此处引号中的内容是密码，自己可以随便设置
+
+Query OK, 1 row affected, 1 warning (0.00 sec)
+
+Rows matched: 1  Changed: 1  Warnings: 1
+
+mysql> flush privileges;  #作用：相当于保存，执行此命令后，设置才生效，若不执行，还是之前的密码不变
+
+Query OK, 0 rows affected (0.01 sec) 
+
+1.9. 退出mysql:
+mysql> quit
+
+Bye

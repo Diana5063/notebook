@@ -1,0 +1,30 @@
+#redis set操作时报语法错误
+
+edis 的配置及连接都 OK 了，就是有些操作不知道怎么实现，比如生命周期，前缀设置等。
+
+以前用 redis 扩展中的类来写，实现起来非常简单：
+
+$this->redis->set($key,$val,$expires);
+
+这样就可以生效了，但是转了 Laravel 后，使用了默认的 predis：
+
+Redis::set($key,$val,$expires);
+
+这样写就会报错，只能这样写：
+
+Redis::set($key,$val);
+
+
+
+解决方法：
+
+Redis 里 SET 的用法是这样的
+
+SET key value [EX seconds] [PX milliseconds] [NX|XX]
+不是
+
+SET key value expires
+所以你的写法换成这样就对了
+
+Redis::set('key', 'value', 'EX', 60);
+

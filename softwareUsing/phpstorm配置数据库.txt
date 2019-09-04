@@ -1,0 +1,13 @@
+#phpstorm配置数据库时无法连接
+
+出现如下报错提示
+Connection to @127.0.0.1 failed.
+[08001] Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+
+
+
+原因：UTC代表的是全球标准时间 ，但是我们使用的时间是北京时区也就是东八区，领先UTC八个小时
+
+
+解决办法：在数据库配置的URL参数后面加上?serverTimezone=GMT
+jdbc:mysql://127.0.0.1:3306?serverTimezone=GMT

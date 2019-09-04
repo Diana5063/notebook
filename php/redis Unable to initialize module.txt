@@ -1,0 +1,95 @@
+#安装完redis并重启php服务的时候提示如下错误：
+php -m
+PHP Warning:  PHP Startup: redis: Unable to initialize module
+Module compiled with module API=20151012
+PHP    compiled with module API=20160303
+These options need to match
+ in Unknown on line 0
+
+Warning: PHP Startup: redis: Unable to initialize module
+Module compiled with module API=20151012
+PHP    compiled with module API=20160303
+These options need to match
+ in Unknown on line 0
+
+
+
+这是因为安装的phpredis扩展与当前的php版本不一致，重新安装即可，安装步骤如下：
+1、清理之前安装的版本
+rm -R /work/opt/phpredis-phpredis-24e7859/
+
+
+2、下载新的phpredis并安装
+cd /work/opt
+git clone https://github.com/phpredis/phpredis.git(如果https无法下载，可换成 git://github.com/phpredis/phpredis.git)
+cd phpredis
+/work/opt/php/bin/phpize (要使用当前版本的phpize，可使用whereis phpize查找)
+./configure --with-php-config=/work/opt/php/bin/php-config  （php-config查找命令为 whereis php-config）
+make
+make install
+
+3、重启服务
+安装完成后在php.ini中增加一行    extension=redis.so
+重启php  service php-fpm restart
+
+
+4、查看扩展
+php -m
+
+[PHP Modules]
+bcmath
+bz2
+calendar
+Core
+ctype
+curl
+date
+dba
+dom
+exif
+fileinfo
+filter
+ftp
+gd
+gettext
+hash
+iconv
+intl
+json
+libxml
+mbstring
+mcrypt
+mysqli
+mysqlnd
+openssl
+pcre
+PDO
+pdo_mysql
+pdo_sqlite
+phalcon7
+Phar
+posix
+readline
+redis
+Reflection
+session
+shmop
+SimpleXML
+soap
+sockets
+SPL
+sqlite3
+standard
+sysvmsg
+sysvsem
+sysvshm
+tokenizer
+wddx
+xml
+xmlreader
+xmlrpc
+xmlwriter
+zip
+zlib
+
+[Zend Modules]

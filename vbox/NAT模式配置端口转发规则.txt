@@ -1,0 +1,21 @@
+#新建了虚拟后，在虚拟机中直接操作不太方便，需要使用ssh客户端xshell来连接
+
+使xshell能与虚拟机中的系统连网，需要配置端口转发规则，
+操作路径 设置->网络->高级->端口转发，网络连接方式选择 “网络地址转换（NAT）”，
+打开端口转发面板，添加转发规则
+
+名称     协议  主机IP       主机端口  子系统IP    子系统端口
+Rule1   TCP   127.0.0.1  22            10.0.2.15   22
+Rule2   TCP   127.0.0.1  80            10.0.2.15   80
+
+
+其中22端口用于本地xshell连接虚拟机，80端口用于访问虚拟机中的web应用。
+主机IP为127.0.0.1，子系统IP在子系统中查看，ubuntu系统使用 ip addr 命令，
+查看到网卡的地址是10.0.2.15
+
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:4c:6b:ee brd ff:ff:ff:ff:ff:ff
+    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic enp0s3
+       valid_lft 85634sec preferred_lft 85634sec
+    inet6 fe80::a00:27ff:fe4c:6bee/64 scope link 
+       valid_lft forever preferred_lft forever

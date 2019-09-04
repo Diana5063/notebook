@@ -1,0 +1,7 @@
+#linux下切换用户发现提示This account is currently not available
+
+
+原因：用户的shell禁止登录了，开启即可
+
+解决办法：
+要切换的用户名是www，在/etc/passwd查看，发现是/sbin/nologin，改成/bin/bash，保存退出后就可以切换登录了。

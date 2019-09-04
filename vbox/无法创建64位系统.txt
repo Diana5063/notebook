@@ -1,0 +1,7 @@
+#安装virtualbox后无法创建64位系统，只能创建32位
+
+电脑环境：联想Y7000， win10
+
+从网上查找资料后发现是因为没有开启系统的磁盘虚拟化，具体做法如下：
+
+开机时长按F2键进入BIOS系统，选择Configuration，将Intel Virtualization Technology设置为Enabled，然后按F10保存并退出，重新开机进入系统即可解决，现在可以创建64位系统了！

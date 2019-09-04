@@ -1,0 +1,115 @@
+#php安装xdebug
+
+1、下载xdebug（http://www.xdebug.org/），要下载正确的版本，
+可以将phpinfo网页的信息拷贝到http://www.xdebug.org/find-binary.php，然后按照指导安装，
+（除了可以获取网页上的phpinfo信息，还可以在命令行执行php -i来获取），复制以下信息到http://www.xdebug.org/find-binary.php，点击分析按钮，会返回合适的xdebug版本。
+
+
+
+phpinfo()
+PHP Version => 7.3.7
+
+System => Linux xin01 4.15.0-54-generic #58-Ubuntu SMP Mon Jun 24 10:55:24 UTC 2019 x86_64
+Build Date => Jul 13 2019 08:18:28
+Configure Command =>  './configure'  '--prefix=/work/opt/php' '--enable-fpm' '--with-fpm-systemd' '--with-fpm-user=www' '--with-fpm-group=www' '--with-config-file-scan-dir=/work/opt/php/etc/additional.d' '--with-config-file-path=/work/opt/php/etc' '--enable-bcmath' '--with-bz2' '--enable-calendar' '--with-curl' '--enable-dba' '--enable-exif' '--enable-ftp' '--with-gd' '--with-gettext' '--with-mhash' '--with-iconv' '--enable-intl' '--with-libxml-dir' '--enable-mbstring' '--with-openssl' '--with-pcre-jit' '--with-pcre-dir' '--with-pdo-mysql=mysqlnd' '--with-pdo-sqlite' '--with-readline' '--enable-session' '--enable-shmop' '--enable-soap' '--enable-sockets' '--enable-sysvmsg' '--enable-sysvsem' '--enable-sysvshm' '--enable-wddx' '--enable-xml' '--with-xmlrpc' '--with-zlib' '--enable-zip' '--enable-inline-optimization' '--with-mysqli=mysqlnd' '--enable-mbregex' '--with-jpeg-dir' '--with-png-dir' '--with-freetype-dir' '--with-iconv-dir' '--enable-gd-jis-conv' '--enable-embedded-mysqli' '--enable-mysqlnd' '--enable-debug'
+Server API => Command Line Interface
+Virtual Directory Support => disabled
+Configuration File (php.ini) Path => /work/opt/php/etc
+Loaded Configuration File => /work/opt/php/etc/php.ini
+Scan this dir for additional .ini files => /work/opt/php/etc/additional.d
+Additional .ini files parsed => (none)
+PHP API => 20180731
+PHP Extension => 20180731
+Zend Extension => 320180731
+Zend Extension Build => API320180731,NTS,debug
+PHP Extension Build => API20180731,NTS,debug
+Debug Build => yes
+Thread Safety => disabled
+Zend Signal Handling => enabled
+Zend Memory Manager => enabled
+Zend Multibyte Support => provided by mbstring
+IPv6 Support => enabled
+DTrace Support => disabled
+
+
+
+2、安装，参考下面几个地址
+https://xdebug.org/wizard.php
+https://www.cnblogs.com/lightsrs/p/9612409.html
+https://www.cnblogs.com/zhangj391/p/6795536.html
+
+tar xvf xdebug-2.7.2.tgz
+cd xdebug-2.7.2
+/work/opt/php/bin/phpize //需要找到phpize的实际路径
+./configure --with-php-config=/work/opt/php/bin/php-config //需要带上php-config的实际路径
+make   //这一步生成xdebug.so文件
+cp modules/xdebug.so /work/opt/php/lib/php/extensions/debug-non-zts-20180731  //复制到php的扩展目录
+vim /work/opt/php/etc/php.ini   //修改php配置文件，在末尾添加以下配置
+
+[xdebug]
+zend_extension = xdebug.so
+xdebug.remote_enable=1
+4 xdebug.remote_handler=dbgp
+5 xdebug.remote_mode=req
+6 xdebug.remote_host=127.0.0.1
+7 xdebug.remote_port=9000
+
+
+保存并退出，重启php服务，查看扩展可以看到xdebug已成功安装
+root@xin01:~# /work/opt/php/bin/php -m
+[PHP Modules]
+bcmath
+bz2
+calendar
+Core
+ctype
+curl
+date
+dba
+dom
+exif
+fileinfo
+filter
+ftp
+gd
+gettext
+hash
+iconv
+intl
+json
+libxml
+mbstring
+mysqli
+mysqlnd
+openssl
+pcre
+PDO
+pdo_mysql
+pdo_sqlite
+Phar
+posix
+readline
+Reflection
+session
+shmop
+SimpleXML
+soap
+sockets
+SPL
+sqlite3
+standard
+sysvmsg
+sysvsem
+sysvshm
+tokenizer
+wddx
+xdebug
+xml
+xmlreader
+xmlrpc
+xmlwriter
+zip
+zlib
+
+[Zend Modules]
+Xdebug

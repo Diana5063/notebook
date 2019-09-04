@@ -23,18 +23,19 @@ mkdir -p work/web
 sudo -i
 
 
+
 3、安装nginx
 
 3.1安装依赖
 apt install zlib1g-dev libpcre3-dev -y
 
 cd /work/src
-wget https://www.openssl.org/source/openssl-1.1.1-pre8.tar.gz
-wget https://sourceforge.net/projects/pcre/files/pcre/8.42/pcre-8.42.tar.gz
+wget https://www.openssl.org/source/openssl-1.1.1c.tar.gz
+wget https://sourceforge.net/projects/pcre/files/pcre/8.43/pcre-8.43.tar.gz
 wget http://www.zlib.net/zlib-1.2.11.tar.gz
 
-tar xvf openssl-1.1.1-pre8.tar.gz -C /work/opt/
-tar xvf pcre-8.42.tar.gz -C /work/opt/
+tar xvf openssl-1.1.1c.tar.gz -C /work/opt/
+tar xvf pcre-8.43.tar.gz -C /work/opt/
 tar xvf zlib-1.2.11.tar.gz -C /work/opt/
 
 cd /work/opt/openssl-1.1.1-pre8/
@@ -64,17 +65,21 @@ make install
 groupadd -r www
 useradd -r -M -s /sbin/nologin -g www www
 sed -i "s/\/home\/www://" /etc/passwd
+(或创建www用户和组
+groupadd www
+useradd -g www -s /sbin/nologin www
+)
 
 3.3下载nginx
 cd /work/src
-wget http://nginx.org/download/nginx-1.15.0.tar.gz
+wget http://nginx.org/download/nginx-1.17.1.tar.gz
 
 3.4解压
-tar xvf nginx-1.15.0.tar.gz -C /work/opt/
-cd /work/opt/nginx-1.15.0/
+tar xvf nginx-1.17.1.tar.gz -C /work/opt/
+cd /work/opt/nginx-1.17.1/
 
 3.5编译安装
-./configure --prefix=/etc/nginx --user=www --group=www --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --pid-path=/run/nginx.pid --lock-path=/run/nginx.lock --http-client-body-temp-path=/tmp/client --http-proxy-temp-path=/tmp/proxy --http-fastcgi-temp-path=/tmp/fastcgi --http-uwsgi-temp-path=/tmp/uwsgi --http-scgi-temp-path=/tmp/scgi --http-log-path=/work/log/nginx/access.log --error-log-path=/work/log/nginx/error.log --with-http_ssl_module --with-http_v2_module --with-stream_realip_module --with-openssl=/work/opt/openssl-1.1.1-pre8 --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_stub_status_module --with-http_perl_module --with-mail --with-mail_ssl_module --with-debug --with-pcre-jit  --with-pcre=/work/opt/pcre-8.42 --with-zlib=/work/opt/zlib-1.2.11
+./configure --prefix=/work/opt/nginx --user=www --group=www --sbin-path=/usr/sbin/nginx --conf-path=/work/opt/nginx/nginx.conf --pid-path=/work/opt/nginx/log/nginx.pid --lock-path=/work/opt/nginx/log/nginx.lock --http-client-body-temp-path=/tmp/client --http-proxy-temp-path=/tmp/proxy --http-fastcgi-temp-path=/tmp/fastcgi --http-uwsgi-temp-path=/tmp/uwsgi --http-scgi-temp-path=/tmp/scgi --http-log-path=/work/log/nginx/access.log --error-log-path=/work/log/nginx/error.log --with-http_ssl_module --with-http_v2_module --with-stream_realip_module --with-openssl=/work/opt/openssl-1.1.1c --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_stub_status_module --with-http_perl_module --with-mail --with-mail_ssl_module --with-debug --with-pcre-jit  --with-pcre=/work/opt/pcre-8.43 --with-zlib=/work/opt/zlib-1.2.11
 
 （提示需要libxml2模块
 ./configure: error: the HTTP XSLT module requires the libxml2/libxslt
@@ -84,7 +89,7 @@ libraries. You can either do not enable the module or install the libraries.
 （提示需要gd模块
 ./configure: error: the HTTP image filter module requires the GD library.
 You can either do not enable the module or install the libraries.
-安装后继续，需要在/etc/apt/sources.list添加一行deb http://security.ubuntu.com/ubuntu trusty-security main，再执行 apt-get install libgd2-xpm-dev）
+安装后继续，需要在/etc/apt/sources.list添加一行deb http://security.ubuntu.com/ubuntu trusty-security main，再执行 apt-get install libgd2-xpm-dev；不行的话试试 apt-get install -y libgd-dev）
 
 （提示需要GeoIP模块
 安装后继续apt-get install libgeoip-dev）
@@ -121,7 +126,7 @@ root@xin:/usr/sbin# ps -A|grep nginx
 28430 ?        00:00:00 nginx
 此时nginx已经运行
 
-修改配置文件使主机可以访问nginx
+修改配置文件使主机可以访问nginx，在浏览器中输入localhost或127.0.0.1
 如果浏览器中出现如下内容，说明安装成功，可以使用了！
 Welcome to nginx!
 If you see this page, the nginx web server is successfully installed and working. Further configuration is required.
@@ -134,6 +139,8 @@ Thank you for using nginx.
 
 
 3.7增加nginx管理脚本
+
+脚本1：
 **************************************************************************************
 
 #!/bin/bash
@@ -209,17 +216,58 @@ exit 0
 配置后用/etc/init.d/nginx start|stop|restart|reload来控制nginx的开启和关闭
 
 
+
+脚本2：vim /lib/systemd/system/nginx.service
+**************************************************************************************
+[Unit]
+Description=nginx - high performance web server
+After=network.target remote-fs.target nss-lookup.target
+[Service]
+Type=forking
+ExecStart=/usr/sbin/nginx -c /work/opt/nginx/nginx.conf
+ExecReload=/usr/sbin/nginx -s reload
+ExecStop=/usr/sbin/nginx -s stop
+[Install]
+WantedBy=multi-user.target
+**************************************************************************************
+
+// 设置开机启动
+ubuntu@VM-0-12-ubuntu:~/work$ sudo systemctl enable nginx.service
+
+
+// 停止开机启动
+ubuntu@VM-0-12-ubuntu:~/work$ sudo systemctl disable nginx.service
+
+// 开启 nginx 服务
+ubuntu@VM-0-12-ubuntu:~/work$ sudo systemctl start nginx.service
+
+
+// 查看状态
+ubuntu@VM-0-12-ubuntu:~/work$ sudo systemctl status nginx.service
+
+
+// 重启服务
+ubuntu@VM-0-12-ubuntu:~/work$ sudo systemctl restart nginx.service
+
+
+// 查看所有服务
+ubuntu@VM-0-12-ubuntu:~/work$ sudo systemctl list-units --type=service
+
+
+
+
+
 4安装php
 
 4.1安装依赖
 apt install libsystemd-dev libgd-dev libxml2-dev libcurl4-gnutls-dev -y
 
 4.2下载并解压
-从官网下载http://au1.php.net/get/php-7.2.7.tar.gz/from/this/mirror，并用ftp工具上传到/work/src目录
-tar xvf php-7.2.7.tar.gz -C /work/opt/
+wget https://www.php.net/distributions/php-7.3.7.tar.gz
+tar xvf php-7.3.7.tar.gz
 
 4.3安装
-cd /work/opt/php-7.2.7
+cd /work/opt/php-7.3.7
 ./configure --prefix=/work/opt/php --enable-fpm --with-fpm-systemd --with-fpm-user=www --with-fpm-group=www --with-config-file-scan-dir=/work/opt/php/etc/additional.d --with-config-file-path=/work/opt/php/etc --enable-bcmath --with-bz2 --enable-calendar --with-curl --enable-dba --enable-exif --enable-ftp --with-gd --with-gettext --with-mhash --with-iconv --enable-intl --with-libxml-dir --enable-mbstring --with-openssl --with-pcre-jit --with-pcre-dir --with-pdo-mysql=mysqlnd --with-pdo-sqlite --with-readline --enable-session --enable-shmop --enable-soap --enable-sockets --enable-sysvmsg --enable-sysvsem --enable-sysvshm --enable-wddx --enable-xml --with-xmlrpc --with-zlib --enable-zip --enable-inline-optimization --with-mysqli=mysqlnd --enable-mbregex --with-jpeg-dir --with-png-dir --with-freetype-dir --with-iconv-dir --enable-gd-jis-conv --enable-embedded-mysqli --enable-mysqlnd --enable-debug
 
 （提示找不到openssl
@@ -229,12 +277,16 @@ configure: error: Cannot find OpenSSL's <evp.h>
 （提示重新安装bzip2
 configure: error: Please reinstall the BZip2 distribution
 安装后继续
-cd /work/src ; wget http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz ;
+cd /work/src ; wget https://sourceforge.net/projects/bzip2/files/bzip2-1.0.6.tar.gz ;
 tar xvf bzip2-1.0.6.tar.gz -C /work/opt/ ; cd /work/opt/bzip2-1.0.6/ ; make && make install）
 
 （提示重新安装readline
 configure: error: Please reinstall readline - I cannot find readline.h
 安装后继续 apt install -y libedit-dev libreadline-dev）
+
+（提示重新安装 libzip
+configure: error: Please reinstall the libzip distribution
+安装后继续 apt-get install libzip-dev）
 
 make -j5
 
@@ -248,8 +300,8 @@ Installing PDO headers:           /work/opt/php/include/php/ext/pdo/
 
 安装成功！接着增加配置文件
 
-cp php.ini-development ../php/etc/php.ini
 
+cp /work/src/php-7.3.7/php.ini-development /work/opt/php/etc/php.ini
 cd /work/opt/php/etc
 
 cp php-fpm.conf.default php-fpm.conf
@@ -305,6 +357,7 @@ cd /etc/init.d/
 chmod a+x php-fpm
 
 配置后使用/etc/init.d/php-fpm start|stop|restart|status来控制php-fpm的开启和关闭
+（或者使用systemctl start|stop|status等命令管理php-fpm服务）
 
 4.6将php命令添加到系统环境变量
 
@@ -327,25 +380,42 @@ make clean
 
 5.1安装redis
 cd /work/src
-wget http://download.redis.io/releases/redis-4.0.10.tar.gz
-tar xvf redis-4.0.10.tar.gz -C /work/opt/
-cd /work/opt/redis-4.0.10/
+wget http://download.redis.io/releases/redis-5.0.5.tar.gz
+tar xvf redis-5.0.5.tar.gz -C /work/opt/
+cd /work/opt/redis-5.0.5/
 make
 make test 
 
 （make test的时候报错，提示需要tcl8.5或以上
 You need tcl 8.5 or newer in order to run the Redis test
 安装后继续
-wget http://downloads.sourceforge.net/tcl/tcl8.6.8-src.tar.gz
-tar xvf tcl8.6.8-src.tar.gz  -C /work/opt/  
+wget https://sourceforge.net/projects/tcl/files/Tcl/8.6.9/tcl8.6.9-src.tar.gz
+tar xvf tcl8.6.9-src.tar.gz  -C /work/opt/  
 
-cd  /work/opt/tcl8.6.8/unix/
+cd  /work/opt/tcl8.6.9/unix/
 ./configure  
  
 make  
  
 make install
 ）
+
+
+（make test的时候报错，提示defrag didn't stop）
+**********************************************************
+!!! WARNING The following tests failed:
+
+*** [err]: Active defrag in tests/unit/memefficiency.tcl
+defrag didn't stop.
+Cleanup: may take some time... OK
+Makefile:262: recipe for target 'test' failed
+make[1]: *** [test] Error 1
+make[1]: Leaving directory '/work/opt/redis-5.0.5/src'
+Makefile:6: recipe for target 'test' failed
+make: *** [test] Error 2
+**********************************************************
+为了编译通过 ，打开 tests/unit/memefficiency.tcl，根据“defrag didn't stop”，定位到相应报错处，
+将等待时间改大点，原来是150 100，改成1500 1000，（有两处需要修改）保存退出后重新make test
 
 All tests passed without errors!
 
@@ -400,11 +470,11 @@ chown redis:redis /work/opt/redis-4.0.10/data
 chmod 770 /work/opt/redis-4.0.10/data
 
 
-mkdir -p /etc/redis
+#mkdir -p /etc/redis
 
-cp /work/opt/redis-4.0.10/redis.conf /etc/redis/
+#cp /work/opt/redis-4.0.10/redis.conf /etc/redis/
 
-vim /etc/redis/redis.conf
+#vim /etc/redis/redis.conf
 
 在文件中找到supervised命令。
 现在其被设置为no。
@@ -413,7 +483,7 @@ vim /etc/redis/redis.conf
 supervised systemd
 
 
-下面找到dir目录。此选项指定Redis用于放置持久数据的目录。
+下面找到redis.conf配置的dir目录。此选项指定Redis用于放置持久数据的目录。
 
 我们需要挑选合适的位置，并确保Redis有权限写入但普通用户无权查看。
 

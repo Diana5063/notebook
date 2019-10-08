@@ -1,0 +1,51 @@
+#windows安装nodejs
+
+系统环境：
+window10
+
+参考：https://www.cnblogs.com/liaojie970/p/9296177.html
+
+步骤：
+1、官网下载 https://nodejs.org/en/，选择最新稳定版(10.16.3 LTS)，
+下载后双击安装程序，我是安装在D盘，安装目录是 D:\Program Files\nodejs
+
+2、添加系统变量，以便能全局访问
+右键“我的电脑”，选择“属性”->“高级系统设置”->“高级”->“环境变量”，
+在系统变量中添加新的属性NODE_HOME=D:\Program Files\nodejs，
+修改系统变量的path属性，在末尾添加%NODE_HOME%，一路按确定保存，然后在cmd
+终端中输入node -v，输出版本号表示安装成功，否则检查path配置，多个path变量以 ; 隔开。
+
+3、改变原有的环境变量
+(1)配置npm的全局模块的存放路径以及cache的路径，
+例如两个文件夹放在NodeJS的主目录下，便在NodeJs下建立"node_global"及"node_cache"两个文件夹，
+输入以下命令改变npm配置
+npm config set prefix "D:\Program Files\nodejs\node_global"
+npm config set cache "D:\Program Files\nodejs\node_cache"
+
+(2)在系统环境变量添加系统变量
+NODE_PATH=D:\Program Files\nodejs\node_global\node_modules
+然后修改系统变量的path属性，在末尾添加 %NODE_PATH%，
+此后所安装的模块都会安装到改路径下  
+
+(3)在命令行输入以下命令试着安装express（
+注：“-g”这个参数意思是装到global目录下，也就是上面设置的
+“D:\Program Files\nodejs\node_global”里面。）
+npm install express -g
+安装完毕后可以看到
+D:\Program Files\nodejs\node_global\node_modules\express 已经有内容
+
+ (4)在命令行输入node进入编辑模式，输入以下代码测试是否能正常加载模块：
+require('express')
+
+>node
+> require('express')
+{ [Function: createApplication]
+  application:
+   { init: [Function: init],
+     defaultConfiguration: [Function: defaultConfiguration],
+     lazyrouter: [Function: lazyrouter],
+     handle: [Function: handle],
+     use: [Function: use],
+     route: [Function: route],
+
+成功加载 express模块，表示安装成功！

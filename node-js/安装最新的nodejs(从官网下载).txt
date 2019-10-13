@@ -1,0 +1,26 @@
+#linux系统上安装nodejs，用于reactjs项目，步骤如下
+
+系统环境：Ubuntu 18.04.2 LTS (GNU/Linux 4.15.0-54-generic x86_64)
+
+1、下载（http://nodejs.cn/download/），选择适合自己电脑系统的最新版本
+sudo wget https://npm.taobao.org/mirrors/node/v12.9.1/node-v12.9.1-linux-x64.tar.xz
+
+2、解压
+sudo tar -xvf node-v12.9.1-linux-x64.tar.xz
+
+3、重命名文件夹
+sudo mv node-v12.9.1-linux-x64 nodejs
+
+4、pwd命令查看nodejs文件夹的绝对路径
+/work/opt/nodejs
+
+5、通过建立软件链接变为全局程序
+sudo ln -s /work/opt/nodejs/bin/npm /usr/local/bin/
+sudo ln -s /work/opt/nodejs/bin/node /usr/local/bin/
+
+6、查看npm和node的版本，出现以下输出表示安装成功
+node -v
+v12.9.1
+
+npm -v
+6.10.2

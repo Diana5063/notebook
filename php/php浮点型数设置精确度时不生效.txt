@@ -1,0 +1,8 @@
+#在php7.1及以上版本中进行浮点小数精确到小数点后2位时数据不生效，
+使用了round()和number_format()函数尝试都无效，
+经排查发现是php的配置文件中serialize_precision这个参数的数值配置不恰当，
+由于测试服务器php7.1配置的值是-1，
+7.3版本配置的是17，输出的有效位数刚好是17，
+
+原因：影响了json_encode
+解决办法：修改serialize_precision的值为-1 。

@@ -1,0 +1,7 @@
+#在命令行用相同的用户名和密码登录正常，在laravel的配置文件使用相同配置时提示
+
+SQLSTATE[HY000] [1045] Access denied for user 'user'@'xx.xx.xx.xx' (using password: YES)
+
+最后发现原因，是密码中有 特殊符号，
+
+解决办法：将密码整体用 单引号 括起来，运行成功！

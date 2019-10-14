@@ -22,7 +22,7 @@ Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
 勾选 Add packages as libraries和Synchronize IDE Settings with composer.json(勾选本设置后不可修改phpstorm的php版本)，
 选择'composer' executable并填写composer可执行文件的路径（因为前一步安装的是全局的，此处可以直接填写composer）,保存；
 
-5、安装laravel-ide-helper
+5、安装laravel-ide-helper（如果composer.json文件中已包含该依赖，则在项目根目录执行composer install即可）
 需要安装barryvdh/laravel-ide-helper，使得phpstorm支持laravel的语法，由于composer.json文件中已经添加了库名称，
 所以直接安装composer.json中的依赖，点击Tools->Composer->Install，可以开始安装依赖库了，生成的依赖库放在vendor目录中。
 

@@ -1,0 +1,9 @@
+#ubuntu 18.04/18.10解决create-react-app:command not found问题
+
+sudo npm install -g create-react-app
+sudo create-react-app my-app
+
+
+
+
+总结：主要还是权限问题，要用sudo 

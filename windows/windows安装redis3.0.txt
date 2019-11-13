@@ -1,0 +1,38 @@
+#windows安装redis服务
+
+环境 windows10+redis3.2.100(预发布版本，版本可自由选择)
+
+1、下载redis(下载地址：https://github.com/MicrosoftArchive/redis/releases)
+我下载的是https://github.com/microsoftarchive/redis/releases/download/win-3.2.100/Redis-x64-3.2.100.zip，
+下载后解压得到文件夹Redis-x64-3.2.100，我移到D盘并重命名为Redis目录，
+最终目录为D:\Program Files\Redis
+
+2、安装
+打开cmd窗口，进入redis目录
+cd D:\Program Files\Redis
+d:  //需要这一步才能到redis目录
+D:\Program Files\Redis>redis-server --service-install redis.windows.conf
+[36900] 13 Nov 20:44:54.399 # Granting read/write access to 'NT AUTHORITY\NetworkService' on: "D:\Program Files\Redis" "D:\Program Files\Redis\"
+[36900] 13 Nov 20:44:54.400 # Redis successfully installed as a service.
+
+
+安装成功！
+
+3、安装后的启动服务命令：redis-server --service-start 
+D:\Program Files\Redis>redis-server --service-start
+[13500] 13 Nov 20:47:29.582 # Redis service successfully started.
+
+启动成功！
+
+4、停止服务：redis-server --service-stop
+
+5、进入客户端
+D:\Program Files\Redis>redis-cli
+127.0.0.1:6379>
+
+6、退出客户端
+D:\Program Files\Redis>redis-cli
+127.0.0.1:6379> quit
+
+D:\Program Files\Redis>
+

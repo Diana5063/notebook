@@ -1,0 +1,31 @@
+#手动删除了vendor下的一个目录后，再执行php artisan 命令时提示如下错误
+
+composer install
+Loading composer repositories with package information
+Installing dependencies (including require-dev) from lock file
+Nothing to install or update
+Generating optimized autoload files
+> Illuminate\Foundation\ComposerScripts::postAutoloadDump
+> @php artisan package:discover --ansi
+
+In ProviderRepository.php line 208:
+                                                          
+  Class 'Chumper\Zipper\ZipperServiceProvider' not found  
+                                                          
+
+Script @php artisan package:discover --ansi handling the post-autoload-dump event returned with error code 1
+
+
+
+因为手动删除依赖包目录导致项目缓存没有更新，对依赖类的引用代码还存在，尝试修复步骤如下：
+1、修复删除的包
+composer require chumper/zipper
+
+测试 php artisan list，修复OK，
+
+然后用命令移除composer remove chumper/zipper
+并修改composer.json，再引用zipper依赖的那一行去掉，
+
+最后再执行composer install，就完整移除了zipper依赖
+测试php artisan list ，
+得到正确结果，OK~!

@@ -38,7 +38,7 @@ tar xvf openssl-1.1.1c.tar.gz -C /work/opt/
 tar xvf pcre-8.43.tar.gz -C /work/opt/
 tar xvf zlib-1.2.11.tar.gz -C /work/opt/
 
-cd /work/opt/openssl-1.1.1-pre8/
+cd /work/opt/openssl-1.1.1c/
 ./config --prefix=/work/opt/lib --openssldir=/work/opt/lib/openssl
 make -j5
 
@@ -113,9 +113,13 @@ cd /work/opt/nginx-1.17.1/
 --with-mail_ssl_module 
 --with-debug 
 --with-pcre-jit  
---with-openssl=/work/opt/openssl-1.1.1-pre8
+--with-openssl=/work/opt/openssl-1.1.1c
 --with-pcre=/work/opt/pcre-8.42 
 --with-zlib=/work/opt/zlib-1.2.11
+
+
+********************************完整**************************************
+./configure --prefix=/work/opt/nginx --user=www --group=www --sbin-path=/usr/sbin/nginx --conf-path=/work/opt/nginx/nginx.conf --pid-path=/work/opt/nginx/logs/nginx.pid --lock-path=/work/opt/nginx/logs/nginx.lock --http-client-body-temp-path=/tmp/nginx/client --http-proxy-temp-path=/tmp/nginx/proxy --http-fastcgi-temp-path=/tmp/nginx/fastcgi --http-uwsgi-temp-path=/tmp/nginx/uwsgi --http-scgi-temp-path=/tmp/nginx/scgi --http-log-path=/work/opt/nginx/logs/access.log --error-log-path=/work/opt/nginx/logs/error.log --with-http_ssl_module --with-http_v2_module --with-stream_realip_module  --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_stub_status_module --with-http_perl_module --with-mail --with-mail_ssl_module --with-debug --with-pcre-jit --with-openssl=/work/opt/openssl-1.1.1c --with-pcre=/work/opt/pcre-8.43 --with-zlib=/work/opt/zlib-1.2.11
 
 （提示需要libxml2模块
 ./configure: error: the HTTP XSLT module requires the libxml2/libxslt
@@ -146,6 +150,15 @@ ps -A|grep nginx
 ，没有返回结果表示还没运行。
 如果没有运行，则执行运行脚本
 使用which nginx命令查看nginx的安装目录
+
+(运行时提示如下报错
+nginx: [emerg] mkdir() "/tmp/nginx/client" failed (2: No such file or directory)
+这是上面安装时设置nginx的临时数据目录不存在，创建一下就好
+cd /tmp
+mkdir nginx
+cd ..
+chmod a+w -R tmp/nginx
+)
 
 
 [root@localhost ~]# which nginx
@@ -255,6 +268,8 @@ exit 0
 
 脚本2：vim /lib/systemd/system/nginx.service
 **************************************************************************************
+#!/bin/bash
+
 [Unit]
 Description=nginx - high performance web server
 After=network.target remote-fs.target nss-lookup.target

@@ -82,15 +82,15 @@ cd /work/opt/nginx-1.17.1/
 ./configure --prefix=/work/opt/nginx --user=www --group=www 
 --sbin-path=/usr/sbin/nginx 
 --conf-path=/work/opt/nginx/nginx.conf 
---pid-path=/work/opt/nginx/logs/nginx.pid 
---lock-path=/work/opt/nginx/logs/nginx.lock 
---http-client-body-temp-path=/tmp/nginx/client 
---http-proxy-temp-path=/tmp/nginx/proxy 
---http-fastcgi-temp-path=/tmp/nginx/fastcgi 
---http-uwsgi-temp-path=/tmp/nginx/uwsgi 
---http-scgi-temp-path=/tmp/nginx/scgi 
---http-log-path=/work/opt/nginx/logs/access.log 
---error-log-path=/work/opt/nginx/logs/error.log 
+--pid-path=/work/log/nginx/nginx.pid 
+--lock-path=/work/log/nginx/nginx.lock 
+--http-client-body-temp-path=/work/log/nginx/temp/client 
+--http-proxy-temp-path=/work/log/nginx/temp/proxy 
+--http-fastcgi-temp-path=/work/log/nginx/temp/fastcgi 
+--http-uwsgi-temp-path=/work/log/nginx/temp/uwsgi 
+--http-scgi-temp-path=/work/log/nginx/temp/scgi 
+--http-log-path=/work/log/nginx/logs/access.log 
+--error-log-path=/work/log/nginx/logs/error.log 
 --with-http_ssl_module 
 --with-http_v2_module 
 --with-stream_realip_module  
@@ -119,7 +119,7 @@ cd /work/opt/nginx-1.17.1/
 
 
 ********************************完整**************************************
-./configure --prefix=/work/opt/nginx --user=www --group=www --sbin-path=/usr/sbin/nginx --conf-path=/work/opt/nginx/nginx.conf --pid-path=/work/opt/nginx/logs/nginx.pid --lock-path=/work/opt/nginx/logs/nginx.lock --http-client-body-temp-path=/tmp/nginx/client --http-proxy-temp-path=/tmp/nginx/proxy --http-fastcgi-temp-path=/tmp/nginx/fastcgi --http-uwsgi-temp-path=/tmp/nginx/uwsgi --http-scgi-temp-path=/tmp/nginx/scgi --http-log-path=/work/opt/nginx/logs/access.log --error-log-path=/work/opt/nginx/logs/error.log --with-http_ssl_module --with-http_v2_module --with-stream_realip_module  --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_stub_status_module --with-http_perl_module --with-mail --with-mail_ssl_module --with-debug --with-pcre-jit --with-openssl=/work/opt/openssl-1.1.1c --with-pcre=/work/opt/pcre-8.43 --with-zlib=/work/opt/zlib-1.2.11
+./configure --prefix=/work/opt/nginx --user=www --group=www --sbin-path=/usr/sbin/nginx --conf-path=/work/opt/nginx/nginx.conf --pid-path=/work/log/nginx/nginx.pid --lock-path=/work/log/nginx/nginx.lock --http-client-body-temp-path=/work/log/nginx/temp/client --http-proxy-temp-path=/work/log/nginx/temp/proxy --http-fastcgi-temp-path=/work/log/nginx/temp/fastcgi --http-uwsgi-temp-path=/work/log/nginx/temp/uwsgi --http-scgi-temp-path=/work/log/nginx/temp/scgi --http-log-path=/work/log/nginx/logs/access.log --error-log-path=/work/log/nginx/logs/error.log --with-http_ssl_module --with-http_v2_module --with-stream_realip_module  --with-http_realip_module --with-http_addition_module --with-http_xslt_module --with-http_image_filter_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_stub_status_module --with-http_perl_module --with-mail --with-mail_ssl_module --with-debug --with-pcre-jit --with-openssl=/work/opt/openssl-1.1.1c --with-pcre=/work/opt/pcre-8.43 --with-zlib=/work/opt/zlib-1.2.11
 
 （提示需要libxml2模块
 ./configure: error: the HTTP XSLT module requires the libxml2/libxslt
@@ -136,6 +136,7 @@ You can either do not enable the module or install the libraries.
 
 （提示./configure: warning: the "--with-ipv6" option is deprecated
 在编译参数中去掉--with-ipv6 后继续）
+
 
 make -j5
 （提示找到不lperl

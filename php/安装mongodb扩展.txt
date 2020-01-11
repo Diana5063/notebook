@@ -1,0 +1,28 @@
+#编译安装php-mongodb扩展，参考 https://www.runoob.com/mongodb/mongodb-install-php-driver.html
+
+
+1、下载 https://pecl.php.net/package/mongodb
+下载最新版本 https://pecl.php.net/get/mongodb-1.6.1.tgz并解压。
+
+cd /work/src
+sudo wget https://pecl.php.net/get/mongodb-1.6.1.tgz
+sudo tar xvf mongodb-1.6.1.tgz -C /work/opt/
+cd /work/opt/mongodb-1.6.1
+
+2、安装，确保正确的php版本
+sudo /work/opt/php/bin/phpize
+sudo ./configure --with-php-config=/work/opt/php/bin/php-config
+sudo make
+sudo make install
+
+xin@xin01:/work/opt/mongodb-1.6.1$ sudo make install
+Installing shared extensions:     /work/opt/php/lib/php/extensions/debug-non-zts-20180731/
+
+3、添加扩展
+在php.ini中添加一行
+extension=mongodb.so
+
+
+4、重启php并查看扩展
+service php-fpm restart
+/work/opt/php/bin/php -m

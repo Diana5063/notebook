@@ -1,0 +1,73 @@
+#网站资料参考
+
+Window 上安装 MongoDB PHP扩展
+PECL 上已经提供了用于 Window 平台的预编译 php mongodb 驱动二进制包(下载地址： https://pecl.php.net/package/mongodb)，你可以下载与你 php 对应的版本，但是你需要注意以下几点问题：
+
+VC6 是运行于 Apache 服务器
+Thread safe（线程安全）是以模块形式运行在 Apache 上，如果你以 CGI 的模式运行 PHP，请选择非线程安全模式（non-thread safe）。
+VC9 是运行于 IIS 服务器上。
+下载完你需要的二进制包后，解压压缩包，将 php_mongodb.dll 文件添加到你的PHP扩展目录中（ext）。ext 目录通常在 PHP 安装目录下的 ext 目录。
+打开 php 配置文件 php.ini 添加以下配置：
+
+extension=php_mongodb.dll
+
+
+
+#实践操作
+1、查看windows的php版本
+php -v
+
+C:\Users\DIANA>php -v
+PHP 7.2.23 (cli) (built: Sep 25 2019 08:53:05) ( ZTS MSVC15 (Visual C++ 2017) x64 )
+Copyright (c) 1997-2018 The PHP Group
+Zend Engine v3.2.0, Copyright (c) 1998-2018 Zend Technologies
+
+2、下载mongodb（https://pecl.php.net/package/mongodb）
+由于之前下载的是免安装的线程安全版本，因此mongodb扩展程序也下载的是线程安全版本
+php_mongodb-1.6.1-7.2-ts-vc15-x64
+
+3、解压
+解压后将文件夹中的php_mongodb.dll复制到php安装目录下的ext目录中，
+然后在php.ini中添加一行扩展 extension=mongodb
+
+4、查看php扩展，扩展程序列表已有mongodb，表示安装成功
+php -m
+
+
+C:\Users\DIANA>php -m
+[PHP Modules]
+bcmath
+calendar
+Core
+ctype
+date
+dom
+fileinfo
+filter
+gd
+hash
+iconv
+json
+libxml
+mbstring
+mongodb
+mysqlnd
+openssl
+pcre
+PDO
+Phar
+readline
+Reflection
+session
+SimpleXML
+SPL
+standard
+tokenizer
+wddx
+xml
+xmlreader
+xmlwriter
+zip
+zlib
+
+[Zend Modules]

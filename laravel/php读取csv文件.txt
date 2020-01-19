@@ -1,0 +1,69 @@
+方法一：
+$filename = storage_path('app/public/').$filename;
+                $file = fopen($filename, 'r');
+                $line = 0;
+                $key_arr = [];
+                $value_arr = [];
+                while ($row = fgetcsv($file)) {
+                    foreach ($row as &$r) {
+                        $r = mb_convert_encoding($r, 'utf-8', 'gbk');
+                        $r = trim($r);
+                    }
+                    if ($line === 0) {
+                        $key_arr = $row;
+                    } else {
+                        $value_arr[] = $row;
+                    }
+                    $line++;
+                }
+                fclose($file);
+
+                //组装二维数组，方便提取字段
+                $format_data = [];
+                foreach ($value_arr as $value) {
+                    $tmp = [];
+                    foreach ($value as $k => $v) {
+                        $tmp[$key_arr[$k]] = $v;
+                    }
+                    $format_data[] = $tmp;
+                }
+
+
+方法二：
+$file_url = $file_paths['keywordFilePath'];
+                    $zip_filename = Sd::crmCtx()->baidu_service->downloadFile($file_url);
+                    $filename = str_replace('.zip', '.csv', $zip_filename);
+                    $file = fopen($filename, 'r');
+                    $format_data = [];
+                    $key_arr = [];
+                    $value_arr = [];
+                    $line = 0;
+                    //提取数据
+                    while ($data = fgetcsv($file)) {
+                        $row = explode("\t", $data[0]);
+                        foreach ($row as &$r) {
+                            $r = mb_convert_encoding($r, 'utf-8', 'gbk');
+                        }
+                        if ($line === 0) {
+                            $key_arr = $row;
+                        } else {
+                            $value_arr[] = $row;
+                        }
+                        $line++;
+                    }
+                    fclose($file);
+
+                    //组装二维数组，方便提取字段
+                    foreach ($value_arr as $value) {
+                        $tmp = [];
+                        foreach ($value as $k => $v) {
+                            $tmp[$key_arr[$k]] = $v;
+                        }
+                        $format_data[] = $tmp;
+                    }
+                    //根据关键词id升序排列
+                    array_multisort(
+                        array_column($format_data, 'keywordId'),
+                        SORT_ASC,
+                        $format_data
+                    );

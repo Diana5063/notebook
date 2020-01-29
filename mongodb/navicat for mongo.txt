@@ -1,0 +1,22 @@
+#navicat for mongo
+
+1、下载地址
+官网：https://www.navicat.com.cn/products/navicat-for-mongodb
+
+2、安装
+按正常安装步骤安装，安装后可先不运行软件；
+
+3、破解
+注册机下载地址：http://www.zdfans.com/html/47368.html
+将整个zip包下载，解压后将注册机复制到上一步中navicat的安装目录；
+在电脑管家或其他杀毒软件中将注册机程序添加到白名单，避免被杀毒软件删除；
+然后双击运行注册机程序，在
+1）Patch部分，会自动识别版本，点击右侧Patch按钮，浏览到安装的navicat.exe，
+确定后等待破解，自动破解成功；
+2）License部分，在Products里面选择MongoDB，Languages选择自己想要的语言；
+3) Release License部分，选择发布版本为Site license；
+4) Keygen/Offline Activation部分，点击Generate按钮，生成注册码，
+生成的注册码会显示在Serial Keygen框里面，将此注册码复制并打开
+之前安装的navicat程序，在注册界面输入注册码点击激活，会提示需要手动激活；
+将手动激活请求码复制到注册机中的Request Code输入框，点击左下底部的Generate按钮，
+将右下底部框里面生成的激活码复制到navicat软件激活程序中，确认完成激活。

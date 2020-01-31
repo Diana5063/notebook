@@ -1,0 +1,50 @@
+#windows安装mongodb服务器
+参考 
+https://www.runoob.com/mongodb/mongodb-window-install.html
+https://www.cnblogs.com/TM0831/p/10606624.html
+
+
+1、下载版本并安装
+官网地址：https://www.mongodb.com/download-center/community
+选择自己的系统和mongodb版本，
+(这里我是Windows10 64位系统，当前最新发布版本4.2.2，安装包选择的MSI)
+下载完成后双击并按提示安装，最后的安装路径是
+D:\Program Files\MongoDB\Server\4.2
+
+2、创建数据目录
+考虑到以后要升级版本，共用数据目录，数据目录路径为
+D:\Program Files\MongoDB\data
+在data目录下分别创建db和log目录
+
+
+
+3、将mongo添加到系统服务
+找到步骤1中的安装目录，精确到bin，完整路径为
+D:\Program Files\MongoDB\Server\4.2\bin
+将此路径添加到系统环境变量；
+电脑左下角搜索cmd，使用管理员身份打开一个命令窗口，输入如下命令
+mongod --dbpath "D:\Program Files\MongoDB\data\db" --logpath "D:\Program Files\MongoDB\data\log\mongod.log" --install -serviceName "MongoDB"
+没有报错表示成功添加到系统服务，
+使用win+R,然后输入services.msc命令进行查看，可以看到系统中已经有MongoDB这个服务，
+将启动方式改为手动。
+
+
+4、测试
+使用命令启动mongo
+net start|stop MongoDB
+
+在浏览器中输入http://127.0.0.1:27017/，出现如下提示表示启动成功
+It looks like you are trying to access MongoDB over HTTP on the native driver port.
+
+
+5、可能遇到的问题
+1.mongod不是内部或外部命令
+出现这种问题说明你没有把bin目录添加到环境变量之中，重新添加一下即可解决。
+
+2.服务名无效
+首先是看你输入的服务名称是否有误，然后再查看本地服务中有没有MongoDB服务，
+如果没有服务，则运行命令添加服务即可。
+
+3.发生服务特定错误：100
+删除db文件夹下的mongod.lock和storage.bson两个文件，若删除完之后仍然出现这种问题，
+用sc delete MongoDB删除服务，再配置一下服务就能解决了。

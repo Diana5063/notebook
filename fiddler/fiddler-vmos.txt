@@ -1,0 +1,38 @@
+#安卓高版本安装系统证书 HTTPS 抓包 ！！暂未成功！！
+参考 https://www.jianshu.com/p/3d981ae674c5
+
+
+
+痛点
+安卓7.0之后，系统安全策略升级，默认只信任系统证书，我们安装的证书是用户证书，造成https无法抓包。
+解决方案常规有两种
+
+1、修改apk包
+2、root，安装系统证书
+这两个方案成本都太高，所以就需要第三种。
+3、虚拟大师 vmos
+
+1.安装fiddler
+点击Tools->Options,
+
+Https:勾选Capture HTTPS CONNECTs，勾选Decrypt HTTPS traffic(from all processes)，
+勾选Ignore server certificate errors，保存；
+
+Connections:设置监听端口为8888(可随意设置)，页面上的复选框都可以勾选，保存；
+重启fiddler。
+
+再回到Https:点击右上角的Action,选择Export root certificato to desktop(导出证书到桌面)，
+在linux系统中处理一下证书，使得手机能识别，处理方法，执行如下命令
+openssl x509 -inform DER -in FiddlerRoot.cer -out FiddlerRoot.crt
+openssl x509 -inform PEM -subject_hash_old -in FiddlerRoot.crt | head -1
+269953fb
+FiddlerRoot.crt > 69953fb.0
+得到最终的证书文件69953fb.0
+
+2.安装 虚拟大师，官网:http://www.vmos.cn/
+安装完成后记得安装MT管理器，在vmos里面点击安装就行，
+打开MT管理员，将上一步中生成的证书69953fb.0复制到虚拟大师的 /system/etc/security/cacerts/
+
+3、打开电脑上fiddler，配置手机网络代理到电脑fiddler
+打开手机wifi，设置代理ip为电脑wifi的ipv4地址，端口为8888
+打开虚拟大师，配置虚拟大师的网络到fiddler地址

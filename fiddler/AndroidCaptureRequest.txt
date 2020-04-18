@@ -1,0 +1,25 @@
+#夜神模拟器+Xposed框架+JustTrustMe（用来禁用、绕过 SSL 证书检查）来突破SSL Pinning
+参考 https://blog.csdn.net/kai402458953/article/details/99483077
+
+1.夜神模拟器官网(https://www.yeshen.com/)下载安装模拟器
+2.创建一个安卓5.1版本的模拟器
+3.把xposed.apk  拖入夜神模拟器 （ Android 5.1.版本，xposed3.1.5 版本） 
+4.安装xposed框架(双击软件图标，并选择安装/更新，会显示最新版本，进行安装),
+安装完成后,重启android系统
+5.安装JustTrustMe.apk
+双击打开xposed，点击左上角菜单，选择“模块”，此时还没有可用的模块,同样的方法点击apk+
+导入之前下载好的JustTrustMe的apk安装包，
+系统会自动安装，安装完成后，在模块里面点击“软重启”，再次打开“模块”界面，
+即可看到JustTrustMe，勾选一下，启用这个模块
+6.重启生效，以上步骤总结就是创建了一个低版本的安卓系统，版本为5.1。
+
+7.接下来安装 fiddler证书，
+首先在电脑上安装fiddler，在官网下载安装即可，打开fiddler，设备连接的端口号，默认8888，
+不需要修改；然后在解密https复选框那里勾选，保存并重启fiddler。
+
+在手机上打开浏览器，输入电脑的IP加fiddler代理的端口号(http:192.168.31.249:8888)
+会出现下载fiddler证书的链接，点击下载并安装证书；
+然后设置手机WLAN代理
+手机设置->Wlan设置，设置代理IP为电脑IP，端口与fiddler一致。
+
+8、打开应用，观察fiddler抓包情况，大功告成！

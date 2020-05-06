@@ -1,0 +1,21 @@
+#安装redis内存分析工具 rdbtools
+
+安装环境：Ubuntu 18.04.4 LTS + Python 2.7.17
+
+1、安装依赖
+pip install python-lzf
+
+2、安装rdbtools
+cd /work/opt (如果没有这个目录需要手动创建)
+sudo git clone https://github.com/sripathikrishnan/redis-rdb-tools.git
+cd redis-rdb-tools/
+sudo python setup.py install
+
+3、查看安装结果
+xin@soudian:~$ whereis rdb
+rdb: /usr/local/bin/rdb /home/xin/.local/bin/rdb
+
+4、使用
+参考 https://www.cnblogs.com/cheyunhua/p/10598181.html
+
+

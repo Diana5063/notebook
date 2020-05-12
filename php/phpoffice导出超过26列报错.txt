@@ -1,0 +1,29 @@
+#phpoffice导出超过26列报错
+
+解决办法
+$newExcel = new Spreadsheet();
+            $objSheet = $newExcel->getActiveSheet();
+$max_column = count($data[0]);//最大列数
+            $max_row = count($data);//最大行数
+            for ($i = 0; $i < $max_column; $i++) {
+                for ($j = 0; $j < $max_row; $j++) {
+                    $p_coordinate = self::stringFromColumnIndex($i).''.($j+1);
+                    $p_value = $data[$j][$i];
+                    $objSheet->setCellValue($p_coordinate, $p_value);
+                }
+            }
+
+
+public static function stringFromColumnIndex($column_index = 0) {
+        static $_indexCache = [];
+        if (!isset($_indexCache[$column_index])) {
+            if ($column_index < 26) {
+                $_indexCache[$column_index] = chr(65 + $column_index);
+            } elseif ($column_index < 702) {
+                $_indexCache[$column_index] = chr(64 + ($column_index / 26)).chr(65 + $column_index % 26);
+            } else {
+                $_indexCache[$column_index] = chr(64 + ($column_index - 26) / 676).chr(65 + ((($column_index - 26) % 676) / 26)).chr(65 + $column_index % 26);
+            }
+        }
+        return $_indexCache[$column_index];
+    }

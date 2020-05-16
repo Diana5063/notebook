@@ -1,5 +1,8 @@
-安装包下载地址为：https://golang.org/dl/。
+﻿安装包下载地址为：https://golang.org/dl/。
 
 如果打不开可以使用这个地址：https://golang.google.cn/dl/。
 
 下载windows版本软件双击安装即可。
+
+测试一下是否安装成功，打开一个windows命令窗口，输入go version，成功输出go版本说明安装成功。
+完成！

@@ -21,11 +21,14 @@ window10
 输入以下命令改变npm配置
 npm config set prefix "D:\Program Files\nodejs\node_global"
 npm config set cache "D:\Program Files\nodejs\node_cache"
+如果创建目录失败，提示没有权限，需要使用管理员身份打开命令窗口再执行操作，
+如果要删除已经配置了的config set ，到C盘当前用户的目录下删除.nmprc文件，如果没找到，
+全局搜一下这个文件并删除，然后重新设置。
 
 (2)在系统环境变量添加系统变量
 NODE_PATH=D:\Program Files\nodejs\node_global\node_modules
 然后修改系统变量的path属性，在末尾添加 %NODE_PATH%，
-此后所安装的模块都会安装到改路径下  
+此后所安装的模块都会安装到该路径下  
 
 (3)在命令行输入以下命令试着安装express（
 注：“-g”这个参数意思是装到global目录下，也就是上面设置的
@@ -61,4 +64,8 @@ One CLI for webpack must be installed. These are recommended choices, delivered 
 We will use "npm" to install the CLI via "npm install -D".
 Do you want to install 'webpack-cli' (yes/no): yes //选择yes自动安装
 Installing 'webpack-cli' (running 'npm install -D webpack-cli')...
+
+
+如果webpack安装成功后，在项目里面还是不能编译，需要在项目里再安装一次
+npm install webpack
 

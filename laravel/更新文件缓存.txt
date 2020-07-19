@@ -1,0 +1,24 @@
+#更新laravel文件缓存可执行以下2种方式
+
+方式一
+1.1 php artisan config:clear//此命令做的事情就是把 bootstrap/cache/config.php 文件删除
+1.2 php artisan route:clear//此命令做的事情就是把 bootstrap/cache/routes.php 文件删除
+1.3 php artisan clear-compiled//此命令会删除 optimize 生成的两个文件bootstrap/cache/compiled.php、bootstrap/cache/services.json
+注意：1.3需要在1.1后面执行，因为compile依赖config。
+
+方式二
+php artisan optimize//把常用加载的类合并到一个文件里，通过减少文件的加载，来提高运行效率
+
+
+建议使用方式一，开发环境只需要执行一次。
+其他性能正在实现中；
+
+
+以上操作实际上是把project/bootstrap/cache目录下的文件删除，包括以下文件
+config.php
+routes.php
+packages.php
+services.php
+
+注意：配置信息缓存不会随着更新而自动重载，
+所以，开发时候建议关闭配置信息缓存，一般在生产环境中使用，可以配合 Envoy 任务运行器 一起使用。

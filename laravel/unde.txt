@@ -1,0 +1,9 @@
+#在lavaral项目中执行composer install更新依赖时提示如下错误
+
+Undefined class constant PDO::MYSQL_ATTR_USE_BUFFERED_QUERY
+
+原因：php不支持pdo_mysql扩展
+
+解决办法：在php.ini中开启支持。
+安装php的pdo_mysql扩展(如已安装请忽略)，在php.ini中将下面内容前面的 ; 去掉，保存后重新执行上述命令即可
+;extension=pdo_mysql

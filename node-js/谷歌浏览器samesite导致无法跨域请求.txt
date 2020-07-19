@@ -1,0 +1,8 @@
+#升级了谷歌浏览器后，本地测试单点登录时无法获取cookie，
+参考https://blog.csdn.net/sinat_36521655/article/details/104844667
+
+原因：谷歌浏览器的新特性samesite，要求相同域名才能共享cookie，
+解决办法：由于是本地测试，因此将浏览器这个设置关闭即可，步骤如下，
+地址栏输入：chrome://flags/
+找到SameSite by default cookies和Cookies without SameSite must be secure
+将上面两项设置为 Disable

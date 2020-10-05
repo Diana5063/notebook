@@ -1,0 +1,23 @@
+使用sourcetree克隆远程仓库，已经添加了公钥且能保证公钥是有效的，但仍提示
+for user git on host xxx
+
+原因
+首次添加公钥时需要交互确认是否添加远程主机密钥为可信任，在终端操作一次即可，后续就可以在sourcetree操作了。
+
+解决办法
+进入终端，使用命令git clone，会提示是否继续连接远程主机，输入yes，回车，等待自动执行。
+
+效果如下
+
+git clone git@github.com:Diana5063/notebook.git
+Cloning into 'notebook'...
+The authenticity of host 'github.com (52.74.223.119)' can't be established.
+RSA key fingerprint is SHA256:nThbg6kXUpJWGl7E1IGOCspRomTxdCARLviKw6E5SY8.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'github.com,52.74.223.119' (RSA) to the list of known hosts.
+remote: Enumerating objects: 134, done.
+remote: Counting objects: 100% (134/134), done.
+remote: Compressing objects: 100% (103/103), done.
+remote: Total 531 (delta 56), reused 102 (delta 27), pack-reused 397
+Receiving objects: 100% (531/531), 208.90 KiB | 233.00 KiB/s, done.
+Resolving deltas: 100% (181/181), done.

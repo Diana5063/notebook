@@ -1,0 +1,79 @@
+升级Big Sur之后，关闭SIP也不好使了，完全无法建立/usr/include软链，php扩展编译之路彻底被堵死的节奏。
+考虑到PHP扩展主要就是phpize和php-config工具的设置，而这两个工具本质上其实就是shell脚本，所以完全可以自定义来解决/usr/include依赖路径的问题，毕竟操作系统已经把php.h放到MacOSX.sdk下了。
+而且这里还有一个变化，以前php.h是直接在MacOSX.sdk/usr/include下的，而现在放的更深了，在MacOSX.sdk/usr/include/php/main下，所以还需要用比较新版本的phpize和php-config。
+自从参考了这篇文章：macos高版本安装php扩展报错。我找到了灵感，于是一口气编译安装好了yac.so和yaconf.go，手感不错
+
+1.下载代码
+~$ mkdir ~/php-private
+~$cd ~/php-private
+~/php-private$ cp /usr/bin/php-config ~/php-private/
+~/php-private$ cp /usr/bin/phpize ~/php-private/
+~/php-private$ git clone https://github.com/laruence/yac.git
+
+
+
+2. 修改php-config
+获取配置的工具，本质上只是一个shell脚本。
+每次安装时都要使用；
+#! /bin/sh
+
+SED="/usr/bin/sed"
+#prefix="/usr"
+prefix="$(xcrun --show-sdk-path)/usr"  #使用系统目录
+datarootdir="/usr/php"
+exec_prefix="${prefix}"
+version="7.3.24-(to be removed in future macOS)"
+vernum="70324"
+include_dir="${prefix}/include/php"
+includes="-I$include_dir -I$include_dir/main -I$include_dir/TSRM -I$include_dir/Zend -I$include_dir/ext -I$include_dir/ext/date/lib"
+ldflags=" -L$SDKROOT/usr/lib -L$SDKROOT/usr/local/libressl/lib "
+libs="-lresolv  -lcrypto -lssl -lcrypto -lexslt -ltidy -lresolv -ledit -lncurses -lldap -llber -liconv -liconv -lpng -lz -ljpeg -lcrypto -lssl -lcrypto -lbz2 -lz -lcrypto -lssl -lcrypto -lm  -lxml2 -lz -licucore -lm -lkrb5 -lcurl -lxml2 -lz -licucore -lm -lxml2 -lz -licucore -lm -lnetsnmp -lxml2 -lz -licucore -lm -lxml2 -lz -licucore -lm -lxml2 -lz -licucore -lm -lxml2 -lz -licucore -lm -lxml2 -lz -licucore -lm -lxml2 -lz -licucore -lm -lxslt -lxml2 -lz -licucore -lm "
+#extension_dir='/usr/lib/php/extensions/no-debug-non-zts-20180731'
+extension_dir='/usr_include/tools/php_extensions'    #把这一行改成自己有权限写入的目录
+man_dir=`eval echo /usr/share/man`
+program_prefix=""
+...
+
+
+
+
+
+3. 修改phpize
+用来生成configure工具，本质上只是一个shell脚本。
+只要修改得当，就可以改变依赖/usr/include的路径
+
+#!/bin/sh
+
+# Variable declaration
+XCODE_SDK_ROOT=$(/usr/bin/xcrun --show-sdk-path) #增加一行当前用户目录
+prefix='/usr'
+datarootdir='/usr/php'
+exec_prefix="`eval echo ${prefix}`"
+phpdir="`eval echo ${exec_prefix}/lib/php`/build"
+#includedir="`eval echo ${prefix}/include`/php"
+includedir="`eval echo ${XCODE_SDK_ROOT}${prefix}/include`/php" #改成当前用户目录
+builddir="`pwd`"
+SED="/usr/bin/sed"
+...
+
+
+
+4. 执行phpize时使用绝对路径
+5. ./configure --with-php-config=$HOME/php-private/php-config
+6. make
+7. make install
+8. 修改/etc/php.ini，增加扩展
+;extension=zip
+extension=/usr_include/tools/php_extensions/zip.so
+;extension=mongodb
+extension=/usr_include/tools/php_extensions/mongodb.so
+
+
+
+
+
+
+作者：牧笛工程师
+链接：https://www.jianshu.com/p/1213cb76b09e
+来源：简书
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

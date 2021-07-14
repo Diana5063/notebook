@@ -1,0 +1,5 @@
+#参考 https://blog.csdn.net/Lemostic/article/details/84959635
+
+MacOS安装VirtualBox后创建虚拟机点击启动报错Kernel driver not installed (rc=-1908)的问题
+
+解决方法：打开系统偏好设置->安全性与隐私，下方有个允许Oracle …的请求，点击后面的允许按钮，再次启动虚拟机就可以正常启动了，如果还报错，重启Mac系统再打开virtualbox。

@@ -1,0 +1,3 @@
+Sourcetree拉取github.com上的代码时提示Connection reset by 52.74.223.119 port 22
+
+解决办法：修改DNS，改为114.114.114.114

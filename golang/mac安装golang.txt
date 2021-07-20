@@ -19,3 +19,12 @@ go version
 
 得到结果
 go version go1.16.6 darwin/amd64
+
+5、查看运行变量
+go env
+
+GOPATH="/Users/chenyixin/go" #默认go项目工作目录
+GOROOT="/usr/local/go" #go的默认安装路径
+
+
+

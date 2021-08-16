@@ -26,5 +26,19 @@ go env
 GOPATH="/Users/chenyixin/go" #默认go项目工作目录
 GOROOT="/usr/local/go" #go的默认安装路径
 
+6、修改模块支持参数
+go env -w GO111MODULE=on
+
+它有三个可选值：off、on、auto，默认值是 auto。
+
+//GO111MODULE=off 无模块支持，go 会从 GOPATH 和 vendor 文件夹寻找包。
+//GO111MODULE=on 模块支持，go 会忽略 GOPATH 和 vendor 文件夹，只根据 go.mod 下载依赖。
+//GO111MODULE=auto 在 $GOPATH/src 外面且根目录有 go.mod 文件时，开启模块支持。
 
 
+
+7、设置代理为国内地址
+go env -w GOPROXY=https://goproxy.cn,direct
+
+8、设置GOPRIVATE来跳过私有库，比如常用的Gitlab或Gitee，中间使用逗号分隔：
+go env -w GOPRIVATE=.gitlab.com,.gitee.com

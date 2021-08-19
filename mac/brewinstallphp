@@ -1,0 +1,37 @@
+#Mac 中brew安装PHP及扩展
+
+1、brew安装php
+brew search php  使用此命令搜索可用的PHP版本
+brew install php@7.1 使用此命令安装指定版本的php
+brew install brew-php-switcher 安装php多版本切换工具
+brew-php-switcher 7.1 切换PHP版本到7.1（需要brew安装多个版本）
+
+PHP -v 查询版本信息，确定是否安装成功（如果显示的是系统自带版本，则需要配置环境变量，修改~/.bash_profile中/usr/local/bin的优先级）
+
+2、brew安装PHP扩展
+通过brew安装的PHP版本中自带了pecl,可以直接使用
+pecl version 查看版本信息
+pecl help 可以查看命令帮助
+pecl search xdebug  搜索可以安装的扩展信息
+pecl install xdebug 安装扩展
+pecl install http://pecl.php.net/get/redis-4.2.0.tgz 安装指定版本扩展
+
+3、通过php --ini查看配置文件，一般在/etc/php.ini
+修改配置文件，增加新安装的扩展
+
+4、php -m 查看扩展是否安装
+
+5、错误情况
+使用pecl install zip
+running: phpize
+grep: /usr/include/php/main/php.h: No such file or directory
+grep: /usr/include/php/Zend/zend_modules.h: No such file or directory
+grep: /usr/include/php/Zend/zend_extensions.h: No such file or directory
+Configuring for:
+PHP Api Version:
+Zend Module Api No:
+Zend Extension Api No:
+
+提示找不到头文件，这是因为mac升级到bigsur(11.0)后，不允许写根目录文件
+
+解决办法：

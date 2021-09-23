@@ -1,0 +1,6 @@
+#误删除分支恢复
+
+参考：https://blog.csdn.net/fdipzone/article/details/50616386
+
+git reflog //查看历史提交记录
+git branch tmp commitid //从指定提交检出新分支

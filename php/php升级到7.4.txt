@@ -1,0 +1,82 @@
+#mac 升级php到7.4
+
+mac环境：MacOS Big Sur 11.4
+PHP版本：7.3.24
+旧版本是brew安装的
+
+
+1、首先保证 homebrew 为最新版本，升级 homebrew
+
+  brew update
+  brew upgrade
+
+2、然后查看系统中的php软件
+
+  brew search php
+
+出现以下结果：
+==> Formulae
+brew-php-switcher   php-cs-fixer@2      phpbrew             phpstan
+php                 php@7.2             phplint             phpunit
+php-code-sniffer    php@7.3 ✔           phpmd               pcp
+php-cs-fixer        php@7.4 ✔           phpmyadmin          pup
+==> Casks
+homebrew/cask/eclipse-php
+
+发现有7.4，于是
+
+  brew install php@7.4 (如果安装失败，尝试 sudo brew install php@7.4)
+
+安装完成后按照提示将以下两行添加到 ~/.zshrc 文件中，这样就能在同时存在多个版本时，优先使用7.4
+
+  export PATH="/usr/local/opt/php@7.4/bin:$PATH"
+  export PATH="/usr/local/opt/php@7.4/sbin:$PATH"
+
+然后更新~/.zshrc文件
+
+  source ~/.zshrc
+
+
+3、查看php最新版本
+
+  php -v
+
+PHP 7.4.24 (cli) (built: Sep 26 2021 20:57:01) ( NTS )
+Copyright (c) The PHP Group
+Zend Engine v3.4.0, Copyright (c) Zend Technologies
+    with Zend OPcache v7.4.24, Copyright (c), by Zend Technologies
+
+已经升级到7.4
+
+
+4、查看当前使用的php版本路径
+
+  which php
+
+/usr/local/opt/php@7.4/bin/php
+
+
+5、启动php7.4
+
+  sudo brew services start php@7.4
+
+
+6、检查新版本是否能使用
+
+  brew services list
+
+php@7.3 started
+php@7.4 error
+
+发现php7.4是错误状态，因为7.3正在运行，占用了9000端口，导致7.4启动失败(但启动7.4没有报错)，解决方法，停止7.3并重新启动7.4
+  sudo brew services stop php@7.3
+  sudo brew services restart(或start) php@7.4
+
+再看brew services list
+php@7.3 stopped
+php@7.4 started
+
+OK啦！
+
+
+7、编辑器中的php版本记得也更新一下哦，不然还是识别到旧版本的，更新后重启一下编辑器。

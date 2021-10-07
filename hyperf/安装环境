@@ -1,0 +1,64 @@
+#Hyperf安装要求
+
+PHP >= 7.4(已安装)
+以下任一网络引擎
+Swoole PHP 扩展 >= 4.7.2（修复了Http2问题），并关闭了 Short Name
+Swow PHP 扩展 (Beta)
+JSON PHP 扩展
+Pcntl PHP 扩展
+OpenSSL PHP 扩展（如需要使用到 HTTPS）
+PDO PHP 扩展 （如需要使用到 MySQL 客户端）
+Redis PHP 扩展 （如需要使用到 Redis 客户端）
+Protobuf PHP 扩展 （如需要使用到 gRPC 服务端或客户端）
+https://hyperf.wiki/2.2/#/zh-cn/quick-start/install
+
+1、安装PHP扩展(以下是常用扩展，可根据 php -m ，没有的需要安装)
+
+    sudo pecl install igbinary
+    sudo pecl install redis
+    sudo pecl install mongodb
+    sudo pecl install protobuf
+    sudo pecl install grpc
+    sudo pecl install PDO
+    sudo pecl install json
+    sudo pecl install pcntl
+
+
+2、编译安装swoole(也可以使用sudo pecl install swoole，我的环境使用pecl安装会报错)，
+据说github上的版本比pecl版本发布快一些，因此可以得到更新的版本
+
+2.1 安装openssl
+  brew install openssl
+
+2.2 安装swoole，
+  下载
+  https://github.com/swoole/swoole-src/archive/master.tar.gz，下载后的文件是swoole-src-master.tar.gz
+
+  解压和安装
+  tar zxvf swoole-src-master.tar.gz
+  cd swoole-src-master
+  phpize
+  ./configure --enable-openssl --enable-http2 --enable-sockets --with-openssl-dir=/usr/local/Cellar/openssl@3/3.0.0 (这里要带上openssl的安装路径，不然会找不到openssl，跟brew安装有关)
+  make
+  make install
+
+2.3 添加swoole到php.ini
+  extension=swoole.so
+
+2.4 重启php服务并查看swoole扩展是否安装
+  brew services restart php@7.4
+  php -m
+
+  可以看到已经成功安装了swoole扩展。
+
+2.5 查看swoolw版本
+  php --ri swoole
+  或 php -r "phpinfo();"
+
+  可以看到当前的swoole版本是4.7.2-dev
+
+
+3、安装protobuf
+  brew info protobuf //查看现有protobuf包
+  brew install protobuf //安装protobuf
+  protoc --version //查看protobuf版本

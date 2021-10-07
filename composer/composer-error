@@ -1,0 +1,10 @@
+#在项目中用composer install时报如下错误
+
+PHP Fatal error:  Class UpdateHelper\ComposerPlugin contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (Composer\Plugin\PluginInterface::deactivate, Composer\Plugin\PluginInterface::uninstall) in /workspace/backend/vendor/kylekatarnls/update-helper/src/UpdateHelper/ComposerPlugin.php on line 11
+
+Fatal error: Class UpdateHelper\ComposerPlugin contains 2 abstract methods and must therefore be declared abstract or implement the remaining methods (Composer\Plugin\PluginInterface::deactivate, Composer\Plugin\PluginInterface::uninstall) in /workspace/backend/vendor/kylekatarnls/update-helper/src/UpdateHelper/ComposerPlugin.php on line 11
+
+
+
+解决方法：
+参考网上的做法，在vendor目录找到kylekatarnls并删除文件夹，重新执行生成。

@@ -1,0 +1,6 @@
+#hyperf启动时报错
+Swoole short function names must be disabled before the server starts, please set swoole.use_shortname = 'Off' in your php.ini.
+
+
+解决方法：
+在php.ini中添加swoole.use_shortname = off 重启php

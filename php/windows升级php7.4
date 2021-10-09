@@ -1,0 +1,30 @@
+#windows升级php到7.4
+
+环境：windows10
+当前php版本：7.3.27
+目标：升级到7.4.24
+
+1、下载(官网下载：https://windows.php.net/download#php-7.4)
+我下载的是64位线程安全版本zip包，名安装，解压即用
+VC15 x64 Thread Safe (2021-Sep-21 16:58:46)
+
+2、解压和配置
+   将压缩包解压到指定目录，如E:\software\php-7.4.24-Win32-vc15-x64
+
+   进入解压目录，将php.ini-development文件复制一份并命名为php.ini，这是php的配置文件，后面会用到
+
+   在当前目录运行php.exe -v，输出版本信息则安装成功，否则排查问题并解决。
+   E:\software\php-7.4.24-Win32-vc15-x64>php.exe -v
+   PHP 7.4.24 (cli) (built: Sep 21 2021 13:38:25) ( ZTS Visual C++ 2017 x64 )
+   Copyright (c) The PHP Group
+   Zend Engine v3.4.0, Copyright (c) Zend Technologies
+
+
+   安装完成后给php配置系统变量，在windows环境变量中添加此版本的运行目录，即E:\software\php-7.4.24-Win32-vc15-x64，
+   配置完成后即可在任意位置执行php -v
+   C:\Users\DIANA>php -v
+   PHP 7.4.24 (cli) (built: Sep 21 2021 13:38:25) ( ZTS Visual C++ 2017 x64 )
+   Copyright (c) The PHP Group
+   Zend Engine v3.4.0, Copyright (c) Zend Technologies
+
+

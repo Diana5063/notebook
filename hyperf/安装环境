@@ -62,3 +62,32 @@ https://hyperf.wiki/2.2/#/zh-cn/quick-start/install
   brew info protobuf //查看现有protobuf包
   brew install protobuf //安装protobuf
   protoc --version //查看protobuf版本
+
+
+
+4、nacos
+4.1 下载安装
+https://github.com/alibaba/nacos/releases 下载最新包文件，比如我下载的是nacos-server-2.0.3.tar.gz
+
+然后解压缩，进入bin目录，单机启动
+sh startup.sh -m standalone
+
+报如下错误
+The operation couldn’t be completed. Unable to locate a Java Runtime.
+Please visit http://www.java.com for information on installing Java
+原因是没有安装java jdk
+解决方法：下载jdk最新版本安装，参考官方安装方法，下载64位dmg文件双击安装即可
+https://docs.oracle.com/en/java/javase/17/install/installation-jdk-macos.html#GUID-2FE451B0-9572-4E38-A1A5-568B77B146DE
+
+4.2 进入可视化页面，账号密码都是nacos，进行登录即可，nacos的端口为8848
+http://127.0.0.1:8848/nacos/#/login
+发现这个地址打不开，网上参考解释是因为nacos版本过高，换到1.4.x试试，由于某些原因没有继续尝试，未能确认解决方法是否可行。
+
+4.3 关闭nacos
+sh shutdown.sh
+但发现关闭后，仍然能在可视化页面连接nacos，所以需要杀死8848端口的进程
+
+//查询8848端口的进程，获取到进程id，例如是45025
+lsof -i:8848
+//杀死45025进程
+kill -9 45025

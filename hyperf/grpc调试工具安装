@@ -1,0 +1,44 @@
+Grpc调试
+除了我们在项目中写单元测试之外，通过以下插件可以做到HTTP请求的方式，来调试grpc.
+https://github.com/fullstorydev/grpcurl -- 通过命令行来调试
+https://github.com/fullstorydev/grpcui -- 通过UI界面来调试
+
+1、安装命令行工具
+brew install grpcurl
+
+2、安装图形界面工具
+go env
+查看GOPATH的值，为/Users/chenyixin/go，进入go的工作目录，使用go安装grpcui
+cd /Users/chenyixin/go
+go install github.com/fullstorydev/grpcui/cmd/grpcui@latest
+
+安装完成后会在/Users/chenyixin/go/bin目录下发现grpcui程序
+测试，进入bin目录，执行
+
+./grpcui
+
+提示以下信息说明安装成功
+This program requires exactly one arg: the host:port of gRPC server.
+Try './grpcui -help' for more details.
+
+如果要在任意目录执行，需要添加到系统环境变量，方法如下
+
+vim ~/.zshrc
+
+在打开的文件末尾添加一行
+export PATH="$HOME/go/bin:$PATH"
+
+保存退出后执行以下命令更新环境变量
+
+source ~/.zshrc
+
+然后在任意目录执行
+grpcui
+
+同样输出
+This program requires exactly one arg: the host:port of gRPC server.
+Try './grpcui -help' for more details.
+
+安装成功！
+
+3、图形界面连接

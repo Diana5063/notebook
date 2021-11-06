@@ -1,0 +1,15 @@
+#FortClient连接VPN有如下报错
+
+Failed to establish the VPN connection. This may be caused by a mismatch in the TLS version.
+Please check the TLS version settings in the Advanced of the Internet options. (-5029)
+
+
+从提示看是TLS版本设置错误，可能是我使用电脑管家清理系统时设置了什么，参考网上的做法，
+打开 控制面板\网络和 Internet\网络和共享中心，点击 Internet选项，在打开的Internet属性面板中，切换到 高级，
+里面有TLS版本：TLS1.0,TLS1.1,TLS1.2,TLS1.3等
+
+如果知道自己修改了哪些配置，还原一下就行
+不知道改了哪些，可以点击 还原高级设置
+
+
+我点击 还原高级设置 解决了问题。

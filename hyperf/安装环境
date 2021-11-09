@@ -57,6 +57,9 @@ https://hyperf.wiki/2.2/#/zh-cn/quick-start/install
 
   可以看到当前的swoole版本是4.7.2-dev
 
+2.6 升级swoole版本
+重复以上2.1~2.5步骤即可
+
 
 3、安装protobuf
   brew info protobuf //查看现有protobuf包

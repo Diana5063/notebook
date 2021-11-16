@@ -94,3 +94,10 @@ sh shutdown.sh
 lsof -i:8848
 //杀死45025进程
 kill -9 45025
+
+
+5、运行Hyperf单元测试
+在phpstorm中执行单元测试时报
+http 503 错误
+经排查发现是swoole版本问题，使用4.8.0或以下版本可正常运行，4.8.0以上的版本有问题，我的版本是4.9.0-dev，回退到4.8.0了，回退安装方法见上2.2，
+历史版本下载地址：https://pecl.php.net/package/swoole

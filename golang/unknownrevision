@@ -1,0 +1,45 @@
+#在项目中执行go mod tidy时提示以下错误
+go: xxx.com/xxx/go-common@v1.5.4: reading xxx.com/xxx/go-common/go-common/go.mod at revision go-common/v1.5.4: unknown revision go-common/v1.5.4
+
+
+拉不到go-common仓库的代码，使用go env查看配置
+xxx@xxxdeMacBook-Pro ~ % go env
+GO111MODULE="on"
+GOARCH="amd64"
+GOBIN=""
+GOCACHE="/Users/xxx/Library/Caches/go-build"
+GOENV="/Users/xxx/Library/Application Support/go/env"
+GOEXE=""
+GOFLAGS=""
+GOHOSTARCH="amd64"
+GOHOSTOS="darwin"
+GOINSECURE=""
+GOMODCACHE="/Users/xxx/go/pkg/mod"
+GONOPROXY="xxx.com"
+GONOSUMDB="xxx.com"
+GOOS="darwin"
+GOPATH="/Users/xxx/go"
+GOPRIVATE="xxx.com"
+GOPROXY="https://goproxy.cn,direct"
+GOROOT="/usr/local/go"
+GOSUMDB="sum.golang.org"
+GOTMPDIR=""
+GOTOOLDIR="/usr/local/go/pkg/tool/darwin_amd64"
+GOVCS=""
+GOVERSION="go1.16.6"
+GCCGO="gccgo"
+AR="ar"
+CC="clang"
+CXX="clang++"
+CGO_ENABLED="1"
+GOMOD="/dev/null"
+CGO_CFLAGS="-g -O2"
+CGO_CPPFLAGS=""
+CGO_CXXFLAGS="-g -O2"
+CGO_FFLAGS="-g -O2"
+CGO_LDFLAGS="-g -O2"
+PKG_CONFIG="pkg-config"
+GOGCCFLAGS="-fPIC -arch x86_64 -m64 -pthread -fno-caret-diagnostics -Qunused-arguments -fmessage-length=0 -fdebug-prefix-map=/var/folders/tq/vrx47r053l53k2tr8ssrm_p40000gn/T/go-build1948011704=/tmp/go-build -gno-record-gcc-switches -fno-common"
+
+配置没有看出问题，问了大佬终于解决了，执行以下命令(账号密码改成自己的)
+echo 'machine xxx.com login xxx password aaaaaa' > ~/.netrc

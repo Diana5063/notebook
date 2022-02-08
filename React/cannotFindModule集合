@@ -1,0 +1,5 @@
+#找不到模块报错集合
+1、Error: Cannot find module 'esbuild-loader'
+
+cd pc
+npm i --save-dev esbuild-loader

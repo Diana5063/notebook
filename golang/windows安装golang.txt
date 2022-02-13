@@ -1,8 +1,30 @@
-﻿安装包下载地址为：https://golang.org/dl/。
-
-如果打不开可以使用这个地址：https://golang.google.cn/dl/。
+﻿安装包下载地址为：https://golang.google.cn/dl/。
 
 下载windows版本软件双击安装即可。
 
 测试一下是否安装成功，打开一个windows命令窗口，输入go version，成功输出go版本说明安装成功。
 完成！
+
+1、通用配置
+go env -w GO111MODULE=on //开启模块支持
+//GO111MODULE=off 无模块支持，go 会从 GOPATH 和 vendor 文件夹寻找包。
+//GO111MODULE=on 模块支持，go 会忽略 GOPATH 和 vendor 文件夹，只根据 go.mod 下载依赖。
+//GO111MODULE=auto 在 $GOPATH/src 外面且根目录有 go.mod 文件时，开启模块支持。
+
+go env -w GOPROXY=https://goproxy.cn,direct //设置代理为国内地址
+go env -w GOPRIVATE=.xxx.com //设置GOPRIVATE来跳过私有库
+
+
+2、配置GOPATH环境变量
+在windows系统环境变量中增加一行
+变量名：GOPATH
+变量值：E:\workspaceGo //自己写的代码要放到这个变量中配置的目录中，go编译器才会找到并编译
+
+3、安装调试工具dlv
+根据官方文档：https://github.com/derekparker/delve/blob/master/Documentation/installation/windows/install.md
+go get github.com/go-delve/delve/cmd/dlv
+
+go get: module github.com/go-delve/delve/cmd/dlv: git ls-remote -q origin in E:\workspaceGo\pkg\mod\cache\vcs\09e416c991289a13aad7de4337bb96bc98ab89763cc18ac2f790771787c60ed5: exit status 128:
+        fatal: unable to access 'https://github.com/go-delve/delve/': OpenSSL SSL_read: Connection was reset, errno 10054
+
+报错解决办法：

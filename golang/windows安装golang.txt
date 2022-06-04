@@ -24,7 +24,31 @@ go env -w GOPRIVATE=.xxx.com //设置GOPRIVATE来跳过私有库
 根据官方文档：https://github.com/derekparker/delve/blob/master/Documentation/installation/windows/install.md
 go get github.com/go-delve/delve/cmd/dlv
 
-go get: module github.com/go-delve/delve/cmd/dlv: git ls-remote -q origin in E:\workspaceGo\pkg\mod\cache\vcs\09e416c991289a13aad7de4337bb96bc98ab89763cc18ac2f790771787c60ed5: exit status 128:
-        fatal: unable to access 'https://github.com/go-delve/delve/': OpenSSL SSL_read: Connection was reset, errno 10054
+E:\workspaceGo>go get github.com/go-delve/delve/cmd/dlv
+go: downloading github.com/go-delve/delve v1.8.1
+go: downloading github.com/sirupsen/logrus v1.6.0
+go: downloading github.com/spf13/cobra v1.1.3
+go: downloading github.com/mattn/go-isatty v0.0.3
+go: downloading gopkg.in/yaml.v2 v2.4.0
+go: downloading github.com/google/go-dap v0.6.0
+go: downloading github.com/cosiner/argv v0.1.0
+go: downloading github.com/derekparker/trie v0.0.0-20200317170641-1fdf38b7b0e9
+go: downloading github.com/mattn/go-colorable v0.0.9
+go: downloading github.com/peterh/liner v1.2.2
+go: downloading golang.org/x/sys v0.0.0-20211117180635-dee7805ff2e1
+go: downloading github.com/konsorten/go-windows-terminal-sequences v1.0.3
+go: downloading github.com/cpuguy83/go-md2man/v2 v2.0.0
+go: downloading github.com/hashicorp/golang-lru v0.5.4
+go: downloading golang.org/x/arch v0.0.0-20190927153633-4e8777c89be4
+go: downloading go.starlark.net v0.0.0-20200821142938-949cc6f4b097
+go: downloading github.com/mattn/go-runewidth v0.0.3
+go: downloading github.com/russross/blackfriday/v2 v2.0.1
+go: downloading github.com/cilium/ebpf v0.7.0
+go: downloading github.com/shurcooL/sanitized_anchor_name v1.0.0
+go get: installing executables with 'go get' in module mode is deprecated.
+        Use 'go install pkg@version' instead.
+        For more information, see https://golang.org/doc/go-get-install-deprecation
+        or run 'go help get' or 'go help install'.
 
-报错解决办法：
+
+在E:\workspaceGo>go可以看到dlv已经安装了。

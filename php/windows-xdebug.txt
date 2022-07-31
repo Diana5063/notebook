@@ -1,0 +1,31 @@
+#windows安装和使用php xdebug插件
+
+一、安装
+参考官网指导方法 https://xdebug.org/wizard
+
+1、在命令行下运行 php -i，将输出结果完整复制并粘贴到以上网址的输入框中，点击分析，得到正确的xdebug版本。
+
+2、根据1得到的结果下载xdebug文件，将文件复制到php的扩展目录(ext)中并重命名为php_xdebug.dll。
+
+3、个性php.ini文件，增加一行扩展
+zend_extension = xdebug
+并配置以下项目
+xdebug.mode = debug
+xdebug.start_with_request = yes
+xdebug.idekey = PHPSTORM
+
+4、保存php.ini文件，在代码中执行xdebug_info()方法，能正常输出xdebug信息表示安装成功。
+
+二、使用
+1、配置phpstorm
+打开phpstorm->File->Settings->PHP->Debug，Debug port填入9003(xdebug的默认端口)，
+然后phpstorm->File->Settings->PHP->Servers，添加host，
+Host:localhost
+Port:80
+Debugger:Xdebug
+保存
+
+2、运行
+以sd:cyx_test命令示例
+先点击phpstorm右上角的开始监听按钮，然后在命令的脚本文件中任意打断点，然后在命令行执行命令
+debug信息就会显示phpstorm的Debug控制台。

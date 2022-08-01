@@ -1,0 +1,46 @@
+#mac安装和使用php xdebug
+
+环境：
+PHP7.4.24
+MacOS 12.4
+
+一、安装
+参考官网指导https://xdebug.org/docs/install#pecl
+1、安装 xcode-select --install //已安装请忽略这一步
+2、file `which php` //查看PHP架构
+如果是arm64e，则执行  arch -arm64 sudo pecl install xdebug
+如果是x86_64，则执行  arch -x86_64 sudo pecl install xdebug
+
+安装后程序会自动将php.ini中的xdebug模块开启
+Extension xdebug enabled in php.ini
+
+3、执行php -m，可以看到扩展已安装
+[Zend Modules]
+Xdebug
+Zend OPcache
+
+二、使用
+1、配置xdebug，在php.ini中添加以下内容
+[xdebug]
+xdebug.start_with_request = yes
+xdebug.mode=debug
+xdebug.idekey=PHPSTORM
+xdebug.client_host=localhost
+xdebug.client_port=9003
+
+2、配置phpstorm
+2.1 PhpStorm->Preferences->PHP->Debug，Xdebug的debug port填入9003
+
+2.2 PhpStorm->Preferences->PHP->Debug->DBGp Proxy，填入以下信息，与php.ini相应参数一致
+IDE key:PHPSTORM
+Host:localhost
+Port:9003
+
+2.3 PhpStorm->Preferences->PHP->ServerServers，新增Server，填入以下信息
+Name:localhost
+Host:localhost
+Port:80
+Debugger:Xdebug
+
+2.4 测试
+点击右上角开始监听

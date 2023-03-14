@@ -1,0 +1,10 @@
+#参考https://my.oschina.net/antsky/blog/3041310
+
+1、下载php-yaf-doc
+git clone https://github.com/elad-yosifon/php-yaf-doc.git
+
+2、设置phpstorm
+打开Preferences->PHP，添加Include Path，浏览到第一步下载的php-yaf-doc目录，保存即可。
+
+3、测试
+打开yaf项目，可以看到yaf类都可追溯且写代码有提示了

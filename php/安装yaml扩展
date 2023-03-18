@@ -1,0 +1,39 @@
+#mac安装php yaml扩展
+
+1、首先安装 libyaml
+1.1 brew install libyaml
+
+Updating Homebrew...
+==> Auto-updated Homebrew!
+Updated 1 tap (homebrew/services).
+No changes to formulae.
+
+Warning: You are using macOS 12.
+We do not provide support for this pre-release version.
+You will encounter build failures with some formulae.
+Please create pull requests instead of asking for help on Homebrew's GitHub,
+Twitter or any other official channels. You are responsible for resolving
+any issues you experience while you are running this
+pre-release version.
+
+==> Downloading https://mirrors.ustc.edu.cn/homebrew-bottles/libyaml-0.2.5.big_s
+######################################################################## 100.0%
+==> Pouring libyaml-0.2.5.big_sur.bottle.tar.gz
+🍺  /usr/local/Cellar/libyaml/0.2.5: 10 files, 348.4KB
+==> `brew cleanup` has not been run in the last 30 days, running now...
+
+1.2 记录一下这一步里的libyaml路径:/usr/local/Cellar/libyaml/0.2.5
+
+2、然后安装 yaml
+pecl install yaml
+
+Build process completed successfully
+Installing '/usr/local/Cellar/php@7.4/7.4.24/pecl/20190902/yaml.so'
+ERROR: Adding package pecl.php.net/yaml to registry failed
+
+3、修改php.ini，添加如下配置
+extension="yaml.so"
+
+4、查看
+php -m|grep yaml
+yaml

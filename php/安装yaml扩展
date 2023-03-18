@@ -27,6 +27,8 @@ pre-release version.
 2、然后安装 yaml
 pecl install yaml
 
+Please provide the prefix of libyaml installation [autodetect] :这里粘贴1.2的路径
+...
 Build process completed successfully
 Installing '/usr/local/Cellar/php@7.4/7.4.24/pecl/20190902/yaml.so'
 ERROR: Adding package pecl.php.net/yaml to registry failed

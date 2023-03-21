@@ -1,0 +1,95 @@
+#mac安装yasd扩展
+
+参考 https://huanghantao.github.io/yasd-wiki/#/%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8/%E5%AE%89%E8%A3%85
+
+1、PHP版本要求：大于等于7.2
+
+2、安装依赖库
+brew install boost
+
+Updating Homebrew...
+Warning: You are using macOS 12.
+We do not provide support for this pre-release version.
+You will encounter build failures with some formulae.
+Please create pull requests instead of asking for help on Homebrew's GitHub,
+Twitter or any other official channels. You are responsible for resolving
+any issues you experience while you are running this
+pre-release version.
+
+==> Downloading https://mirrors.ustc.edu.cn/homebrew-bottles/boost-1.76.0.big_sur.bottle.tar.gz
+curl: (22) The requested URL returned error: 404
+
+Warning: Bottle missing, falling back to the default domain...
+==> Downloading https://ghcr.io/v2/homebrew/core/boost/manifests/1.76.0
+######################################################################## 100.0%
+==> Downloading https://ghcr.io/v2/homebrew/core/boost/blobs/sha256:35c726d8bea731d85af3d6ba173e95b1726cdfac04e020e259937c8e99c3d4e7
+==> Downloading from https://pkg-containers.githubusercontent.com/ghcr1/blobs/sha256:35c726d8bea731d85af3d6ba173e95b1726cdfac04e020e259937c8e99c3d4e7?se=2023-03-21T09%3A45%3A00Z&sig=whvBP5yT7nrhdrP0KxhbIc
+######################################################################## 100.0%
+==> Pouring boost--1.76.0.big_sur.bottle.tar.gz
+🍺  /usr/local/Cellar/boost/1.76.0: 15,150 files, 504.3MB
+
+
+3、下载yasd源码
+git clone https://github.com/swoole/yasd.git
+
+Cloning into 'yasd'...
+remote: Enumerating objects: 1094, done.
+remote: Counting objects: 100% (206/206), done.
+remote: Compressing objects: 100% (99/99), done.
+remote: Total 1094 (delta 127), reused 171 (delta 106), pack-reused 888
+Receiving objects: 100% (1094/1094), 348.16 KiB | 909.00 KiB/s, done.
+Resolving deltas: 100% (754/754), done.
+
+4、编译安装扩展
+cd yasd
+phpize --clean && \
+phpize && \
+./configure && \
+make clean && \
+make && \
+make install
+
+......
+Build complete.
+Don't forget to run 'make test'.
+
+MacBook-Pro yasd % make install
+Installing shared extensions:     /usr/local/Cellar/php@7.4/7.4.24/pecl/20190902/
+
+5、配置yasd对应的ini文件：
+打开php.ini文件，添加一行 zend_extension=yasd，保存
+注意如果有安装xdebug扩展，需要禁用，在php.ini文件中将zend_extension="xdebug.so"前面加;
+
+6、查看安装是否成功
+php -m|grep yasd
+yasd
+
+或者 php -v
+PHP 7.4.24 (cli) (built: Sep 26 2021 20:57:01) ( NTS )
+Copyright (c) The PHP Group
+Zend Engine v3.4.0, Copyright (c) Zend Technologies
+    with Yasd v0.3.9-alpha, Our Copyright, by codinghuang
+    with Zend OPcache v7.4.24, Copyright (c), by Zend Technologies
+
+以上都表示安装成功
+
+7、开始调试，无论是cmd模式还是IDE模式，都是采取以下方式开始一个调试会话
+7.1 设置参数，打开php.ini文件，添加以下设置
+[yasd]
+yasd.debug_mode=remote //打开IDE调试
+yasd.remote_host=127.0.0.1//IDE所在的机器的IP
+yasd.remote_port=9004 //IDE所监听的端口
+yasd.open_extended_info=1 //开启这个配置项之后，默认会在执行php的时候添加-e选项，这样，就不需要每次执行脚本的时候，添加-e选项了
+yasd.log_level=0 //是否生成调试日志，默认是-1，表示不生成调试日志。该配置只在remote模式下生效
+yasd.depth=1 //一次返回的子元素深度，默认是1。该配置只在remote模式下生效
+yasd.max_executed_opline_num=50000 //当前函数内，执行的语句最大条数，可用来检测死循环，默认是10000
+
+7.2 配置phpstorm
+Preferences->PHP->Debug，在Xdebug设置这里，Debug port输入框添加9004，如果已经有别的端口，多个端口之间用半角逗号隔开，保存。
+Preferences->PHP->Servers，添加一个服务器配置，Host:127.0.0.1,Port:9004,Debugger:Xdebug，选中Use path mappings，在Project Files那里添加一行，浏览到项目根目录，保存。
+
+7.3 打断点
+
+7.4 打开phpstorm右上角的调试监听，启动脚本
+php your_script.php
+

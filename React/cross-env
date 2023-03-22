@@ -1,0 +1,5 @@
+#安装cross-env
+
+参考：http://www.manongjc.com/detail/15-spbykmdutnqdhda.html
+
+npm install --save-dev cross-env

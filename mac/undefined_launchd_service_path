@@ -1,0 +1,28 @@
+#mac brew services报错
+
+
+今天使用brew services指令启动redis服务的时候，发现报错了，大概的内容如下
+
+brew services start redis
+Error: undefined method `launchd_service_path' for #<Formulary::FormulaNamespace771873302195db072872d50a5f178da4::Redis:0x00007f8068a397c0>
+/usr/local/Homebrew/Library/Taps/homebrew/homebrew-services/lib/service/formula_wrapper.rb:58:in `service_file'
+/usr/local/Homebrew/Library/Taps/homebrew/homebrew-services/lib/service/services_cli.rb:98:in `block in start'
+/usr/local/Homebrew/Library/Taps/homebrew/homebrew-services/lib/service/services_cli.rb:90:in `each'
+/usr/local/Homebrew/Library/Taps/homebrew/homebrew-services/lib/service/services_cli.rb:90:in `start'
+/usr/local/Homebrew/Library/Taps/homebrew/homebrew-services/lib/service/commands/start.rb:12:in `run'
+/usr/local/Homebrew/Library/Taps/homebrew/homebrew-services/cmd/services.rb:112:in `services'
+/usr/local/Homebrew/Library/Homebrew/brew.rb:129:in `<main>'
+
+
+解决办法：
+brew update
+==> Downloading https://formulae.brew.sh/api/formula.jws.json
+######################################################################## 100.0%
+==> Downloading https://formulae.brew.sh/api/cask.jws.json
+######################################################################## 100.0%
+Already up-to-date.
+
+
+再次启动redis
+brew services start redis
+==> Successfully started `redis` (label: homebrew.mxcl.redis)

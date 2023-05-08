@@ -1,0 +1,13 @@
+#执行laravel命令时一直提示
+
+Please provide a valid cache path.
+/home/xxx/sd_oversea_admin/master/vendor/laravel/framework/src/Illuminate/View/Compilers/Compiler.php
+36
+
+要求的缓存路径是在 config/cache.php 中指定的，查到缓存路径是storage/framework/cache/data，发现没有这个目录，手动创建了以下目录
+确保storage目录下有app，framework，views三个目录并有读写权限
+确保storage/framework目录下有cache，sessions，views三个目录并有读写权限
+
+storage及其子目录都给了777权限，还是提示上面的错误，
+最后灵机一动，执行php artisan optimize，
+OK了！

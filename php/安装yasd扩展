@@ -30,7 +30,7 @@ Warning: Bottle missing, falling back to the default domain...
 
 
 3、下载yasd源码
-git clone https://github.com/swoole/yasd.git
+git clone https://github.com/swoole/yasd.git金
 
 Cloning into 'yasd'...
 remote: Enumerating objects: 1094, done.

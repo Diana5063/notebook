@@ -1,0 +1,6 @@
+#编辑支持swoole语法
+
+在项目根目录执行以下命令
+composer require --dev “eaglewu/swoole-ide-helper:dev-master”
+
+下载后，右键External Libraries，打开Configure PHP Include Path，点击图标“+” 添加下载好的helper库，保存。

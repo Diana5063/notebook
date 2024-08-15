@@ -22,6 +22,32 @@ pecl install http://pecl.php.net/get/redis-4.2.0.tgz 安装指定版本扩展
 4、php -m 查看扩展是否安装
 
 5、错误情况
+命令不存在 zsh: command not found: brew
+解决办法(参考：https://mac.install.guide/homebrew/3)：
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+zm@axin ~ % /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+==> Checking for `sudo` access (which may request your password)...
+Password:
+==> This script will install:
+/opt/homebrew/bin/brew
+/opt/homebrew/share/doc/homebrew
+/opt/homebrew/share/man/man1/brew.1
+/opt/homebrew/share/zsh/site-functions/_brew
+/opt/homebrew/etc/bash_completion.d/brew
+/opt/homebrew
+
+Press RETURN/ENTER to continue or any other key to abort:
+==> /usr/bin/sudo /usr/sbin/chown -R zm:admin /opt/homebrew
+==> Downloading and installing Homebrew...
+remote: Enumerating objects: 278170, done.
+remote: Counting objects: 100% (1226/1226), done.
+remote: Compressing objects: 100% (750/750), done.
+remote: Total 278170 (delta 495), reused 1123 (delta 442), pack-reused 276944 (from 1)
+Receiving objects: 100% (278170/278170), 85.93 MiB | 1.74 MiB/s, done.
+Resolving deltas: 100% (199719/199719), done.
+From https://github.com/Homebrew/brew
+
 使用pecl install zip
 running: phpize
 grep: /usr/include/php/main/php.h: No such file or directory

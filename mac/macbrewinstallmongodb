@@ -1,0 +1,22 @@
+macbookpro m3安装php mongodb扩展
+
+参考：https://juejin.cn/post/7088213573897289736
+
+在官网下载安装包：https://pecl.php.net/package/mongodb
+解压到本地目录
+cd mongodb-1.19.3/mongodb-1.19.3
+phpize
+./configure
+
+
+#问题1
+/opt/homebrew/Cellar/php@7.4-zts/7.4.33_1/include/php/ext/pcre/php_pcre.h:25:10: fatal error: 'pcre2.h' file not found
+解决办法：
+brew install pcre2
+ln -s /opt/homebrew/opt/pcre2/include/pcre2.h /opt/homebrew/opt/php@7.4-zts/include/php/ext/pcre
+
+
+make && make install
+
+vim /opt/homebrew/etc/php/7.4-zts/php.ini
+在ini文件中添加一行extension="mongodb"

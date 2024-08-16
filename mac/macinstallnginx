@@ -1,0 +1,24 @@
+macbook pro m3安装nginx
+参考：https://segmentfault.com/a/1190000022738645
+
+安装
+brew install nginx
+
+启动
+brew services start nginx
+
+停止
+brew services stop nginx
+
+重启nginx
+brew services restart nginx
+
+重新加载配置文件
+nginx -s reload
+
+验证nginx配置文件是否正确
+nginx -t
+
+配置文件位置
+nginx: the configuration file /opt/homebrew/etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /opt/homebrew/etc/nginx/nginx.conf test is successful

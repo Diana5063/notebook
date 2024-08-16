@@ -12,6 +12,11 @@ curl -sS https://getcomposer.org/installer | php -- --install-dir=bin
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 
+#执行mv命令时提示目录不存在
+mv: rename composer.phar to /usr/local/bin/composer: No such file or directory
+原因：有些系统不存在这个目录
+解决办法：手动创建目录  sudo mkdir -p /usr/local/bin
+
 注意： 如果上诉命令因为权限执行失败， 请使用 sudo 再次尝试运行 mv 那行命令。
 然后给composer增加可执行命令：sudo chmod 777 composer
 现在只需要运行 composer 命令就可以使用 Composer 而不需要输入 php composer.phar

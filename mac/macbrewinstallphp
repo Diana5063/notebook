@@ -1,0 +1,26 @@
+Macbook pro m3安装php
+参考 https://stackoverflow.com/questions/69786222/zsh-command-not-found-php
+
+#安装php包
+brew tap shivammathur/php
+
+#选择安装php版本 7.4
+brew install shivammathur/php/php@7.4-zts
+
+#创建文件映射
+brew link --overwrite --force php@7.4-zts
+Linking /opt/homebrew/Cellar/php@7.4-zts/7.4.33_1... 25 symlinks created.
+
+If you need to have this software first in your PATH instead consider running:
+  echo 'export PATH="/opt/homebrew/opt/php@7.4-zts/bin:$PATH"' >> ~/.zshrc
+  echo 'export PATH="/opt/homebrew/opt/php@7.4-zts/sbin:$PATH"' >> ~/.zshrc
+
+#查看php版本
+php -v
+PHP 7.4.33 (cli) (built: Aug  1 2024 07:06:15) ( ZTS )
+Copyright (c) The PHP Group
+Zend Engine v3.4.0, Copyright (c) Zend Technologies
+    with Zend OPcache v7.4.33, Copyright (c), by Zend Technologies
+
+
+

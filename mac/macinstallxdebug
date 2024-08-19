@@ -1,0 +1,20 @@
+#macbook pro m3安装xdebug
+
+参考官网安装教程 https://xdebug.org/wizard
+
+1、在本地执行php i，将输出信息复制到上面地址中分析后可以得到匹配php版本的xdebug版本。
+
+2、下载xdebug
+
+3、安装
+
+cd xdebug-3.1.6
+phpize
+./configure
+make
+make install
+
+Installing shared extensions:     /opt/homebrew/Cellar/php@7.4-zts/7.4.33_1/pecl/20190902-zts/
+
+
+新建配置文件/opt/homebrew/etc/php/7.4-zts/conf.d/99-xdebug.ini，写入一行zend_extension = xdebug

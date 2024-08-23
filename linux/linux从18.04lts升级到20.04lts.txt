@@ -4,3 +4,4 @@
 1、sudo apt update //检查软件源是否有更新
 2、sudo apt upgrade -y //更新已安装的软件包，-y 直接将所有软件更新到最新版本，不需要操作者确认，谨慎使用，一般场景使用 sudo apt upgrade 稳定可靠升级，这里是升级linux版本，因此全部升级
 3、do-release-upgrade //升级系统
+4、lsb_release -a //查看当前版本信息

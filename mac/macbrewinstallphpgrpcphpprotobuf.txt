@@ -1,0 +1,60 @@
+#macpro m3 安装php-grpc，php-protobuf扩展
+参考：https://www.jianshu.com/p/bb15ad7532be
+
+1、安装protobuf3
+brew install protobuf
+
+安装完成后，检查是否安装成功，执行命令 protoc --version 。若安装成功，可看到返回的版本号信息。
+protoc --version
+libprotoc 27.3
+
+
+2、安装php-protobuf扩展
+git clone https://github.com/allegro/php-protobuf
+cd php-protobuf
+phpize
+./configure
+make
+make install
+
+安装完成后，修改php.ini，添加配置 extension = protobuf.so
+
+执行命令 php -m | grep protobuf 查看是否安装成功。
+php -m | grep protobuf
+protobuf
+
+
+3、安装grpc
+brew install grpc
+
+4、安装php-grpc扩展
+pecl install grpc
+
+安装完成后，修改php.ini，添加配置 extension = grpc.so
+php -m | grep grpc
+grpc
+
+5、安装grpc_php_plugin
+brew install automake
+
+//在安装gRPC-Core时，下载grpc是没有问题的，但grpc的几个依赖库submodules下载总是失败,使用ssh方式，得以解决
+git config --global url.git@github.com:.insteadOf https://github.com/
+此命令的作用是将所有git clone的url中包含https://github.com/的都替换为git@github.com:，以ssh的方式去执行git clone，例如：
+git clone https://github.com/envoyproxy/data-plane-api.git
+执行了上边的命令后，将转为
+git clone git@github.com:envoyproxy/data-plane-api.git
+
+git clone --recurse-submodules -b v1.34.1 https://github.com/grpc/grpc
+cd grpc
+git submodule update --init
+make grpc_php_plugin
+
+执行make命令时发生错误：make: *** No rule to make target `grpc_php_plugin'.  Stop.
+解决方法：
+降低grpc版本，使用v1.34.1可make成功
+
+注意：上面的v1.34.0是示例版本号，你应该根据需要安装的gRPC版本来更改它。
+
+将grpc_php_plugin二进制文件复制到你的bin目录下：
+sudo cp bins/opt/grpc_php_plugin /usr/local/bin/grpc_php_plugin
+

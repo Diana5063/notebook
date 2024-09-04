@@ -44,6 +44,8 @@ git clone https://github.com/envoyproxy/data-plane-api.git
 执行了上边的命令后，将转为
 git clone git@github.com:envoyproxy/data-plane-api.git
 
+如果不需要insteadOf，可以执行撤销命令去掉：git config --global --unset url.git@github.com:.insteadof
+
 git clone --recurse-submodules -b v1.34.1 https://github.com/grpc/grpc
 cd grpc
 git submodule update --init

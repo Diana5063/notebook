@@ -1,0 +1,51 @@
+#在phpstudy中给网站配置SSL证书
+
+由于是本地开发环境，所以使用免费证书，在deepseek的指导下生成，步骤如下：
+1. 安装 Chocolatey（若未安装），打开 PowerShell（管理员权限），执行以下命令：
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+
+
+2. 安装 mkcert，执行以下命令：
+choco install mkcert -y
+
+PS C:\WINDOWS\system32> choco install mkcert -y
+Chocolatey v2.5.0
+Installing the following packages:
+mkcert
+By installing, you accept licenses for the packages.
+Downloading package from source 'https://community.chocolatey.org/api/v2/'
+Progress: Downloading mkcert 1.4.4... 100%
+
+mkcert v1.4.4 [Approved]
+mkcert package files install completed. Performing other installation steps.
+ ShimGen has successfully created a shim for mkcert.exe
+ The install of mkcert was successful.
+  Deployed to 'C:\ProgramData\chocolatey\lib\mkcert'
+
+Chocolatey installed 1/1 packages.
+ See the log for details (C:\ProgramData\chocolatey\logs\chocolatey.log).
+
+
+3. 安装根证书，执行以下命令：
+mkcert -install
+
+PS C:\WINDOWS\system32> mkcert -install
+Created a new local CA 💥
+The local CA is now installed in the system trust store! ⚡
+
+4. 生成证书，执行以下命令（将 `xx.xx.com` 替换为你的域名）：
+mkcert localhost xx.xx.com
+
+PS C:\WINDOWS\system32> mkcert test.xx.com
+
+Created a new certificate valid for the following names 📜
+ - "test.xx.com"
+
+The certificate is at "./test.xx.com.pem" and the key at "./test.xx.com-key.pem" ✅
+
+It will expire on 7 November 2027 🗓
+
+
+5.在phpstudy中配置证书
+将生成的 `test.xx.com.pem` 和 `test.xx.com-key.pem` 文件导入到 phpstudy 的服务器 SSL 证书目录中，使用的nginx作为服务器，路径为 `D:\phpstudy_pro\Extensions\Nginx1.15.11\conf\ssl`。
+然后在 phpstudy 中配置站点，选择 SSL 证书，填写域名，保存即可。

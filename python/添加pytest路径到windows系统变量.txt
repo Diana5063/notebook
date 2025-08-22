@@ -1,0 +1,58 @@
+#在win10中安装pytest后需要添加路径到系统变量但无法通过图形界面修改，以便可以全局使用pytest命令
+解决方法：以管理员身份在powershell中使用命令修改，以下是具体步骤
+
+#1. 找到python的安装路径
+$pythonPath = python -c "import sys; print(sys.executable)"
+#可以通过 echo $pythonPath 命令查看变量值
+#C:\Users\xxx\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\python.exe
+
+#2. 找到python解释器路径，一般是python安装路径下的scripts子路径，所以直接在后面拼接Scripts
+$scriptsPath = [System.IO.Path]::Combine([System.IO.Path]::GetDirectoryName($pythonPath), "Scripts")
+#同样可以通过 echo $scriptsPath 命令查看变量值
+#C:\Users\xxx\AppData\Local\Microsoft\WindowsApps\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\Scripts
+
+#3. 找到系统变量PATH的值
+$currentPath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+#可以通过 echo $currentPath 查看当前PATH变量的值
+
+#4. 将python解释器路径拼接到PATH
+$newPath = $currentPath + ";" + $scriptsPath
+#可以通过 echo $newPath 查看修改后的PATH变量值
+
+#4. 应用新的PATH值
+[Environment]::SetEnvironmentVariable("Path", $newPath, "Machine")
+#可以通过 echo %PATH% 查看最新PATH
+
+#6. 打开命令提示符窗口，测试pytest路径是否添加成功
+pytest --version
+如果输出版本号即为添加成功
+
+但是我这样操作报错了，提示找不到命令
+'pytest' 不是内部或外部命令，也不是可运行的程序或批处理文件。
+
+到上面步骤2的路径去看，没有这个路径，也找不到pytest，但是我确定pytest安装成功了，安装命令是pip install pytest，于是想卸载重装，于是执行pip uninstall pytest，输出以下提示信息，输入n，确定安装后就不用卸载
+Found existing installation: pytest 8.4.1
+Uninstalling pytest-8.4.1:
+  Would remove:
+    c:\users\xxx\appdata\local\packages\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\localcache\local-packages\python313\scripts\py.test.exe
+    c:\users\xxx\appdata\local\packages\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\localcache\local-packages\python313\scripts\pytest.exe
+    c:\users\xxx\appdata\local\packages\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\localcache\local-packages\python313\site-packages\_pytest\*
+    c:\users\xxx\appdata\local\packages\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\localcache\local-packages\python313\site-packages\py.py
+    c:\users\xxx\appdata\local\packages\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\localcache\local-packages\python313\site-packages\pytest-8.4.1.dist-info\*
+    c:\users\xxx\appdata\local\packages\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\localcache\local-packages\python313\site-packages\pytest\*
+Proceed (Y/n)?
+
+原来pytest的正确路径是c:\users\xxx\appdata\local\packages\pythonsoftwarefoundation.python.3.13_qbz5n2kfra8p0\localcache\local-packages\python313\scripts
+于是重新执行了以下命令
+
+$currentPath = [Environment]::GetEnvironmentVariable("Path", "Machine")
+$scriptsPath = "C:\Users\xxx\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\Scripts"
+$newPath = $currentPath + ";" + $scriptsPath
+[Environment]::SetEnvironmentVariable("Path", $newPath, "Machine")
+
+然后执行
+pytest --version
+输出以下信息
+pytest 8.4.1
+
+修改成功！！

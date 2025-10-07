@@ -45,6 +45,8 @@ The certificate is at "./test.xx.com.pem" and the key at "./test.xx.com-key.pem"
 
 It will expire on 7 November 2027 🗓
 
+这一步生成的证书保存在C:\WINDOWS\system32这个目录中
+
 
 5.在phpstudy中配置证书
 将生成的 `test.xx.com.pem` 和 `test.xx.com-key.pem` 文件导入到 phpstudy 的服务器 SSL 证书目录中，使用的nginx作为服务器，路径为 `D:\phpstudy_pro\Extensions\Nginx1.15.11\conf\ssl`。

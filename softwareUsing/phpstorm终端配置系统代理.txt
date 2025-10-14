@@ -1,0 +1,66 @@
+#PHPStorm（以及所有基于 IntelliJ 的 IDE）在默认情况下不会直接使用操作系统的系统代理设置。
+
+这会导致以下几种情况：
+
+无法在 IDE 内登录账号（如 JetBrains Account）
+
+无法安装插件
+
+无法检查更新
+
+Composer、npm 等工具在 IDE 终端内可能无法通过代理访问网络
+
+解决方案主要分为两大类：为 IDE 配置代理和为内置终端配置代理。
+
+
+
+#解决方案
+步骤一、查看phpstorm使用的终端
+打开 PHPStorm 设置：
+
+Windows/Linux: File → Settings
+
+macOS: PHPStorm → Preferences
+
+导航到：
+Tools → Terminal
+在 Shell path 字段中，你可以看到当前配置的 Shell 可执行文件路径。
+我的win11中phpstorm使用的终端是powershell
+
+步骤二、为 IDE 配置代理
+方法一：在 PowerShell 中设置临时环境变量
+# 设置 HTTP 和 HTTPS 代理 (适用于 HTTP 代理)
+$env:HTTP_PROXY="http://127.0.0.1:7890"
+$env:HTTPS_PROXY="http://127.0.0.1:7890"
+
+# 设置不经过代理的地址
+$env:NO_PROXY="localhost,127.0.0.1,192.168.*,10.*"
+
+# 验证代理设置
+echo $env:HTTP_PROXY
+echo $env:HTTPS_PROXY
+
+# 测试网络连接
+curl -Uri "https://www.google.com" -UseBasicParsing
+
+StatusCode        : 200
+StatusDescription : OK
+Content           : <!doctype html><html itemscope="" itemtype="http://schema.org/WebPage" lang="zh-CN"><head><meta content="text/html; charset=UTF-8" http-equiv="Content-Type"><meta content="/images/branding/googleg/1x/...
+RawContent        : HTTP/1.1 200 OK
+                    Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-src 'nonce-E0LKj53_CpSkgSqjEIMk1Q' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: ...
+Forms             :
+Headers           : {[Content-Security-Policy-Report-Only, object-src 'none';base-uri 'self';script-src 'nonce-E0LKj53_CpSkgSqjEIMk1Q' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https
+                    ://csp.withgoogle.com/csp/gws/other-hp], [Accept-CH, Sec-CH-Prefers-Color-Scheme], [X-XSS-Protection, 0], [X-Frame-Options, SAMEORIGIN]...}
+Images            : {}
+InputFields       : {}
+Links             : {@{outerHTML=<a class="gbzt gbz0l gbp1" id=gb_1 href="https://www.google.com.hk/webhp?tab=ww"><span class=gbtb2></span><span class=gbts>搜索</span></a>; tagName=A; class=gbzt gbz0l gbp1; id=gb_1; href=https:
+                    //www.google.com.hk/webhp?tab=ww}, @{outerHTML=<a class=gbzt id=gb_2 href="https://www.google.com.hk/imghp?hl=zh-CN&tab=wi"><span class=gbtb2></span><span class=gbts>图片</span></a>; tagName=A; class=gbzt; i
+                    d=gb_2; href=https://www.google.com.hk/imghp?hl=zh-CN&tab=wi}, @{outerHTML=<a class=gbzt id=gb_8 href="http://ditu.google.cn/maps?hl=zh-CN&tab=wl"><span class=gbtb2></span><span class=gbts>地图</span></a>; t
+                    agName=A; class=gbzt; id=gb_8; href=http://ditu.google.cn/maps?hl=zh-CN&tab=wl}, @{outerHTML=<a class=gbzt id=gb_78 href="https://play.google.com/?hl=zh-CN&tab=w8"><span class=gbtb2></span><span class=gbts>P
+                    lay</span></a>; tagName=A; class=gbzt; id=gb_78; href=https://play.google.com/?hl=zh-CN&tab=w8}...}
+ParsedHtml        :
+RawContentLength  : 50002
+
+状态码200，连接成功，说明代理配置正确。
+
+注意： 这种方法设置的代理只在当前 PowerShell 会话中有效，关闭终端后需要重新设置。

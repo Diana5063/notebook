@@ -1,0 +1,116 @@
+本地启动backend服务时报ModuleNotFoundError，还不只一个，如下
+
+1.
+uv run main.py run --env=dev
+🚀 当前运行环境: dev
+▗▄▄▄▖ ▗▄▖  ▗▄▄▖▗▄▄▄▖▗▄▖ ▗▄▄▖▗▄▄▄▖ ▗▄▖ ▗▄▄▄ ▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖                                                                                                                                                                        
+▐▌   ▐▌ ▐▌▐▌     █ ▐▌ ▐▌▐▌ ▐▌ █  ▐▌ ▐▌▐▌  █▐▛▚▞▜▌  █  ▐▛▚▖▐▌                                                                                                                                                                        
+▐▛▀▀▘▐▛▀▜▌ ▝▀▚▖  █ ▐▛▀▜▌▐▛▀▘  █  ▐▛▀▜▌▐▌  █▐▌  ▐▌  █  ▐▌ ▝▜▌                                                                                                                                                                        
+▐▌   ▐▌ ▐▌▗▄▄▞▘  █ ▐▌ ▐▌▐▌  ▗▄█▄▖▐▌ ▐▌▐▙▄▄▀▐▌  ▐▌▗▄█▄▖▐▌  ▐▌                                                                                                                                                                        
+                                                                                                                                                                                                                                    
+2026-06-01 19:29:53.056 | INFO     | uvicorn.config:__init__:317 - Will watch for changes in these directories: ['D:\\phpstudy_pro\\WWW\\xxxapi\\backend']
+2026-06-01 19:29:53.070 | INFO     | uvicorn.config:bind_socket:523 - Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2026-06-01 19:29:53.071 | INFO     | uvicorn.supervisors.basereload:startup:79 - Started reloader process [54528] using StatReload
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "C:\Users\xxx\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\xxx\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\.venv\lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\.venv\lib\site-packages\uvicorn\server.py", line 65, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "C:\Users\xxx\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\lib\asyncio\runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "C:\Users\xxx\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\lib\asyncio\base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\.venv\lib\site-packages\uvicorn\server.py", line 69, in serve
+    await self._serve(sockets)
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\.venv\lib\site-packages\uvicorn\server.py", line 76, in _serve
+    config.load()
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\.venv\lib\site-packages\uvicorn\config.py", line 440, in load
+    self.loaded_app = self.loaded_app()
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\main.py", line 45, in create_app
+    register_routers(app)
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\scripts\init_app.py", line 149, in register_routers
+    from app.api.v1.module_lingxing import lingxing_router
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\api\v1\module_lingxing\__init__.py", line 3, in <module>
+    from .multi_platform.controller import MultiPlatformRouter
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\api\v1\module_lingxing\multi_platform\controller.py", line 7, in <module>
+    from .service import MultiPlatformService
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\api\v1\module_lingxing\multi_platform\service.py", line 4, in <module>
+    from ..common import LingxingCommon
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\api\v1\module_lingxing\common.py", line 15, in <module>
+    from Crypto.Cipher import AES
+ModuleNotFoundError: No module named 'Crypto'
+
+
+解决方法：
+#安装缺少的模块
+cd backend
+uv add pycryptodome
+
+
+
+
+2.
+$ uv run main.py run --env=dev
+🚀 当前运行环境: dev
+▗▄▄▄▖ ▗▄▖  ▗▄▄▖▗▄▄▄▖▗▄▖ ▗▄▄▖▗▄▄▄▖ ▗▄▖ ▗▄▄▄ ▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖
+▐▌   ▐▌ ▐▌▐▌     █ ▐▌ ▐▌▐▌ ▐▌ █  ▐▌ ▐▌▐▌  █▐▛▚▞▜▌  █  ▐▛▚▖▐▌
+▐▛▀▀▘▐▛▀▜▌ ▝▀▚▖  █ ▐▛▀▜▌▐▛▀▘  █  ▐▛▀▜▌▐▌  █▐▌  ▐▌  █  ▐▌ ▝▜▌
+▐▌   ▐▌ ▐▌▗▄▄▞▘  █ ▐▌ ▐▌▐▌  ▗▄█▄▖▐▌ ▐▌▐▙▄▄▀▐▌  ▐▌▗▄█▄▖▐▌  ▐▌
+
+2026-06-01 19:32:13.338 | INFO     | uvicorn.config:__init__:317 - Will watch for changes in these directories: ['D:\\phpstudy_pro\\WWW\\xxxapi\\backend']
+2026-06-01 19:32:13.348 | INFO     | uvicorn.config:bind_socket:523 - Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+2026-06-01 19:32:13.348 | INFO     | uvicorn.supervisors.basereload:startup:79 - Started reloader process [91928] using StatReload
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "C:\Users\xxx\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\lib\multiprocessing\process.py", line 314, in _bootstrap
+    self.run()
+  File "C:\Users\xxx\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\lib\multiprocessing\process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\.venv\lib\site-packages\uvicorn\_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\.venv\lib\site-packages\uvicorn\server.py", line 65, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "C:\Users\xxx\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\lib\asyncio\runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "C:\Users\xxx\AppData\Roaming\uv\python\cpython-3.10-windows-x86_64-none\lib\asyncio\base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\.venv\lib\site-packages\uvicorn\server.py", line 69, in serve
+    await self._serve(sockets)
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\.venv\lib\site-packages\uvicorn\server.py", line 76, in _serve
+    config.load()
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\.venv\lib\site-packages\uvicorn\config.py", line 440, in load
+    self.loaded_app = self.loaded_app()
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\main.py", line 45, in create_app
+    register_routers(app)
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\scripts\init_app.py", line 149, in register_routers
+    from app.api.v1.module_lingxing import lingxing_router
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\api\v1\module_lingxing\__init__.py", line 3, in <module>
+    from .multi_platform.controller import MultiPlatformRouter
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\api\v1\module_lingxing\multi_platform\controller.py", line 7, in <module>
+    from .service import MultiPlatformService
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\api\v1\module_lingxing\multi_platform\service.py", line 8, in <module>
+    from .crud import MultiPlatformCrud
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\api\v1\module_lingxing\multi_platform\crud.py", line 1, in <module>
+    from app.core.mongo import MongoDB
+  File "D:\phpstudy_pro\WWW\xxxapi\backend\app\core\mongo.py", line 2, in <module>
+    from motor.motor_asyncio import AsyncIOMotorClient
+ModuleNotFoundError: No module named 'motor'
+
+
+解决方法：
+#安装缺少的模块
+cd backend
+uv add motor
+
+
+在pyproject.toml记录了项目所需要的全部依赖，如果不想单个uv add，可以批量uv sync全部安装，但要注意uv.lock与pyproject.toml依赖是否一致，
+如果不一致会以uv.lock为准，需要先执行uv lock --upgrade使uv.lock与pyproject.toml一致，再执行uv sync
+
+
+安装缺少的模块后再启动服务
+uv run main.py run --env=dev

@@ -114,3 +114,9 @@ uv add motor
 
 安装缺少的模块后再启动服务
 uv run main.py run --env=dev
+
+
+3.避免每次都需要手动安装以上依赖，可以将依赖包更新到包管理文件，后续启动时将自动安装缺少的依赖
+cd backend
+pip freeze >> requirements.txt (>>用于追加到文件末尾，>用于覆盖文件)
+执行以上命令，在当前环境中将第1、2步安装的依赖追加到包管理文件末尾，下次执行uv sync

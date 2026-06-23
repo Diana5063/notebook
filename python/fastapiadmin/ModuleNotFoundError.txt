@@ -115,8 +115,38 @@ uv add motor
 安装缺少的模块后再启动服务
 uv run main.py run --env=dev
 
+执行以上uv add后，uv.lock与pyproject.toml中已经自动添加了这两个组件的版本信息，保存后下次再执行uv sync即会自动安装。
 
-3.避免每次都需要手动安装以上依赖，可以将依赖包更新到包管理文件，后续启动时将自动安装缺少的依赖
-cd backend
-pip freeze >> requirements.txt (>>用于追加到文件末尾，>用于覆盖文件)
-执行以上命令，在当前环境中将第1、2步安装的依赖追加到包管理文件末尾，下次执行uv sync
+
+3.为兼容传统格式，补充requirements.txt
+$ cd backend/
+$ deactivate
+bash: deactivate: command not found
+
+MINGW64 /d/phpstudy_pro/WWW/xxxapi/backend (dev)
+$ source .venv/Scripts/activate
+(backend) 
+MINGW64 /d/phpstudy_pro/WWW/xxxapi/backend
+$ python -m pip list
+D:\phpstudy_pro\WWW\xxxapi\backend\.venv\Scripts\python.exe: No module named pip
+(backend) 
+MINGW64 /d/phpstudy_pro/WWW/xxxapi/backend
+$ python -m ensurepip --upgrade
+Looking in links: c:\Users\YIXIN~1.CHE\AppData\Local\Temp\tmpwwymxnb0
+Processing c:\users\xxx~1.che\appdata\local\temp\tmpwwymxnb0\pip-25.0.1-py3-none-any.whl
+Installing collected packages: pip
+Successfully installed pip-25.0.1
+(backend) 
+MINGW64 /d/phpstudy_pro/WWW/xxxapi/backend
+$ uv pip freeze >> requirements.txt
+bash: uv: command not found
+(backend) 
+MINGW64 /d/phpstudy_pro/WWW/xxxapi/backend
+$ python -m uv pip freeze >> requirements.txt
+D:\phpstudy_pro\WWW\xxxapi\backend\.venv\Scripts\python.exe: No module named uv
+(backend) 
+MINGW64 /d/phpstudy_pro/WWW/xxxapi/backend
+$ python -m pip freeze >> requirements.txt(>>用于追加到文件末尾，>用于覆盖文件)
+(backend)
+
+可以看到

@@ -1,0 +1,81 @@
+#搭建Wordpress Multisite
+
+环境：win11 + phpstudy(php8.4.11+nginx1.15.11+mysql8.0.12+redis3.0.504)
+
+步骤：
+1.在phpstudy-数据库-创建数据库，并将字符集设置为utf8mb4
+
+
+2.下载安装wordpress
+在官网下载最新版(7.0)：https://wordpress.org/download/
+将解压后的文件夹放入phpstudy的web目录：D:\phpstudy_pro\WWW
+
+然后根据官方安装教程完成wordpress安装：https://developer.wordpress.org/advanced-administration/before-install/howto-install/
+2.1 复制wp-config-sample.php 改名为 wp-config.php
+在wp-config.php中填入步骤1创建的数据库信息
+
+2.2 开启多站点
+在wp-config.php中加入 define('WP_ALLOW_MULTISITE', true);
+
+2.3 部署网站
+在phpstudy-网站-创建网站，填入域名、子域名、端口、根目录、php版本等信息，勾选同步hosts
+
+2.4 开始安装
+在浏览器中打开步骤2.3配置的网站域名，在网页上按提示一步步操作：
+选择语言-填写站点信息、管理员账号等，安装成功即可登录
+
+
+3.配置多站点
+3.1 管理员账号登录后台后，打开 工具 → 网络设置 (Network Setup)，创建主站点，
+选择 子域名(Sub-domains)，填写站点标题和站点管理员邮箱，点击安装。
+
+3.2将以下配置添加到config.php
+define( 'MULTISITE', true );
+define( 'SUBDOMAIN_INSTALL', true );
+define( 'DOMAIN_CURRENT_SITE', 'toovem-multisite.com' );
+define( 'PATH_CURRENT_SITE', '/' );
+define( 'SITE_ID_CURRENT_SITE', 1 );
+define( 'BLOG_ID_CURRENT_SITE', 1 );
+
+3.3配置nginx伪静态
+参考官方指导：https://developer.wordpress.org/advanced-administration/server/web-server/nginx/
+在phpstudy-网站，选择步骤2.3创建的网站，点击管理-修改-伪静态，填入以下内容
+
+if (!-e $request_filename) {
+    rewrite /wp-admin$ $scheme://$host$request_uri/ permanent;
+    rewrite ^(/[^/]+)?(/wp-.*) $2 last;
+    rewrite ^(/[^/]+)?(/.*\.php) $2 last;
+}
+
+location / {
+    try_files $uri $uri/ /index.php?$args ;
+}
+
+保存后phpstudy会自动重启nginx。
+
+
+4.配置DNS(生产必需)
+如果用子域名：
+在 DNS 添加：
+A记录：
+*.example.com → 你的服务器IP
+
+
+5.重新登录后台
+此时进入的是Multisite后台，在网页左上角我的站点 → 网络管理 → 控制面板，可以看到现在有一个主站，点击创建新站点
+填写：
+子站点域名
+子站点标题
+子站点管理员邮箱
+选择子站点语言
+创建完成。
+
+6.在主站下载主题、插件并开启“网络启用”，然后在子站的主题、插件管理中启用
+
+
+7.优化设置
+关闭站点wp-cron，使用服务器cron：define('DISABLE_WP_CRON', true);
+启用redis
+启用PHP-FPM 限流
+
+8.旧站数据迁移到multisite子站
